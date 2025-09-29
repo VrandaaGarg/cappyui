@@ -1,170 +1,54 @@
 ---
-title: Evervault Card
-description: A cool card with amazing hover effect, reveals encrypted text and a mixed gradient.
+title: Welcome to UI Library
+description: A collection of beautiful, reusable React components built with Tailwind CSS and Framer Motion.
 ---
 
-## Preview
+## Features
 
-<div className="flex items-center justify-center border border-black/[0.2] dark:border-white/[0.2] rounded-xl py-7 w-full">
-  <EvervaultCard
-    text="hover"
-    className="border border-black/[0.2] dark:border-white/[0.2] w-60 h-60"
+- ✨ **Modern Design** - Clean, contemporary components that look great out of the box
+- 🎨 **Fully Customizable** - Built with Tailwind CSS for easy theming and customization
+- 🚀 **Performance Optimized** - Lightweight components with smooth animations
+- 📱 **Responsive** - Mobile-first design that works on all devices
+- ♿ **Accessible** - Built with accessibility best practices in mind
+- 🔧 **TypeScript Ready** - Full TypeScript support with comprehensive type definitions
+
+## Getting Started
+
+Browse our component categories to find the perfect components for your project:
+
+<Cards>
+  <Card
+    title="Cards"
+    href="/docs/components/cards"
+    description="Interactive card components with hover effects and animations"
   />
-</div>
-
-_Hover over the card to see the effect_
+  <Card
+    title="Buttons"
+    href="/docs/components/buttons"
+    description="Various button styles and interactive elements"
+  />
+  <Card
+    title="Text Components"
+    href="/docs/components/text"
+    description="Typography and text-based components"
+  />
+  <Card
+    title="Scroll & Parallax"
+    href="/docs/components/scroll"
+    description="Scroll-triggered animations and parallax effects"
+  />
+</Cards>
 
 ## Installation
 
-<Tabs items={["CLI", "Manual"]}>
-  <Tab value="CLI">
+Most components require these common dependencies:
 
-```npm
-npx shadcn@latest add https://ui.aceternity.com/registry/evervault-card.json
+```bash
+npm install framer-motion clsx tailwind-merge
 ```
 
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        Install dependencies
+Each component page includes specific installation instructions and usage examples.
 
-        ```bash
-        npm i motion clsx tailwind-merge
-        ```
-      </Step>
-      <Step>
-        Add util file
+## Contributing
 
-        `lib/utils.ts`
-        ```ts
-        import { ClassValue, clsx } from "clsx";
-        import { twMerge } from "tailwind-merge";
-
-        export function cn(...inputs: ClassValue[]) {
-          return twMerge(clsx(inputs));
-        }
-        ```
-      </Step>
-      <Step>
-        Copy the source code
-
-        ```tsx
-
-"use client";
-import { useMotionValue } from "framer-motion";
-import React, { useState, useEffect } from "react";
-import { useMotionTemplate, motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-
-export const EvervaultCard = ({
-  text,
-  className,
-}: {
-  text?: string;
-  className?: string;
-}) => {
-  let mouseX = useMotionValue(0);
-  let mouseY = useMotionValue(0);
-
-        const [randomString, setRandomString] = useState("");
-
-        useEffect(() => {
-          let str = generateRandomString(1500);
-          setRandomString(str);
-        }, []);
-
-        function onMouseMove({ currentTarget, clientX, clientY }: any) {
-          let { left, top } = currentTarget.getBoundingClientRect();
-          mouseX.set(clientX - left);
-          mouseY.set(clientY - top);
-
-          const str = generateRandomString(1500);
-          setRandomString(str);
-        }
-
-        return (
-          <div
-            className={cn(
-              "p-0.5 bg-transparent aspect-square flex items-center justify-center w-full h-full relative",
-              className
-            )}
-          >
-            <div
-              onMouseMove={onMouseMove}
-              className="group/card rounded-3xl w-full relative overflow-hidden bg-transparent flex items-center justify-center h-full"
-            >
-              <CardPattern mouseX={mouseX} mouseY={mouseY} randomString={randomString} />
-              <div className="relative z-10 flex items-center justify-center">
-                <div className="relative h-44 w-44 rounded-full flex items-center justify-center text-white font-bold text-4xl">
-                  <div className="absolute w-full h-full bg-white/[0.8] dark:bg-black/[0.8] blur-sm rounded-full" />
-                  <span className="dark:text-white text-black z-20">{text}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-        };
-
-        export function CardPattern({ mouseX, mouseY, randomString }: any) {
-          let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
-          let style = { maskImage, WebkitMaskImage: maskImage };
-
-          return (
-            <div className="pointer-events-none">
-              <div className="absolute inset-0 rounded-2xl [mask-image:linear-gradient(white,transparent)] group-hover/card:opacity-50"></div>
-              <motion.div
-                className="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-500 to-blue-700 opacity-0 group-hover/card:opacity-100 backdrop-blur-xl transition duration-500"
-                style={style}
-              />
-              <motion.div
-                className="absolute inset-0 rounded-2xl opacity-0 mix-blend-overlay group-hover/card:opacity-100"
-                style={style}
-              >
-                <p className="absolute inset-x-0 text-xs h-full break-words whitespace-pre-wrap text-white font-mono font-bold transition duration-500">
-                  {randomString}
-                </p>
-              </motion.div>
-            </div>
-          );
-        }
-
-        const characters =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        export const generateRandomString = (length: number) => {
-          let result = "";
-          for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * characters.length));
-          }
-          return result;
-        };
-
-        export const Icon = ({ className, ...rest }: any) => {
-          return (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className={className}
-              {...rest}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
-            </svg>
-          );
-        };
-
-        ```
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
-
-## Props
-
-| Prop name   | Type     | Description                            |
-| ----------- | -------- | -------------------------------------- |
-| `className` | `string` | The class name of the child component. |
-| `text`      | `string` | The text that stays on the card        |
+We welcome contributions! Feel free to submit issues, feature requests, or pull requests to help improve this library.
