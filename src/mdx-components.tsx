@@ -4,7 +4,7 @@ import type { MDXComponents } from "mdx/types";
 import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { EvervaultCard } from "@/components/evervault-card";
-import AssistantChatDemo from "@/components/assistant-chat-demo";
+import AIChat from "@/components/ai-chat";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -14,7 +14,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Step,
     Steps,
     EvervaultCard,
-    AssistantChatDemo,
+    AIChat,
     pre: ({ ref: _ref, ...props }) => (
       <CodeBlock {...props}>
         <Pre>{props.children}</Pre>

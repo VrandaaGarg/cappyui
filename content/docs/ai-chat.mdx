@@ -1,23 +1,23 @@
 ---
-title: Assistant Chat Demo
+title: AI Chat
 description: Animated AI chat walkthrough with typing effects, perfect for showcasing conversational product experiences.
 ---
 
 ## Preview
 
-<AssistantChatDemo />
+<AIChat />
 
 _The assistant progress animates automatically when the demo scrolls into view._
 
 ## Usage
 
 ```tsx
-import AssistantChatDemo from "@/components/assistant-chat-demo";
+import AIChat from "@/components/ai-chat";
 
 export default function Example() {
   return (
     <div className="max-w-4xl">
-      <AssistantChatDemo />
+      <AIChat />
     </div>
   );
 }
@@ -25,7 +25,7 @@ export default function Example() {
 
 ### Customising the transcript
 
-- Update `DEMO_MESSAGES` inside `assistant-chat-demo.tsx` to reflect your product story.
+- Update `DEMO_MESSAGES` inside `ai-chat.tsx` to reflect your product story.
 - Adjust `thinkingDelay` and `nextDelay` values for pacing between user and assistant messages.
 - Tailor the container classes (`bg-card/40`, `border-ring/40`, etc.) to match your brand.
 
@@ -58,7 +58,7 @@ export default function Example() {
         ```
       </Step>
       <Step>
-        Copy the component source from `src/components/assistant-chat-demo.tsx`.
+        Copy the component source from `src/components/ai-chat.tsx`.
       </Step>
     </Steps>
 

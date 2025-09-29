@@ -444,7 +444,7 @@ const splitContent = (content: string) => {
   return segments;
 };
 
-const AssistantChatDemo = memo(function AssistantChatDemo() {
+const AIChat = memo(function AIChat() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const isProgrammatic = useRef(false);
@@ -688,7 +688,7 @@ const AssistantChatDemo = memo(function AssistantChatDemo() {
       <div className="mb-4 p-6 flex items-center gap-3 border-b border-ring/30 ">
         <div className="flex gap-3 items-center justify-center rounded-full bg-primary/15 text-primary">
           <MessageSquareText className="h-5 w-5" />
-          <span className="text-sm font-semibold">Assistant Chat Demo</span>
+          <span className="text-sm font-semibold">AI Chat</span>
         </div>
 
         <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
@@ -866,6 +866,6 @@ const AssistantChatDemo = memo(function AssistantChatDemo() {
   );
 });
 
-AssistantChatDemo.displayName = "AssistantChatDemo";
+AIChat.displayName = "AIChat";
 
-export default AssistantChatDemo;
+export default AIChat;
