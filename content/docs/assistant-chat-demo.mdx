@@ -1,0 +1,66 @@
+---
+title: Assistant Chat Demo
+description: Animated AI chat walkthrough with typing effects, perfect for showcasing conversational product experiences.
+---
+
+## Preview
+
+<AssistantChatDemo />
+
+_The assistant progress animates automatically when the demo scrolls into view._
+
+## Usage
+
+```tsx
+import AssistantChatDemo from "@/components/assistant-chat-demo";
+
+export default function Example() {
+  return (
+    <div className="max-w-4xl">
+      <AssistantChatDemo />
+    </div>
+  );
+}
+```
+
+### Customising the transcript
+
+- Update `DEMO_MESSAGES` inside `assistant-chat-demo.tsx` to reflect your product story.
+- Adjust `thinkingDelay` and `nextDelay` values for pacing between user and assistant messages.
+- Tailor the container classes (`bg-card/40`, `border-ring/40`, etc.) to match your brand.
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    This component is not available through the registry yet. Use the manual
+    steps to copy it into your project.
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies:
+
+        ```bash
+        pnpm add framer-motion lucide-react tailwind-merge clsx
+        ```
+      </Step>
+      <Step>
+        Confirm you have the utility helper:
+
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the component source from `src/components/assistant-chat-demo.tsx`.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>

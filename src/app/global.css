@@ -1,3 +1,14 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* Hide scrollbar completely */
+.scrollbar-visible::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox scrollbar */
+.scrollbar-visible {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
