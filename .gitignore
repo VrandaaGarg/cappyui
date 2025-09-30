@@ -1,6 +1,9 @@
 # deps
 /node_modules
 
+#registry
+/registry
+
 # generated content
 .contentlayer
 .content-collections

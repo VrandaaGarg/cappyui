@@ -683,7 +683,7 @@ const AIChat = memo(function AIChat() {
   return (
     <div
       ref={containerRef}
-      className="flex h-[480px] w-full flex-col rounded-3xl border border-ring/40 bg-card/40 backdrop-blur"
+      className="flex h-[480px] max-w-2xl mx-auto w-full flex-col rounded-3xl border border-ring/40 bg-card/40 backdrop-blur"
     >
       <div className="mb-4 p-6 flex items-center gap-3 border-b border-ring/30 ">
         <div className="flex gap-3 items-center justify-center rounded-full bg-primary/15 text-primary">
