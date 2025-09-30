@@ -6,6 +6,9 @@
     "evervault-card",
     "button",
     "---AI Applications---",
-    "ai-chat"
+    "ai-chat",
+    "---Components---",
+    "calender-current",
+    "calender-range"
   ]
 }

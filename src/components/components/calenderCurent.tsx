@@ -1,0 +1,217 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+interface CalendarCurrentProps {
+  className?: string;
+}
+
+interface DayCell {
+  day: number;
+  month: number;
+  year: number;
+  isCurrentMonth: boolean;
+}
+
+export const CalendarCurrent = ({ className }: CalendarCurrentProps) => {
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  const isToday = (day: number, month: number, year: number) => {
+    return (
+      day === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear()
+    );
+  };
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+
+  // Get previous month info
+  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+  const daysInPrevMonth = getDaysInMonth(prevMonth, prevMonthYear);
+
+  // Get next month info
+  const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+  const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+  const days: DayCell[] = [];
+
+  // Days from previous month
+  for (let i = firstDay - 1; i >= 0; i--) {
+    days.push({
+      day: daysInPrevMonth - i,
+      month: prevMonth,
+      year: prevMonthYear,
+      isCurrentMonth: false,
+    });
+  }
+
+  // Days of current month
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push({
+      day: i,
+      month: currentMonth,
+      year: currentYear,
+      isCurrentMonth: true,
+    });
+  }
+
+  // Days from next month to fill the grid
+  const remainingCells = 42 - days.length; // 6 rows * 7 days
+  for (let i = 1; i <= remainingCells; i++) {
+    days.push({
+      day: i,
+      month: nextMonth,
+      year: nextMonthYear,
+      isCurrentMonth: false,
+    });
+  }
+
+  return (
+    <div
+      className={cn(
+        "mx-auto w-full max-w-md rounded-3xl border border-fd-border bg-fd-background p-8 shadow-lg",
+        className
+      )}
+    >
+      {/* Header with navigation */}
+      <div className="mb-8 flex items-center justify-between">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handlePrevMonth}
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-foreground"
+          aria-label="Previous month"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </motion.button>
+
+        <motion.span
+          key={`${currentMonth}-${currentYear}`}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="text-xl font-bold tracking-wider text-fd-foreground"
+        >
+          {MONTHS[currentMonth]} {currentYear}
+        </motion.span>
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleNextMonth}
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-foreground"
+          aria-label="Next month"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </motion.button>
+      </div>
+
+      {/* Day headers */}
+      <div className="mb-4 grid grid-cols-7 gap-2">
+        {DAYS.map((day, index) => (
+          <div
+            key={index}
+            className="flex h-10 items-center justify-center text-sm font-medium text-fd-muted-foreground"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Calendar grid */}
+      <motion.div
+        key={`${currentMonth}-${currentYear}-grid`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="grid grid-cols-7 gap-2"
+      >
+        {days.map((dayCell, index) => {
+          const isTodayDate = isToday(dayCell.day, dayCell.month, dayCell.year);
+
+          return (
+            <motion.div
+              key={index}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: index * 0.01, duration: 0.2 }}
+              className={cn(
+                "relative flex h-12 items-center justify-center rounded-lg text-lg font-medium transition-all",
+                !dayCell.isCurrentMonth && "text-fd-muted-foreground/40",
+                dayCell.isCurrentMonth &&
+                  !isTodayDate &&
+                  "text-fd-foreground hover:bg-fd-accent",
+                isTodayDate &&
+                  "bg-fd-primary text-fd-primary-foreground shadow-md"
+              )}
+            >
+              {dayCell.day}
+              {isTodayDate && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.3 }}
+                  className="absolute inset-0 flex items-center justify-center rounded-lg bg-fd-primary"
+                >
+                  <Check className="h-6 w-6 text-fd-primary-foreground" />
+                </motion.div>
+              )}
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+};
+
+export default CalendarCurrent;
