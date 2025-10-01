@@ -1,0 +1,196 @@
+---
+title: Installation
+description: Get started with our UI component library in your Next.js project.
+---
+
+## Getting Started
+
+Follow these steps to set up a new Next.js project and start using our components.
+
+<Steps>
+
+<Step>
+
+## Create Next.js Project
+
+Create a new Next.js application using the latest version:
+
+```bash
+npx create-next-app@latest my-app
+```
+
+You'll be prompted with several configuration options. Here are the recommended settings:
+
+```bash
+✔ Would you like to use TypeScript? … Yes
+✔ Would you like to use ESLint? … Yes
+✔ Would you like to use Tailwind CSS? … Yes
+✔ Would you like your code inside a `src/` directory? … Yes
+✔ Would you like to use App Router? … Yes
+✔ Would you like to use Turbopack for `next dev`? … Yes
+✔ Would you like to customize the import alias (`@/*` by default)? … No
+```
+
+Navigate to your project directory:
+
+```bash
+cd my-app
+```
+
+</Step>
+
+<Step>
+
+## Install Required Dependencies
+
+Install the core dependencies needed for most components:
+
+```bash
+npm install framer-motion lucide-react clsx tailwind-merge
+```
+
+### Dependency Overview
+
+- **framer-motion**: Animation library for smooth transitions and interactions
+- **lucide-react**: Beautiful, consistent icon library
+- **clsx**: Utility for constructing className strings conditionally
+- **tailwind-merge**: Merge Tailwind CSS classes without style conflicts
+
+### Optional Dependencies
+
+Some components may require additional packages:
+
+```bash
+# For AI Chat component
+npm install react-shiki shiki
+
+# For React Icons (if needed)
+npm install react-icons
+```
+
+</Step>
+
+<Step>
+
+## Set Up Utility Function
+
+Create a utility file for the `cn()` helper function that merges Tailwind classes:
+
+Create `src/lib/utils.ts`:
+
+```typescript
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+</Step>
+
+<Step>
+
+## Add Components
+
+You can add components in two ways:
+
+### Option A: Using CLI (Recommended)
+
+Use the shadcn CLI to automatically install components:
+
+```bash
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/calendar-current.json
+```
+
+This will:
+
+- Download the component
+- Install required dependencies
+- Place the component in `src/components/ui/`
+
+### Option B: Manual Installation
+
+1. Copy the component code from the documentation
+2. Create a new file in `src/components/ui/`
+3. Paste the component code
+4. Install any required dependencies
+
+### Example: Adding Calendar Component
+
+```bash
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/calendar-current.json
+```
+
+Then use it in your app:
+
+```tsx
+import { CalendarCurrent } from "@/components/ui/calendar-current";
+
+export default function Page() {
+  return (
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">My Calendar</h1>
+      <CalendarCurrent />
+    </div>
+  );
+}
+```
+
+</Step>
+
+<Step>
+
+## Start Development Server
+
+Start your development server:
+
+```bash
+npm run dev
+```
+
+Your app will be available at [http://localhost:3000](http://localhost:3000)
+
+</Step>
+
+</Steps>
+
+## Configuration
+
+### Tailwind CSS Variables
+
+Our components use CSS custom properties for theming. Add these to your `src/app/globals.css`:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --fd-background: 0 0% 100%;
+    --fd-foreground: 0 0% 10%;
+    --fd-muted: 0 0% 96%;
+    --fd-muted-foreground: 0 0% 42%;
+    --fd-border: 0 0% 90%;
+    --fd-accent: 0 0% 96%;
+    --fd-accent-foreground: 0 0% 10%;
+    --fd-primary: 217 91% 60%;
+    --fd-primary-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --fd-background: 0 0% 10%;
+    --fd-foreground: 0 0% 98%;
+    --fd-muted: 0 0% 15%;
+    --fd-muted-foreground: 0 0% 64%;
+    --fd-border: 0 0% 20%;
+    --fd-accent: 0 0% 15%;
+    --fd-accent-foreground: 0 0% 98%;
+    --fd-primary: 217 91% 60%;
+    --fd-primary-foreground: 0 0% 100%;
+  }
+}
+```
+
+<br />

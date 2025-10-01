@@ -7,6 +7,216 @@ description: Animated AI chat walkthrough with typing effects, perfect for showc
 
 <AIChat />
 
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton prompt={`# AI Chat Component
+
+Create a fully functional, animated AI chat demo component with typing effects, code syntax highlighting, and smooth scrolling behavior. This component simulates a conversation between a user and an AI assistant with realistic typing animations.
+
+## Required Dependencies
+
+Install the following packages:
+
+\`\`\`bash
+npm install framer-motion lucide-react react-shiki clsx tailwind-merge
+\`\`\`
+
+## CSS Styles Required
+
+Add this to your global CSS file (e.g., \`globals.css\` or \`index.css\`):
+
+\`\`\`css
+/_ Hide scrollbar completely _/
+.scrollbar-visible::-webkit-scrollbar {
+display: none;
+}
+
+/_ Firefox scrollbar _/
+.scrollbar-visible {
+scrollbar-width: none;
+-ms-overflow-style: none;
+}
+\`\`\`
+
+## Utility Function Required
+
+Create \`@/lib/utils.ts\` if not already available:
+
+\`\`\`typescript
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+\`\`\`
+
+## Component Requirements
+
+Create a React component named \`AIChat\` with the following features:
+
+### 1. **Theme Detection Hook**
+
+- Detect dark/light mode by checking \`document.documentElement\` for classes: "dark"
+- Use MutationObserver to watch for class changes
+- Return boolean \`isDarkMode\` state
+
+### 2. **Demo Messages Array**
+
+Define 8 messages alternating between user and assistant with:
+
+- role: "user" | "assistant"
+- content: string (including markdown and code blocks in \`\`\`tsx format)
+- timestamp: string
+- thinkingDelay: number (milliseconds before assistant responds)
+- nextDelay: number (milliseconds before next message)
+
+Sample conversation about "What is React?" with code examples.
+
+### 3. **TypingText Component**
+
+Character-by-character typing animation:
+
+- Props: text, isVisible, delay, speed (default 20ms), onComplete callback
+- State: displayedText, currentIndex, hasStarted
+- Use setTimeout to add one character at a time
+- Call onComplete when finished
+
+### 4. **TypingCodeBlock Component**
+
+Same as TypingText but renders code with ShikiHighlighter:
+
+- Use \`react-shiki\` with themes: "github-dark" | "github-light"
+- Language: "tsx"
+- Styling: rounded border, muted background
+- Speed: 12ms per character
+
+### 5. **StaticCodeBlock Component**
+
+Memoized component for completed code blocks (no animation)
+
+### 6. **LRU Cache Class**
+
+Implement least-recently-used cache with max size 50:
+
+- Methods: get(), set(), clear()
+- Cache split content segments to avoid re-parsing
+
+### 7. **Content Splitting Function**
+
+Parse message content to extract:
+
+- Text segments (with markdown: **bold**, \`inline code\`)
+- Code blocks (\`\`\`tsx...\`\`\`)
+- Return array of {type: "text"|"code", value: string, delay: number}
+- Use regex: \`/\\\`\\\`\\\`(tsx|jsx|javascript|js)?\\n([\\s\\S]\*?)\\\`\\\`\\\`/g\`
+- Cache results with LRU cache
+
+### 8. **Markdown Rendering Helper**
+
+Parse and render:
+
+- **Bold text** → \`<strong>\` with semibold font
+- \`Inline code\` → \`<code>\` with muted background and mono font
+
+### 9. **Main AIChat Component State**
+
+- currentIndex: which message is being typed (-1 = not started)
+- completedMessages: Set of completed message indices
+- isTyping: boolean
+- showThinking: boolean (shows "Assistant is thinking..." indicator)
+- isFinished: boolean
+- currentSegmentIndex: which segment of current message
+- completedSegments: Set of completed segments
+- shouldAutoScroll: ref to control auto-scrolling
+
+### 10. **Scroll Behavior**
+
+- Auto-scroll to bottom during typing
+- Disable auto-scroll when user manually scrolls up
+- Re-enable auto-scroll when user scrolls back to bottom (within 50px threshold)
+- Use ref \`isProgrammatic\` to distinguish programmatic vs user scrolls
+- Use throttled MutationObserver during typing (100ms throttle)
+
+### 11. **Animation Flow**
+
+1. Component appears in viewport (use Framer Motion \`useInView\` with 0.3 amount)
+2. Wait 400ms, show first message
+3. Type message content segment by segment
+4. For user messages → show thinking indicator with thinkingDelay
+5. For assistant messages → wait nextDelay before next message
+6. After last message → show "Replay Demo" button
+
+### 12. **UI Structure**
+
+\`\`\`
+Container (480px height, rounded-3xl, border, backdrop-blur)
+├── Header
+│ ├── MessageSquareText icon + "AI Chat" label
+│ └── "Live Demo" indicator with pulsing green dot
+└── Scrollable Content Area
+├── Message Bubbles
+│ ├── User: right-aligned, secondary bg, User icon on right
+│ └── Assistant: left-aligned, muted bg, Bot icon on left
+├── Thinking Indicator (animated dots)
+└── Replay Button (when finished)
+\`\`\`
+
+### 13. **Message Bubble Styling**
+
+- User: rounded-2xl, rounded-br-sm, bg-secondary
+- Assistant: rounded-2xl, rounded-bl-sm, border, bg-muted/60
+- Icons: 9x9 rounded-full with border
+- Max width: 80% of container
+- Framer Motion: fade in from y: 12
+
+### 14. **Key Features**
+
+- Timeout management with cleanup on unmount
+- Segment-by-segment typing (text then code then text...)
+- Each segment completes before next starts
+- Cache clearing on unmount to prevent memory leaks
+- Passive scroll listeners for performance
+
+### 15. **Icons from lucide-react**
+
+- Bot (assistant)
+- User (user)
+- MessageSquareText (header and replay button)
+
+### 16. **Tailwind Classes to Use**
+
+- Colors: primary, secondary, muted, foreground, border, ring
+- Spacing: p-4, p-6, gap-3, space-y-4
+- Effects: backdrop-blur, shadow-sm, animate-pulse
+- Responsive: max-w-2xl, mx-auto
+
+## Usage
+
+\`\`\`tsx
+import AIChat from "@/components/AIChat";
+
+export default function Page() {
+  return (
+    <div className="container py-12">
+      <AIChat />
+    </div>
+  );
+}
+\`\`\`
+
+## Key Implementation Notes
+
+1. Use "use client" directive at top of file
+2. Export component as default with memo
+3. Clean up all timeouts in useEffect cleanup
+4. Use refs for isProgrammatic and shouldAutoScroll flags
+5. Handle edge cases: user scrolling, component unmounting mid-animation
+6. Optimize with React.memo for static code blocks
+7. Set displayName for memoized components`} />
+
 ## Installation
 
 <Tabs items={["CLI", "Manual"]}>

@@ -1,54 +1,85 @@
 ---
-title: Welcome to UI Library
-description: A collection of beautiful, reusable React components built with Tailwind CSS and Framer Motion.
+title: Welcome to CappyUI
+description: A collection of beautiful, animated React components built with Next.js, Tailwind CSS, and Framer Motion.
 ---
+
+## Overview
+
+CappyUI is a modern component library designed for Next.js applications. Each component is crafted with attention to detail, featuring smooth animations, responsive design, and full TypeScript support.
 
 ## Features
 
 - ✨ **Modern Design** - Clean, contemporary components that look great out of the box
-- 🎨 **Fully Customizable** - Built with Tailwind CSS for easy theming and customization
-- 🚀 **Performance Optimized** - Lightweight components with smooth animations
-- 📱 **Responsive** - Mobile-first design that works on all devices
+- 🎨 **Fully Customizable** - Built with Tailwind CSS for easy theming and styling
+- 🚀 **Smooth Animations** - Powered by Framer Motion for fluid, performant animations
+- 📱 **Responsive** - Mobile-first design that works beautifully on all devices
 - ♿ **Accessible** - Built with accessibility best practices in mind
 - 🔧 **TypeScript Ready** - Full TypeScript support with comprehensive type definitions
+- 🤖 **AI-Powered** - Generate components using AI with our copy-paste prompts
 
-## Getting Started
+## Quick Start
 
-Browse our component categories to find the perfect components for your project:
+Get started with CappyUI in just a few steps:
 
-<Cards>
-  <Card
-    title="Cards"
-    href="/docs/components/cards"
-    description="Interactive card components with hover effects and animations"
-  />
-  <Card
-    title="Buttons"
-    href="/docs/components/buttons"
-    description="Various button styles and interactive elements"
-  />
-  <Card
-    title="Text Components"
-    href="/docs/components/text"
-    description="Typography and text-based components"
-  />
-  <Card
-    title="Scroll & Parallax"
-    href="/docs/components/scroll"
-    description="Scroll-triggered animations and parallax effects"
-  />
-</Cards>
+<Steps>
 
-## Installation
+<Step>
 
-Most components require these common dependencies:
+### Install Next.js
+
+Create a new Next.js project or use an existing one:
 
 ```bash
-npm install framer-motion clsx tailwind-merge
+npx create-next-app@latest my-app
+cd my-app
 ```
 
-Each component page includes specific installation instructions and usage examples.
+</Step>
+
+<Step>
+
+### Install Dependencies
+
+Install the required dependencies:
+
+```bash
+npm install framer-motion lucide-react clsx tailwind-merge
+```
+
+</Step>
+
+<Step>
+
+### Add Components
+
+Use the CLI to add components to your project:
+
+```bash
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/calendar-current.json
+```
+
+</Step>
+
+</Steps>
+
+For detailed setup instructions, check out our [Installation Guide](/docs/installation).
+
+## Tech Stack
+
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Framer Motion](https://www.framer.com/motion/)** - Animation library
+- **[Lucide React](https://lucide.dev/)** - Beautiful icon library
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
 
 ## Contributing
 
-We welcome contributions! Feel free to submit issues, feature requests, or pull requests to help improve this library.
+We welcome contributions! If you have ideas for new components or improvements, feel free to:
+
+- Submit issues on GitHub
+- Create pull requests
+- Share feedback and suggestions
+
+## License
+
+MIT License - feel free to use these components in your projects, both personal and commercial.

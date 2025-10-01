@@ -19,19 +19,13 @@ function useThemeDetection() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof document === "undefined") return false;
     const root = document.documentElement;
-    return (
-      root.classList.contains("dark") ||
-      root.classList.contains("capybara-dark")
-    );
+    return root.classList.contains("dark");
   });
 
   useEffect(() => {
     const computeIsDark = () => {
       const root = document.documentElement;
-      return (
-        root.classList.contains("dark") ||
-        root.classList.contains("capybara-dark")
-      );
+      return root.classList.contains("dark");
     };
 
     const observer = new MutationObserver(() => {

@@ -7,6 +7,202 @@ description: A beautiful calendar component that highlights a range of dates wit
 
 <CalendarRange />
 
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton prompt={`React Calendar Range Component Prompt
+
+Create a modern, animated calendar component with date range highlighting in React. This component displays a monthly calendar view with a customizable date range centered around today's date, featuring smooth animations and visual indicators.
+
+Component Overview
+Build a CalendarRange component that displays a monthly calendar with a highlighted date range. The range is defined by a configurable number of days before and after the current date, with distinct visual styling for range start, end, middle dates, and today's date.
+
+Required Dependencies
+Install the following packages:
+\`\`\`bash
+npm install framer-motion lucide-react clsx tailwind-merge
+\`\`\`
+
+Utility Function
+First, create a utility file at @/lib/utils.ts:
+\`\`\`typescript
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+\`\`\`
+
+Component Requirements
+
+1. Core Functionality
+
+- Display current month and year with month navigation
+- Show all days in a 7x6 grid (42 cells total)
+- Include overflow days from previous and next months (displayed with reduced opacity)
+- Highlight a date range based on configurable days before/after today
+- Differentiate between:
+  - Today's date: Primary color with check icon overlay
+  - Range start/end dates: Primary color with slight transparency (90% opacity)
+  - Middle range dates: Accent background with 50% opacity
+  - Outside range dates: Standard styling with hover effects
+- Navigate between months with previous/next buttons
+
+2. Visual Design
+
+- Clean card layout with rounded corners and shadow
+- Header with month/year display centered between navigation arrows
+- Day-of-week labels (Su, Mo, Tu, We, Th, Fr, Sa)
+- Grid layout with proper spacing
+- Visual hierarchy for different date states in the range
+- Use CSS custom properties for theming:
+  - --fd-background - card background
+  - --fd-foreground - primary text
+  - --fd-muted-foreground - secondary text
+  - --fd-border - border color
+  - --fd-accent - middle range highlight
+  - --fd-primary - today and range endpoints
+  - --fd-primary-foreground - text on primary background
+
+3. Animations (using Framer Motion)
+
+- Navigation buttons: scale on hover (1.1x) and tap (0.95x)
+- Month/year text: fade and slide down animation when changing months
+- Calendar grid: fade transition between months
+- Individual day cells: staggered entrance animation (each cell delayed by 0.01s)
+- Today indicator: check icon appears with scale and fade animation (0.3s delay)
+
+4. Component Structure
+   CalendarRange
+   ├── Header
+   │ ├── Previous Month Button (ChevronLeft icon)
+   │ ├── Month Year Display (h2 element)
+   │ └── Next Month Button (ChevronRight icon)
+   ├── Day Headers Row (Su-Sa)
+   └── Calendar Grid (7 columns × 6 rows)
+   └── Day Cells (with conditional range styling)
+
+5. State Management
+
+- currentMonth: number (0-11)
+- currentYear: number
+- Track today's date for highlighting
+- Calculate rangeStart and rangeEnd based on props
+- Calculate days to display including overflow from adjacent months
+
+6. Helper Functions to Implement
+
+- getDaysInMonth(month, year) - returns number of days in month
+- getFirstDayOfMonth(month, year) - returns day of week (0-6) for first day
+- isDateInRange(day, month, year) - checks if date falls within the range
+- isToday(day, month, year) - checks if date matches today
+- isRangeStart(day, month, year) - checks if date is the start of range
+- isRangeEnd(day, month, year) - checks if date is the end of range
+- handlePrevMonth() - navigates to previous month (handles year boundary)
+- handleNextMonth() - navigates to next month (handles year boundary)
+
+7. Date Comparison Logic
+   When comparing dates, ensure to:
+
+- Set hours to 0, 0, 0, 0 for accurate date-only comparisons
+- Use .getTime() for precise equality checks
+- Compare using >= and <= for range boundaries
+
+8. Styling Classes by Date Type
+
+- Non-current month days: text-fd-muted-foreground/40
+- Current month, outside range: text-fd-foreground hover:bg-fd-accent
+- Middle range dates: bg-fd-accent/50 text-fd-foreground
+- Range start/end dates: bg-fd-primary/90 text-fd-primary-foreground shadow-md
+- Today's date: bg-fd-primary text-fd-primary-foreground shadow-md
+- Base cell: 48px height, rounded-lg, text-lg, relative positioning
+
+9. Props Interface
+   \`\`\`typescript
+   interface CalendarRangeProps {
+   className?: string; // Optional additional styling
+   daysBeforeCurrent?: number; // Days before today to highlight (default: 2)
+   daysAfterCurrent?: number; // Days after today to highlight (default: 2)
+   }
+   \`\`\`
+
+10. Constants
+    \`\`\`typescript
+    const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    const MONTHS = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+    \`\`\`
+
+Implementation Notes
+
+Range Calculation
+\`\`\`typescript
+// Calculate range start
+const rangeStart = new Date(today);
+rangeStart.setDate(today.getDate() - daysBeforeCurrent);
+
+// Calculate range end
+const rangeEnd = new Date(today);
+rangeEnd.setDate(today.getDate() + daysAfterCurrent);
+\`\`\`
+
+Date State Priority (for styling)
+
+1. Check if it's today → show check icon overlay
+2. Check if it's range start or end → primary background with 90% opacity
+3. Check if it's in middle of range → accent background with 50% opacity
+4. Default → standard styling
+
+Key Features
+
+- Component is a client component ("use client" directive)
+- TypeScript for type safety
+- Default export included
+- Grid always shows 42 cells (6 rows × 7 days) for consistent height
+- Range persists across month navigation
+- Range can span multiple months
+- Today always gets special treatment with check icon, even if it's a range boundary
+
+Tailwind Configuration
+Ensure your tailwind.config.js includes custom CSS variables or define them in your global CSS:
+\`\`\`css
+:root {
+--fd-background: white;
+--fd-foreground: #1a1a1a;
+--fd-muted-foreground: #6b7280;
+--fd-border: #e5e7eb;
+--fd-accent: #f3f4f6;
+--fd-primary: #3b82f6;
+--fd-primary-foreground: white;
+}
+\`\`\`
+
+Usage Example
+\`\`\`tsx
+// Default: 2 days before and after today
+
+<CalendarRange />
+
+// Custom range: 5 days before and 3 days after
+
+<CalendarRange daysBeforeCurrent={5} daysAfterCurrent={3} />
+
+// One week range
+
+<CalendarRange daysBeforeCurrent={3} daysAfterCurrent={3} />
+\`\`\`
+
+Accessibility
+
+- Add aria-label attributes to navigation buttons
+- Proper semantic HTML (use h2 for month/year heading)
+- Keyboard navigation support through native button elements
+- Sufficient color contrast for all date states`} />
+
 ## Installation
 
 <Tabs items={["CLI", "Manual"]}>

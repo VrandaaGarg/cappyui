@@ -27,7 +27,7 @@ export function CopyPromptButton({ prompt, className }: CopyPromptButtonProps) {
       type="button"
       onClick={handleCopy}
       className={cn(
-        "inline-flex items-center gap-2 rounded-lg border border-fd-border bg-fd-background px-4 py-2 text-sm font-medium text-fd-foreground transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground",
+        "inline-flex items-center gap-2 rounded-lg border border-fd-border bg-fd-foreground px-4 py-2 text-sm font-medium text-fd-background transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground",
         className
       )}
     >
@@ -45,4 +45,3 @@ export function CopyPromptButton({ prompt, className }: CopyPromptButtonProps) {
     </button>
   );
 }
-

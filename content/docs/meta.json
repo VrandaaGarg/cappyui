@@ -1,13 +1,12 @@
 {
   "title": "Documentation",
   "pages": [
+    "---GETTING STARTED---",
     "index",
-    "---Cards---",
-    "evervault-card",
-    "button",
-    "---AI Applications---",
+    "installation",
+    "---AI APPLICATIONS---",
     "ai-chat",
-    "---Components---",
+    "---COMPONENTS---",
     "calender-current",
     "calender-range"
   ]
