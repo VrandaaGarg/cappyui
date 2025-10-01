@@ -7,6 +7,7 @@ import { Step, Steps } from "fumadocs-ui/components/steps";
 import AIChat from "@/components/AIapplicationsComponents/ai-chat";
 import { CalendarRange } from "@/components/components/calenderRange";
 import { CalendarCurrent } from "@/components/components/calenderCurent";
+import { Puzzle } from "@/components/components/puzzle";
 import { CopyPromptButton } from "@/components/ui/copy-prompt-button";
 
 // use this function to get MDX components, you will need it for rendering MDX
@@ -19,6 +20,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     AIChat,
     CalendarRange,
     CalendarCurrent,
+    Puzzle,
     CopyPromptButton,
     pre: ({ ...props }) => (
       <CodeBlock {...props}>
