@@ -4,6 +4,9 @@
 #registry
 /registry
 
+#Prompts
+/prompts
+
 # generated content
 .contentlayer
 .content-collections

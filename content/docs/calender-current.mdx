@@ -5,9 +5,145 @@ description: A beautiful calendar component that highlights only the current dat
 
 ## Preview
 
-This calendar highlights only the current date with a checkmark icon. Adjacent month dates are shown in a muted color for better context.
-
 <CalendarCurrent />
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton prompt={`React Calendar Component Prompt
+
+Create a modern, animated calendar component in React with the following specifications:
+
+Component Overview
+Build a CalendarCurrent component that displays a monthly calendar view with smooth animations, navigation controls, and today's date highlighted. The calendar should show a 6-week grid (42 days) including overflow days from previous and next months.
+
+Required Dependencies
+Install the following packages:
+\`\`\`bash
+npm install framer-motion lucide-react clsx tailwind-merge
+\`\`\`
+
+Utility Function
+First, create a utility file at @/lib/utils.ts:
+\`\`\`typescript
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+\`\`\`
+
+Component Requirements
+
+1. Core Functionality
+
+- Display current month and year with ability to navigate between months
+- Show all days in a 7x6 grid (42 cells total)
+- Include overflow days from previous and next months (displayed with reduced opacity)
+- Highlight today's date with primary color and a check icon
+- Responsive navigation with previous/next month buttons
+
+2. Visual Design
+
+- Clean card layout with rounded corners and shadow
+- Header with month/year display centered between navigation arrows
+- Day-of-week labels (Su, Mo, Tu, We, Th, Fr, Sa)
+- Grid layout with proper spacing
+- Use CSS custom properties for theming:
+  - --fd-background - card background
+  - --fd-foreground - primary text
+  - --fd-muted-foreground - secondary text
+  - --fd-border - border color
+  - --fd-accent - hover state
+  - --fd-primary - today highlight
+  - --fd-primary-foreground - today text color
+
+3. Animations (using Framer Motion)
+
+- Navigation buttons: scale on hover (1.1x) and tap (0.95x)
+- Month/year text: fade and slide animation when changing months
+- Calendar grid: fade transition between months
+- Individual day cells: staggered entrance animation (each cell delayed by 0.01s)
+- Today indicator: check icon appears with scale and fade animation
+
+4. Component Structure
+   CalendarCurrent
+   ├── Header
+   │ ├── Previous Month Button (ChevronLeft icon)
+   │ ├── Month Year Display
+   │ └── Next Month Button (ChevronRight icon)
+   ├── Day Headers Row (Su-Sa)
+   └── Calendar Grid (7 columns × 6 rows)
+   └── Day Cells (with conditional styling)
+
+5. State Management
+
+- currentMonth: number (0-11)
+- currentYear: number
+- Track today's date for highlighting
+- Calculate days to display including overflow from adjacent months
+
+6. Helper Functions to Implement
+
+- getDaysInMonth(month, year) - returns number of days in month
+- getFirstDayOfMonth(month, year) - returns day of week (0-6) for first day
+- isToday(day, month, year) - checks if date matches today
+- handlePrevMonth() - navigates to previous month (handles year boundary)
+- handleNextMonth() - navigates to next month (handles year boundary)
+
+7. Styling Classes
+
+- Card: max-width 28rem, rounded-3xl, padding 2rem, shadow-lg
+- Navigation buttons: 40px × 40px, rounded-lg, hover effects
+- Month/year text: text-xl, bold, letter-spacing wide
+- Day cells: 48px height, rounded-lg, text-lg
+- Today cell: primary background, white text, shadow-md
+- Non-current month days: 40% opacity
+
+8. Accessibility
+
+- Add aria-label attributes to navigation buttons
+- Proper semantic HTML structure
+- Keyboard navigation support through native button elements
+
+9. Props Interface
+   \`\`\`typescript
+   interface CalendarCurrentProps {
+   className?: string; // Optional additional styling
+   }
+   \`\`\`
+
+10. Constants
+    \`\`\`typescript
+    const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    const MONTHS = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+    \`\`\`
+
+Implementation Notes
+
+- Use TypeScript for type safety
+- Component should be a client component ("use client" directive)
+- Default export the component
+- Grid always shows 42 cells (6 rows × 7 days) for consistent height
+- Stagger animation creates a smooth reveal effect for all day cells
+- Today's date shows a check icon overlay on top of the date number
+
+Tailwind Configuration
+Ensure your tailwind.config.js includes custom CSS variables or define them in your global CSS:
+\`\`\`css
+:root {
+--fd-background: white;
+--fd-foreground: #1a1a1a;
+--fd-muted-foreground: #6b7280;
+--fd-border: #e5e7eb;
+--fd-accent: #f3f4f6;
+--fd-primary: #3b82f6;
+--fd-primary-foreground: white;
+}
+\`\`\``} />
 
 ## Installation
 
