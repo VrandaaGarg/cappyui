@@ -3,7 +3,7 @@ import * as TabsComponents from "fumadocs-ui/components/tabs";
 import type { MDXComponents } from "mdx/types";
 import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-
+import { TeamCard } from "./components/components/TeamCard";
 import AIChat from "@/components/AIapplicationsComponents/ai-chat";
 import { CalendarRange } from "@/components/components/calenderRange";
 import { CalendarCurrent } from "@/components/components/calenderCurent";
@@ -20,6 +20,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     AIChat,
     CalendarRange,
     CalendarCurrent,
+    TeamCard,
     Puzzle,
     CopyPromptButton,
     pre: ({ ...props }) => (

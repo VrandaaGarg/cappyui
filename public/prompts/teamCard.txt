@@ -1,0 +1,200 @@
+Leadership Spotlight Component
+Create an animated team showcase component that displays a 2x2 grid of team member cards with an intelligent scanning border effect that highlights each member sequentially.
+Dependencies Required
+bashnpm install framer-motion clsx tailwind-merge
+Component Architecture
+Main Component: VisitTeam.tsx
+
+Type: Client-side React component ("use client")
+Props Interface:
+
+className?: string - Optional styling override
+
+
+
+Data Structure
+typescriptinterface TeamMember {
+  name: string;
+  role: string;
+  image: string; // URL to team member photo
+}
+Layout Structure
+Container Hierarchy
+
+Outer wrapper: Flex column, centered, with padding (px-6 md:px-8) and gap-7
+Header section:
+
+Title: "Leadership Spotlight" (text-4xl, font-bold)
+Subtitle: Descriptive text (text-lg, mt-3, muted color)
+Max width: max-w-3xl, centered
+
+
+Grid container:
+
+Max width: max-w-md
+Relative positioning for absolute border overlay
+
+
+Inner grid:
+
+CSS Grid: 2 columns (grid-cols-2)
+Gap: 1.5rem (gap-6)
+Contains 4 cards + 1 animated border overlay
+
+
+
+Card Structure
+
+Dimensions: aspect-[3/4] ratio (portrait orientation)
+Styling: rounded-2xl, overflow-hidden, bg-black
+Contains:
+
+Background image (absolute positioned, full cover)
+Bio tag overlay (absolute positioned at bottom with inset-x-3 bottom-3)
+
+
+
+Animation System
+Timing Constants
+
+SCAN_DURATION: 2 seconds per card
+TOTAL_DURATION: 8 seconds (2s × 4 cards)
+POSITION_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index is active at each keyframe
+KEYFRAME_TIMES: [0, 0.0625, 0.25, 0.3125, 0.5, 0.5625, 0.75, 0.8125, 1] - normalized time points (0-1) for each keyframe
+
+Animation Logic
+Image Animations (per card)
+For each of 4 cards, create animation based on its index:
+
+Filter (grayscale):
+
+Map through POSITION_SEQUENCE
+If position matches card index: grayscale(0%) (full color)
+Otherwise: grayscale(100%) (grayscale)
+
+
+Scale:
+
+Active card: 1.05
+Inactive cards: 1.0
+
+
+Transition: duration = TOTAL_DURATION, times = KEYFRAME_TIMES, ease = "easeInOut", infinite loop
+
+Bio Tag Animations (per card)
+
+Opacity:
+
+Active card: 1 (visible)
+Inactive cards: 0 (hidden)
+
+
+Y-translation:
+
+Active card: 0 (normal position)
+Inactive cards: 12 (slightly down)
+
+
+Same transition config as images
+
+Scanning Border Animation
+Complex feature requiring DOM measurements:
+
+Setup Phase (useEffect + useRef):
+
+Create refs for: grid container, all 4 card elements
+Measure each card's position relative to grid on mount and resize
+Store: cardPositions[] array with {x, y} coordinates
+Measure first card's: width, height, borderRadius
+
+
+Border Position Calculation:
+
+Map POSITION_SEQUENCE to actual pixel coordinates
+Creates array of 9 position keyframes matching the sequence
+
+
+Border Structure (motion.div overlay):
+
+Absolute positioned at top-left initially
+Width/height match measured card dimensions
+Contains 4 corner bracket divs (not full borders)
+Each corner: 3px border with 2 sides (L-shaped brackets)
+Border color: blue-500
+
+
+Corner Bracket Dimensions:
+
+Calculate dynamically: min(cardWidth, cardHeight) * 0.15
+Minimum: frameRadius + 8px
+Maximum: shortestSide / 1.8
+Ensures corners don't overlap
+
+
+Border Animation:
+
+Animate X: array of 9 x-coordinates
+Animate Y: array of 9 y-coordinates
+Duration: TOTAL_DURATION (8s)
+Times: KEYFRAME_TIMES
+Ease: "linear" (for border movement)
+Infinite loop
+
+
+
+Bio Tag Styling
+
+Background: bg-black/75 with backdrop-blur
+Padding: px-3 py-2
+Border radius: rounded-xl
+Shadow: shadow-[0_8px_24px_rgba(15,23,42,0.35)]
+Text colors: white for name, white/70 for role
+Font sizes:
+
+Name: text-[12px] md:text-sm, font-semibold
+Role: text-[8px] md:text-[12px], font-medium
+
+
+
+Measurement System
+Key Implementation Details
+
+Initial measurement: Run on component mount via useEffect
+Resize listener: Re-measure on window resize
+Position calculation:
+
+Get grid's bounding rect
+Get each card's bounding rect
+Calculate relative positions: cardRect.left - gridRect.left, cardRect.top - gridRect.top
+
+
+State updates: Only update if positions actually changed (optimization)
+Border radius extraction: Parse from computed styles of first card
+
+Performance Optimizations
+
+Use React.memo for component
+Use useMemo for derived calculations
+Use useCallback for measurement function
+Set willChange: "transform, opacity" on animated elements
+Prevent unnecessary re-renders with state comparison
+
+Sample Data
+Provide 4 team members with:
+
+Professional names
+Executive-level roles
+High-quality portrait photos (3:4 aspect ratio preferred)
+Use placeholder image URLs from free stock photo sites
+
+Utility Function
+Create cn() utility using clsx and tailwind-merge to merge className props with component classes.
+Critical Implementation Notes
+
+The border overlay must be positioned absolutely within the grid container
+Border measurements must happen after images load (use onLoad callback)
+The border's width, height, and borderRadius must dynamically match the measured card dimensions
+The 4 corner brackets create the scanning frame effect (not a full border)
+All animations must share the same KEYFRAME_TIMES array for synchronization
+The POSITION_SEQUENCE determines which card is "active" at each keyframe step
+Retry

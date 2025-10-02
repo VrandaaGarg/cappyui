@@ -1,0 +1,490 @@
+---
+title: Team Card
+description: An animated team showcase component with a 2x2 grid displaying team member cards with an intelligent scanning border effect that highlights each member sequentially.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Preview
+
+<TeamCard />
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/teamCard.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/team-card.tsx`
+        ```tsx
+        "use client";
+
+        import React, {
+          memo,
+          useCallback,
+          useEffect,
+          useMemo,
+          useRef,
+          useState,
+        } from "react";
+        import { motion } from "framer-motion";
+        import { cn } from "@/lib/utils";
+
+        interface TeamCardProps {
+          className?: string;
+        }
+
+        interface TeamMember {
+          name: string;
+          role: string;
+          image: string;
+        }
+
+        // Team members with basic bio for the callout tags.
+        const TEAM_MEMBERS: TeamMember[] = [
+          {
+            name: "Raj Gupta",
+            role: "Chief Executive Officer",
+            image:
+              "https://img.freepik.com/premium-photo/happy-proud-prosperous-mid-aged-mature-professional-asian-business-man-ceo-executive-wearing-suit-standing-office-arms-crossed-looking-away-thinking-success-leadership-side-profile-view_220770-5137.jpg",
+          },
+          {
+            name: "Anita Desai",
+            role: "Head of Product",
+            image:
+              "https://img.freepik.com/premium-photo/portrait-business-woman-with-arms-crossed-office_770200-4875.jpg",
+          },
+          {
+            name: "Michael Chen",
+            role: "Engineering Director",
+            image:
+              "https://img.freepik.com/premium-photo/portrait-man-businessman-corporate-man-with-smiling-face_1118350-346.jpg",
+          },
+          {
+            name: "Priya Singh",
+            role: "Design Lead",
+            image:
+              "https://static.vecteezy.com/system/resources/previews/029/771/918/large_2x/portrait-of-a-beautiful-businesswoman-in-modern-office-asian-manager-looking-at-camera-and-smiling-confident-female-ceo-planning-and-managing-company-free-photo.jpeg",
+          },
+        ];
+
+        // Animation timing - each image is active for 2 seconds
+        const SCAN_DURATION = 2; // Duration for each image scan
+        const TOTAL_DURATION = SCAN_DURATION * TEAM_MEMBERS.length; // Total cycle duration
+
+        const POSITION_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
+        const KEYFRAME_TIMES = [0, 0.0625, 0.25, 0.3125, 0.5, 0.5625, 0.75, 0.8125, 1];
+
+        const ACTIVE_IMAGE_SCALE = 1.05;
+
+        const getImageAnimation = (activeIndex: number) => {
+          const filter = POSITION_SEQUENCE.map((positionIndex) =>
+            positionIndex === activeIndex ? "grayscale(0%)" : "grayscale(100%)"
+          );
+
+          const scale = POSITION_SEQUENCE.map((positionIndex) =>
+            positionIndex === activeIndex ? ACTIVE_IMAGE_SCALE : 1
+          );
+
+          return { filter, scale };
+        };
+
+        const getTagAnimation = (activeIndex: number) => {
+          const opacity = POSITION_SEQUENCE.map((positionIndex) =>
+            positionIndex === activeIndex ? 1 : 0
+          );
+
+          const y = POSITION_SEQUENCE.map((positionIndex) =>
+            positionIndex === activeIndex ? 0 : 12
+          );
+
+          return { opacity, y };
+        };
+
+        export const TeamCard = memo(({ className }: TeamCardProps) => {
+          const gridRef = useRef<HTMLDivElement | null>(null);
+          const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+          const [cardPositions, setCardPositions] = useState<
+            { x: number; y: number }[]
+          >([]);
+          const [frameSize, setFrameSize] = useState({ width: 0, height: 0 });
+          const [frameRadius, setFrameRadius] = useState(0);
+
+          // Measure card positions so the border snaps precisely to each tile.
+          const updateMeasurements = useCallback(() => {
+            if (!gridRef.current) {
+              return;
+            }
+
+            const gridRect = gridRef.current.getBoundingClientRect();
+            const positions = cardRefs.current.map((card) => {
+              if (!card) {
+                return null;
+              }
+
+              const rect = card.getBoundingClientRect();
+
+              return {
+                x: rect.left - gridRect.left,
+                y: rect.top - gridRect.top,
+              };
+            });
+
+            if (
+              positions.length !== TEAM_MEMBERS.length ||
+              positions.some((pos) => pos === null)
+            ) {
+              return;
+            }
+
+            const typedPositions = positions as { x: number; y: number }[];
+
+            setCardPositions((previous) => {
+              const changed =
+                previous.length !== typedPositions.length ||
+                previous.some((prevPos, index) => {
+                  const nextPos = typedPositions[index];
+                  return prevPos.x !== nextPos.x || prevPos.y !== nextPos.y;
+                });
+
+              return changed ? typedPositions : previous;
+            });
+
+            const firstCard = cardRefs.current[0];
+
+            if (firstCard) {
+              setFrameSize((previous) => {
+                const nextWidth = firstCard.offsetWidth;
+                const nextHeight = firstCard.offsetHeight;
+
+                if (previous.width !== nextWidth || previous.height !== nextHeight) {
+                  return { width: nextWidth, height: nextHeight };
+                }
+
+                return previous;
+              });
+
+              setFrameRadius((previous) => {
+                const computedStyle = window.getComputedStyle(firstCard);
+                const rawRadius = computedStyle.borderTopLeftRadius || "0";
+                const nextRadius = Number.parseFloat(rawRadius) || 0;
+
+                return previous !== nextRadius ? nextRadius : previous;
+              });
+            }
+          }, []);
+
+          useEffect(() => {
+            if (typeof window === "undefined") {
+              return;
+            }
+
+            updateMeasurements();
+            window.addEventListener("resize", updateMeasurements);
+
+            return () => {
+              window.removeEventListener("resize", updateMeasurements);
+            };
+          }, [updateMeasurements]);
+
+          const borderPositions = useMemo(() => {
+            if (cardPositions.length === TEAM_MEMBERS.length) {
+              return POSITION_SEQUENCE.map(
+                (positionIndex) => cardPositions[positionIndex]
+              );
+            }
+
+            return POSITION_SEQUENCE.map(() => ({ x: 0, y: 0 }));
+          }, [cardPositions]);
+
+          const borderXKeyframes = useMemo(
+            () => borderPositions.map((position) => position.x),
+            [borderPositions]
+          );
+
+          const borderYKeyframes = useMemo(
+            () => borderPositions.map((position) => position.y),
+            [borderPositions]
+          );
+
+          const hasFrameSize = frameSize.width > 0 && frameSize.height > 0;
+
+          const cornerLength = useMemo(() => {
+            if (!hasFrameSize) {
+              return 16;
+            }
+
+            const shortestSide = Math.min(frameSize.width, frameSize.height);
+            const desired = shortestSide * 0.15;
+
+            return Math.max(Math.min(desired, shortestSide / 1.8), frameRadius + 8);
+          }, [frameSize.height, frameSize.width, frameRadius, hasFrameSize]);
+
+          cardRefs.current.length = TEAM_MEMBERS.length;
+
+          return (
+            <div
+              className={cn("flex flex-col items-center px-6 md:px-8 gap-7", className)}
+            >
+              {/* Title and Subtitle */}
+              <div className="text-center flex flex-col items-center max-w-3xl">
+                <span className="text-4xl  font-bold text-fd-foreground">
+                  Leadership Spotlight
+                </span>
+                <span className="text-lg mt-3 text-fd-muted-foreground">
+                  Meet the minds shaping our product vision and guiding every launch.
+                </span>
+              </div>
+
+              {/* 2x2 Grid Container */}
+              <div className="relative w-full max-w-md">
+                <div ref={gridRef} className="grid grid-cols-2 gap-6 relative">
+                  {TEAM_MEMBERS.map((member, index) => (
+                    <motion.div
+                      key={index}
+                      className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-black"
+                      style={{ willChange: "filter", lineHeight: 0 }}
+                      ref={(node) => {
+                        cardRefs.current[index] = node;
+                      }}
+                    >
+                      {/* Image */}
+                      <motion.img
+                        src={member.image}
+                        alt={member.name}
+                        className="absolute inset-0 h-full w-full object-cover block"
+                        style={{ margin: 0, willChange: "transform, filter" }}
+                        animate={getImageAnimation(index)}
+                        transition={{
+                          duration: TOTAL_DURATION,
+                          times: KEYFRAME_TIMES,
+                          ease: "easeInOut",
+                          repeat: Infinity,
+                          repeatType: "loop",
+                        }}
+                        onLoad={updateMeasurements}
+                      />
+
+                      {/* Active tag */}
+                      <motion.div
+                        className="absolute flex flex-col gap-1 text-center inset-x-3 bottom-3 rounded-xl bg-black/75 px-3 py-2 text-white shadow-[0_8px_24px_rgba(15,23,42,0.35)] backdrop-blur"
+                        style={{ pointerEvents: "none" }}
+                        animate={getTagAnimation(index)}
+                        transition={{
+                          duration: TOTAL_DURATION,
+                          times: KEYFRAME_TIMES,
+                          ease: "easeInOut",
+                          repeat: Infinity,
+                          repeatType: "loop",
+                        }}
+                      >
+                        <span className="text-[12px] md:text-sm font-semibold leading-tight">
+                          {member.name}
+                        </span>
+                        <span className="text-[8px] md:text-[12px] font-medium text-white/70 leading-tight">
+                          {member.role}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+
+                  {/* Single Moving Scanning Border */}
+                  <motion.div
+                    className="absolute pointer-events-none"
+                    style={{
+                      width: hasFrameSize ? frameSize.width : "calc(50% - 12px)",
+                      height: hasFrameSize ? frameSize.height : undefined,
+                      aspectRatio: hasFrameSize ? undefined : "3/4",
+                      borderRadius: frameRadius || undefined,
+                      top: 0,
+                      left: 0,
+                    }}
+                    animate={{
+                      x: borderXKeyframes,
+                      y: borderYKeyframes,
+                    }}
+                    transition={{
+                      duration: TOTAL_DURATION,
+                      times: KEYFRAME_TIMES,
+                      ease: "linear",
+                      repeat: Infinity,
+                      repeatType: "loop",
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0"
+                      style={{ borderRadius: frameRadius || undefined }}
+                    >
+                      {/* Top-left corner */}
+                      <div
+                        className="absolute border-[3px] border-blue-500 border-r-0 border-b-0"
+                        style={{
+                          width: cornerLength,
+                          height: cornerLength,
+                          top: 0,
+                          left: 0,
+                          borderTopLeftRadius: frameRadius || undefined,
+                        }}
+                      />
+
+                      {/* Top-right corner */}
+                      <div
+                        className="absolute border-[3px] border-blue-500 border-l-0 border-b-0"
+                        style={{
+                          width: cornerLength,
+                          height: cornerLength,
+                          top: 0,
+                          right: 0,
+                          borderTopRightRadius: frameRadius || undefined,
+                        }}
+                      />
+
+                      {/* Bottom-left corner */}
+                      <div
+                        className="absolute border-[3px] border-blue-500 border-r-0 border-t-0"
+                        style={{
+                          width: cornerLength,
+                          height: cornerLength,
+                          bottom: 0,
+                          left: 0,
+                          borderBottomLeftRadius: frameRadius || undefined,
+                        }}
+                      />
+
+                      {/* Bottom-right corner */}
+                      <div
+                        className="absolute border-[3px] border-blue-500 border-l-0 border-t-0"
+                        style={{
+                          width: cornerLength,
+                          height: cornerLength,
+                          bottom: 0,
+                          right: 0,
+                          borderBottomRightRadius: frameRadius || undefined,
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          );
+        });
+
+        TeamCard.displayName = "TeamCard";
+        ```
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { TeamCard } from "@/components/ui/team-card";
+
+export default function Page() {
+  return <TeamCard />;
+}
+```
+
+## Customization
+
+### Team Members
+
+Update the `TEAM_MEMBERS` array to customize the team members:
+
+```tsx
+const TEAM_MEMBERS: TeamMember[] = [
+  {
+    name: "Your Name",
+    role: "Your Role",
+    image: "https://your-image-url.com/image.jpg",
+  },
+  // Add 3 more members for a 2x2 grid
+];
+```
+
+### Animation Timing
+
+Adjust the scanning duration by modifying the `SCAN_DURATION` constant:
+
+```tsx
+const SCAN_DURATION = 2; // Duration in seconds for each member
+```
+
+### Border Color
+
+Change the border color by modifying the border classes:
+
+```tsx
+className = "absolute border-[3px] border-blue-500 ..."; // Change border-blue-500 to your color
+```
+
+### Styling
+
+Customize the component appearance using the `className` prop:
+
+```tsx
+<TeamCard className="bg-gray-100 p-12" />
+```
+
+## Props
+
+| Prop        | Type     | Default     | Description                                      |
+| ----------- | -------- | ----------- | ------------------------------------------------ |
+| `className` | `string` | `undefined` | Additional CSS classes to apply to the component |
+
+## Animation Details
+
+The component uses a sophisticated animation system:
+
+- **Position Sequence**: `[0, 0, 1, 1, 2, 2, 3, 3, 0]` - Defines which card is active at each keyframe
+- **Keyframe Times**: Normalized time points (0-1) for smooth transitions
+- **Image Effects**: Grayscale filter and scale animations for inactive/active states
+- **Bio Tags**: Opacity and Y-translation animations synchronized with image effects
+- **Scanning Border**: Dynamic position calculation based on measured card positions
+
+## Performance
+
+The component is optimized for performance:
+
+- Uses `React.memo` to prevent unnecessary re-renders
+- Implements `useMemo` for expensive calculations
+- Uses `useCallback` for stable function references
+- Sets `willChange` CSS property for GPU acceleration
+- Measures DOM elements only when necessary (mount and resize)
