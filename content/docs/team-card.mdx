@@ -447,44 +447,10 @@ Adjust the scanning duration by modifying the `SCAN_DURATION` constant:
 const SCAN_DURATION = 2; // Duration in seconds for each member
 ```
 
-### Border Color
-
-Change the border color by modifying the border classes:
-
-```tsx
-className = "absolute border-[3px] border-blue-500 ..."; // Change border-blue-500 to your color
-```
-
-### Styling
-
-Customize the component appearance using the `className` prop:
-
-```tsx
-<TeamCard className="bg-gray-100 p-12" />
-```
-
 ## Props
 
 | Prop        | Type     | Default     | Description                                      |
 | ----------- | -------- | ----------- | ------------------------------------------------ |
 | `className` | `string` | `undefined` | Additional CSS classes to apply to the component |
 
-## Animation Details
-
-The component uses a sophisticated animation system:
-
-- **Position Sequence**: `[0, 0, 1, 1, 2, 2, 3, 3, 0]` - Defines which card is active at each keyframe
-- **Keyframe Times**: Normalized time points (0-1) for smooth transitions
-- **Image Effects**: Grayscale filter and scale animations for inactive/active states
-- **Bio Tags**: Opacity and Y-translation animations synchronized with image effects
-- **Scanning Border**: Dynamic position calculation based on measured card positions
-
-## Performance
-
-The component is optimized for performance:
-
-- Uses `React.memo` to prevent unnecessary re-renders
-- Implements `useMemo` for expensive calculations
-- Uses `useCallback` for stable function references
-- Sets `willChange` CSS property for GPU acceleration
-- Measures DOM elements only when necessary (mount and resize)
+<br />
