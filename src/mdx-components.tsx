@@ -5,6 +5,7 @@ import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { TeamCard } from "./components/components/TeamCard";
 import AIChat from "@/components/AIapplicationsComponents/ai-chat";
+import PinChat from "@/components/AIapplicationsComponents/pin-chat";
 import { CalendarRange } from "@/components/components/calenderRange";
 import { CalendarCurrent } from "@/components/components/calenderCurent";
 import { Puzzle } from "@/components/components/puzzle";
@@ -18,6 +19,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Step,
     Steps,
     AIChat,
+    PinChat,
     CalendarRange,
     CalendarCurrent,
     TeamCard,
