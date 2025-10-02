@@ -725,7 +725,7 @@ const AIChat = memo(function AIChat() {
                 className={cn(
                   "relative max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-sm",
                   message.role === "user"
-                    ? "rounded-br-sm bg-secondary text-secondary-foreground"
+                    ? "rounded-br-sm bg-fd-border border border-border/20 text-secondary-foreground"
                     : "rounded-bl-sm border border-border/20 bg-muted/60 text-muted-foreground"
                 )}
               >
@@ -804,7 +804,7 @@ const AIChat = memo(function AIChat() {
                 </div>
               </div>
               {message.role === "user" && (
-                <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary">
+                <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-primary/25 bg-fd-border text-primary">
                   <User className="h-4 w-4" />
                 </div>
               )}
