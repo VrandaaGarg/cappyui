@@ -57,12 +57,12 @@ Bio tag overlay (absolute positioned at bottom with inset-x-3 bottom-3)
 Animation System
 Timing Constants
 
-SCAN_DURATION: 2 seconds per card
-TOTAL_DURATION: 8 seconds (2s × 4 cards)
+SCAN_DURATION: 1.6 seconds per card
+TOTAL_DURATION: 6.4 seconds (1.6s × 4 cards)
 FRAME_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index the border should be positioned on
-FRAME_KEYFRAME_TIMES: [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.75, 0.88, 1] - normalized time points (0-1) for border animation
+FRAME_KEYFRAME_TIMES: [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.7, 0.8, 1] - normalized time points (0-1) for border animation
 CARD_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index should be active (colored/visible tag)
-CARD_KEYFRAME_TIMES: Same as FRAME_KEYFRAME_TIMES for synchronization
+CARD_KEYFRAME_TIMES: [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.85, 0.9, 1] - delayed timing for card effects to sync with border movement
 SMOOTH_EASE: [0.45, 0, 0.55, 1] - custom easing curve for smooth animations
 MEASUREMENT_DEBOUNCE_MS: 100ms debounce delay for DOM measurements
 
@@ -141,7 +141,7 @@ Border Animation:
 
 Animate X: array of 9 x-coordinates
 Animate Y: array of 9 y-coordinates
-Duration: TOTAL_DURATION (8s)
+Duration: TOTAL_DURATION (6.4s)
 Times: FRAME_KEYFRAME_TIMES
 Ease: SMOOTH_EASE (for synchronized movement)
 Infinite loop
@@ -204,9 +204,9 @@ The border overlay must be positioned absolutely within the grid container
 Border measurements must happen after images load (use onLoad callback with debounced handler)
 The border's width, height, and borderRadius must dynamically match the measured card dimensions
 The 4 corner brackets create the scanning frame effect (not a full border)
-FRAME_KEYFRAME_TIMES and CARD_KEYFRAME_TIMES must be synchronized for proper timing
+FRAME_KEYFRAME_TIMES and CARD_KEYFRAME_TIMES have different timing for better synchronization
 The FRAME_SEQUENCE determines border position, CARD_SEQUENCE determines card active state
-Timing synchronization: 4th card stays active longer (0.75 to 0.88) to match border perception
+Timing synchronization: Card effects are delayed (0.85 to 0.9) to activate after border reaches position (0.7 to 0.8)
 Use debounced measurements to prevent performance issues during animations
 Proper cleanup of timeouts and event listeners to prevent memory leaks
 Retry

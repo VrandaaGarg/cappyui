@@ -50,14 +50,14 @@ const TEAM_MEMBERS: TeamMember[] = [
 ];
 
 // Animation timing - each image is active for 2 seconds
-const SCAN_DURATION = 2; // Duration for each image scan
+const SCAN_DURATION = 1.6; // Duration for each image scan
 const TOTAL_DURATION = SCAN_DURATION * TEAM_MEMBERS.length; // Total cycle duration
 
 // Sequences keep the scanning frame looping while card content lingers just long enough.
 const FRAME_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
-const FRAME_KEYFRAME_TIMES = [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.75, 0.88, 1];
+const FRAME_KEYFRAME_TIMES = [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.7, 0.8, 1];
 const CARD_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
-const CARD_KEYFRAME_TIMES = FRAME_KEYFRAME_TIMES;
+const CARD_KEYFRAME_TIMES = [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.85, 0.9, 1];
 const SMOOTH_EASE = [0.45, 0, 0.55, 1] as const;
 
 const ACTIVE_IMAGE_SCALE = 1.05;
