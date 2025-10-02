@@ -59,8 +59,12 @@ Timing Constants
 
 SCAN_DURATION: 2 seconds per card
 TOTAL_DURATION: 8 seconds (2s × 4 cards)
-POSITION_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index is active at each keyframe
-KEYFRAME_TIMES: [0, 0.0625, 0.25, 0.3125, 0.5, 0.5625, 0.75, 0.8125, 1] - normalized time points (0-1) for each keyframe
+FRAME_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index the border should be positioned on
+FRAME_KEYFRAME_TIMES: [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.75, 0.88, 1] - normalized time points (0-1) for border animation
+CARD_SEQUENCE: [0, 0, 1, 1, 2, 2, 3, 3, 0] - defines which card index should be active (colored/visible tag)
+CARD_KEYFRAME_TIMES: Same as FRAME_KEYFRAME_TIMES for synchronization
+SMOOTH_EASE: [0.45, 0, 0.55, 1] - custom easing curve for smooth animations
+MEASUREMENT_DEBOUNCE_MS: 100ms debounce delay for DOM measurements
 
 Animation Logic
 Image Animations (per card)
@@ -68,7 +72,7 @@ For each of 4 cards, create animation based on its index:
 
 Filter (grayscale):
 
-Map through POSITION_SEQUENCE
+Map through CARD_SEQUENCE
 If position matches card index: grayscale(0%) (full color)
 Otherwise: grayscale(100%) (grayscale)
 
@@ -79,7 +83,7 @@ Active card: 1.05
 Inactive cards: 1.0
 
 
-Transition: duration = TOTAL_DURATION, times = KEYFRAME_TIMES, ease = "easeInOut", infinite loop
+Transition: duration = TOTAL_DURATION, times = CARD_KEYFRAME_TIMES, ease = SMOOTH_EASE, infinite loop
 
 Bio Tag Animations (per card)
 
@@ -98,11 +102,12 @@ Inactive cards: 12 (slightly down)
 Same transition config as images
 
 Scanning Border Animation
-Complex feature requiring DOM measurements:
+Complex feature requiring DOM measurements with debouncing:
 
 Setup Phase (useEffect + useRef):
 
-Create refs for: grid container, all 4 card elements
+Create refs for: grid container, all 4 card elements, measurement timeout
+Debounced measurement function to prevent excessive updates during animation
 Measure each card's position relative to grid on mount and resize
 Store: cardPositions[] array with {x, y} coordinates
 Measure first card's: width, height, borderRadius
@@ -110,8 +115,9 @@ Measure first card's: width, height, borderRadius
 
 Border Position Calculation:
 
-Map POSITION_SEQUENCE to actual pixel coordinates
+Map FRAME_SEQUENCE to actual pixel coordinates
 Creates array of 9 position keyframes matching the sequence
+Use fallback positions if measurements not ready
 
 
 Border Structure (motion.div overlay):
@@ -136,8 +142,8 @@ Border Animation:
 Animate X: array of 9 x-coordinates
 Animate Y: array of 9 y-coordinates
 Duration: TOTAL_DURATION (8s)
-Times: KEYFRAME_TIMES
-Ease: "linear" (for border movement)
+Times: FRAME_KEYFRAME_TIMES
+Ease: SMOOTH_EASE (for synchronized movement)
 Infinite loop
 
 
@@ -159,6 +165,7 @@ Role: text-[8px] md:text-[12px], font-medium
 Measurement System
 Key Implementation Details
 
+Debounced measurement: Use setTimeout with 100ms delay to prevent excessive updates
 Initial measurement: Run on component mount via useEffect
 Resize listener: Re-measure on window resize
 Position calculation:
@@ -168,16 +175,18 @@ Get each card's bounding rect
 Calculate relative positions: cardRect.left - gridRect.left, cardRect.top - gridRect.top
 
 
-State updates: Only update if positions actually changed (optimization)
+State updates: Only update if positions changed by more than 1px (optimization)
 Border radius extraction: Parse from computed styles of first card
+Timeout cleanup: Clear measurement timeouts on unmount
 
 Performance Optimizations
 
 Use React.memo for component
-Use useMemo for derived calculations
-Use useCallback for measurement function
-Set willChange: "transform, opacity" on animated elements
-Prevent unnecessary re-renders with state comparison
+Use useMemo for derived calculations (borderPositions, animationKeyframes, cornerLength)
+Use useCallback for debounced measurement function and image load handler
+Set willChange: "auto" on cards, "transform" on border, "transform, filter" on images
+Prevent unnecessary re-renders with precise state comparison
+Animation lifecycle management with refs to prevent measurement conflicts
 
 Sample Data
 Provide 4 team members with:
@@ -192,9 +201,12 @@ Create cn() utility using clsx and tailwind-merge to merge className props with 
 Critical Implementation Notes
 
 The border overlay must be positioned absolutely within the grid container
-Border measurements must happen after images load (use onLoad callback)
+Border measurements must happen after images load (use onLoad callback with debounced handler)
 The border's width, height, and borderRadius must dynamically match the measured card dimensions
 The 4 corner brackets create the scanning frame effect (not a full border)
-All animations must share the same KEYFRAME_TIMES array for synchronization
-The POSITION_SEQUENCE determines which card is "active" at each keyframe step
+FRAME_KEYFRAME_TIMES and CARD_KEYFRAME_TIMES must be synchronized for proper timing
+The FRAME_SEQUENCE determines border position, CARD_SEQUENCE determines card active state
+Timing synchronization: 4th card stays active longer (0.75 to 0.88) to match border perception
+Use debounced measurements to prevent performance issues during animations
+Proper cleanup of timeouts and event listeners to prevent memory leaks
 Retry

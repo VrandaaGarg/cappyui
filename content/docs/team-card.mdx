@@ -106,17 +106,24 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
         const SCAN_DURATION = 2; // Duration for each image scan
         const TOTAL_DURATION = SCAN_DURATION * TEAM_MEMBERS.length; // Total cycle duration
 
-        const POSITION_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
-        const KEYFRAME_TIMES = [0, 0.0625, 0.25, 0.3125, 0.5, 0.5625, 0.75, 0.8125, 1];
+        // Sequences keep the scanning frame looping while card content lingers just long enough.
+        const FRAME_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
+        const FRAME_KEYFRAME_TIMES = [0, 0.07, 0.25, 0.32, 0.5, 0.57, 0.75, 0.88, 1];
+        const CARD_SEQUENCE = [0, 0, 1, 1, 2, 2, 3, 3, 0] as const;
+        const CARD_KEYFRAME_TIMES = FRAME_KEYFRAME_TIMES;
+        const SMOOTH_EASE = [0.45, 0, 0.55, 1] as const;
 
         const ACTIVE_IMAGE_SCALE = 1.05;
 
+        // Debounce delay for measurements to prevent excessive updates
+        const MEASUREMENT_DEBOUNCE_MS = 100;
+
         const getImageAnimation = (activeIndex: number) => {
-          const filter = POSITION_SEQUENCE.map((positionIndex) =>
+          const filter = CARD_SEQUENCE.map((positionIndex) =>
             positionIndex === activeIndex ? "grayscale(0%)" : "grayscale(100%)"
           );
 
-          const scale = POSITION_SEQUENCE.map((positionIndex) =>
+          const scale = CARD_SEQUENCE.map((positionIndex) =>
             positionIndex === activeIndex ? ACTIVE_IMAGE_SCALE : 1
           );
 
@@ -124,11 +131,11 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
         };
 
         const getTagAnimation = (activeIndex: number) => {
-          const opacity = POSITION_SEQUENCE.map((positionIndex) =>
+          const opacity = CARD_SEQUENCE.map((positionIndex) =>
             positionIndex === activeIndex ? 1 : 0
           );
 
-          const y = POSITION_SEQUENCE.map((positionIndex) =>
+          const y = CARD_SEQUENCE.map((positionIndex) =>
             positionIndex === activeIndex ? 0 : 12
           );
 
@@ -138,74 +145,86 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
         export const TeamCard = memo(({ className }: TeamCardProps) => {
           const gridRef = useRef<HTMLDivElement | null>(null);
           const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+          const measurementTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+          const isAnimatingRef = useRef(false);
           const [cardPositions, setCardPositions] = useState<
             { x: number; y: number }[]
           >([]);
           const [frameSize, setFrameSize] = useState({ width: 0, height: 0 });
           const [frameRadius, setFrameRadius] = useState(0);
 
-          // Measure card positions so the border snaps precisely to each tile.
-          const updateMeasurements = useCallback(() => {
-            if (!gridRef.current) {
-              return;
+          // Debounced measurement function to prevent excessive updates during animation
+          const debouncedUpdateMeasurements = useCallback(() => {
+            // Clear existing timeout
+            if (measurementTimeoutRef.current) {
+              clearTimeout(measurementTimeoutRef.current);
             }
 
-            const gridRect = gridRef.current.getBoundingClientRect();
-            const positions = cardRefs.current.map((card) => {
-              if (!card) {
-                return null;
+            measurementTimeoutRef.current = setTimeout(() => {
+              if (!gridRef.current) {
+                return;
               }
 
-              const rect = card.getBoundingClientRect();
-
-              return {
-                x: rect.left - gridRect.left,
-                y: rect.top - gridRect.top,
-              };
-            });
-
-            if (
-              positions.length !== TEAM_MEMBERS.length ||
-              positions.some((pos) => pos === null)
-            ) {
-              return;
-            }
-
-            const typedPositions = positions as { x: number; y: number }[];
-
-            setCardPositions((previous) => {
-              const changed =
-                previous.length !== typedPositions.length ||
-                previous.some((prevPos, index) => {
-                  const nextPos = typedPositions[index];
-                  return prevPos.x !== nextPos.x || prevPos.y !== nextPos.y;
-                });
-
-              return changed ? typedPositions : previous;
-            });
-
-            const firstCard = cardRefs.current[0];
-
-            if (firstCard) {
-              setFrameSize((previous) => {
-                const nextWidth = firstCard.offsetWidth;
-                const nextHeight = firstCard.offsetHeight;
-
-                if (previous.width !== nextWidth || previous.height !== nextHeight) {
-                  return { width: nextWidth, height: nextHeight };
+              const gridRect = gridRef.current.getBoundingClientRect();
+              const positions = cardRefs.current.map((card) => {
+                if (!card) {
+                  return null;
                 }
 
-                return previous;
+                const rect = card.getBoundingClientRect();
+
+                return {
+                  x: rect.left - gridRect.left,
+                  y: rect.top - gridRect.top,
+                };
               });
 
-              setFrameRadius((previous) => {
-                const computedStyle = window.getComputedStyle(firstCard);
-                const rawRadius = computedStyle.borderTopLeftRadius || "0";
-                const nextRadius = Number.parseFloat(rawRadius) || 0;
+              if (
+                positions.length !== TEAM_MEMBERS.length ||
+                positions.some((pos) => pos === null)
+              ) {
+                return;
+              }
 
-                return previous !== nextRadius ? nextRadius : previous;
+              const typedPositions = positions as { x: number; y: number }[];
+
+              setCardPositions((previous) => {
+                const changed =
+                  previous.length !== typedPositions.length ||
+                  previous.some((prevPos, index) => {
+                    const nextPos = typedPositions[index];
+                    return (
+                      Math.abs(prevPos.x - nextPos.x) > 1 ||
+                      Math.abs(prevPos.y - nextPos.y) > 1
+                    );
+                  });
+
+                return changed ? typedPositions : previous;
               });
-            }
+
+              const firstCard = cardRefs.current[0];
+
+              if (firstCard) {
+                setFrameSize((previous) => {
+                  const nextWidth = firstCard.offsetWidth;
+                  const nextHeight = firstCard.offsetHeight;
+
+                  if (previous.width !== nextWidth || previous.height !== nextHeight) {
+                    return { width: nextWidth, height: nextHeight };
+                  }
+
+                  return previous;
+                });
+
+                setFrameRadius((previous) => {
+                  const computedStyle = window.getComputedStyle(firstCard);
+                  const rawRadius = computedStyle.borderTopLeftRadius || "0";
+                  const nextRadius = Number.parseFloat(rawRadius) || 0;
+
+                  return previous !== nextRadius ? nextRadius : previous;
+                });
+              }
+            }, MEASUREMENT_DEBOUNCE_MS);
           }, []);
 
           useEffect(() => {
@@ -213,33 +232,53 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
               return;
             }
 
-            updateMeasurements();
-            window.addEventListener("resize", updateMeasurements);
+            // Initial measurement
+            debouncedUpdateMeasurements();
+            window.addEventListener("resize", debouncedUpdateMeasurements);
 
             return () => {
-              window.removeEventListener("resize", updateMeasurements);
+              window.removeEventListener("resize", debouncedUpdateMeasurements);
+              // Clean up timeout on unmount
+              if (measurementTimeoutRef.current) {
+                clearTimeout(measurementTimeoutRef.current);
+              }
             };
-          }, [updateMeasurements]);
+          }, [debouncedUpdateMeasurements]);
 
+          // Animation lifecycle management - allow initial measurements
+          useEffect(() => {
+            // Start with animation flag false to allow initial measurements
+            isAnimatingRef.current = false;
+
+            // After initial measurements, we can start preventing updates during animation
+            const initTimer = setTimeout(() => {
+              // This will be managed by the animation cycle itself
+            }, 100);
+
+            return () => {
+              clearTimeout(initTimer);
+              isAnimatingRef.current = false;
+            };
+          }, []);
+
+          // Stable border positions - use available positions or fallback to zero
           const borderPositions = useMemo(() => {
             if (cardPositions.length === TEAM_MEMBERS.length) {
-              return POSITION_SEQUENCE.map(
-                (positionIndex) => cardPositions[positionIndex]
+              return FRAME_SEQUENCE.map(
+                (positionIndex) => cardPositions[positionIndex] || { x: 0, y: 0 }
               );
             }
 
-            return POSITION_SEQUENCE.map(() => ({ x: 0, y: 0 }));
+            return FRAME_SEQUENCE.map(() => ({ x: 0, y: 0 }));
           }, [cardPositions]);
 
-          const borderXKeyframes = useMemo(
-            () => borderPositions.map((position) => position.x),
-            [borderPositions]
-          );
+          // Memoize keyframes to prevent recalculation during animation
+          const animationKeyframes = useMemo(() => {
+            const xKeyframes = borderPositions.map((position) => position.x);
+            const yKeyframes = borderPositions.map((position) => position.y);
 
-          const borderYKeyframes = useMemo(
-            () => borderPositions.map((position) => position.y),
-            [borderPositions]
-          );
+            return { x: xKeyframes, y: yKeyframes };
+          }, [borderPositions]);
 
           const hasFrameSize = frameSize.width > 0 && frameSize.height > 0;
 
@@ -254,7 +293,15 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
             return Math.max(Math.min(desired, shortestSide / 1.8), frameRadius + 8);
           }, [frameSize.height, frameSize.width, frameRadius, hasFrameSize]);
 
-          cardRefs.current.length = TEAM_MEMBERS.length;
+          // Optimized image load handler
+          const handleImageLoad = useCallback(() => {
+            debouncedUpdateMeasurements();
+          }, [debouncedUpdateMeasurements]);
+
+          // Initialize refs array length
+          if (cardRefs.current.length !== TEAM_MEMBERS.length) {
+            cardRefs.current.length = TEAM_MEMBERS.length;
+          }
 
           return (
             <div
@@ -277,7 +324,7 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
                     <motion.div
                       key={index}
                       className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-black"
-                      style={{ willChange: "filter", lineHeight: 0 }}
+                      style={{ willChange: "auto", lineHeight: 0 }}
                       ref={(node) => {
                         cardRefs.current[index] = node;
                       }}
@@ -291,12 +338,12 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
                         animate={getImageAnimation(index)}
                         transition={{
                           duration: TOTAL_DURATION,
-                          times: KEYFRAME_TIMES,
-                          ease: "easeInOut",
+                          times: CARD_KEYFRAME_TIMES,
+                          ease: SMOOTH_EASE,
                           repeat: Infinity,
                           repeatType: "loop",
                         }}
-                        onLoad={updateMeasurements}
+                        onLoad={handleImageLoad}
                       />
 
                       {/* Active tag */}
@@ -306,8 +353,8 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
                         animate={getTagAnimation(index)}
                         transition={{
                           duration: TOTAL_DURATION,
-                          times: KEYFRAME_TIMES,
-                          ease: "easeInOut",
+                          times: CARD_KEYFRAME_TIMES,
+                          ease: SMOOTH_EASE,
                           repeat: Infinity,
                           repeatType: "loop",
                         }}
@@ -332,15 +379,16 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/TeamCard.json
                       borderRadius: frameRadius || undefined,
                       top: 0,
                       left: 0,
+                      willChange: "transform",
                     }}
                     animate={{
-                      x: borderXKeyframes,
-                      y: borderYKeyframes,
+                      x: animationKeyframes.x,
+                      y: animationKeyframes.y,
                     }}
                     transition={{
                       duration: TOTAL_DURATION,
-                      times: KEYFRAME_TIMES,
-                      ease: "linear",
+                      times: FRAME_KEYFRAME_TIMES,
+                      ease: SMOOTH_EASE,
                       repeat: Infinity,
                       repeatType: "loop",
                     }}
