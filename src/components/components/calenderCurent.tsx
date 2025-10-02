@@ -119,7 +119,7 @@ export const CalendarCurrent = ({ className }: CalendarCurrentProps) => {
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-md rounded-3xl border border-fd-border bg-fd-background p-8 shadow-lg",
+        "mx-auto w-full max-w-md rounded-3xl border border-fd-border bg-fd-background p-4 md:p-8 shadow-lg",
         className
       )}
     >
@@ -157,7 +157,7 @@ export const CalendarCurrent = ({ className }: CalendarCurrentProps) => {
       </div>
 
       {/* Day headers */}
-      <div className="mb-4 grid grid-cols-7 gap-2">
+      <div className="mb-4 grid grid-cols-7 gap-1.5 md:gap-2">
         {DAYS.map((day, index) => (
           <div
             key={index}
@@ -174,7 +174,7 @@ export const CalendarCurrent = ({ className }: CalendarCurrentProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="grid grid-cols-7 gap-2"
+        className="grid grid-cols-7 gap-1.5 md:gap-2"
       >
         {days.map((dayCell, index) => {
           const isTodayDate = isToday(dayCell.day, dayCell.month, dayCell.year);
@@ -186,7 +186,7 @@ export const CalendarCurrent = ({ className }: CalendarCurrentProps) => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: index * 0.01, duration: 0.2 }}
               className={cn(
-                "relative flex h-12 items-center justify-center rounded-lg text-lg font-medium transition-all",
+                "relative flex h-10 md:h-12 items-center justify-center rounded-lg text-sm md:text-lg font-medium transition-all",
                 !dayCell.isCurrentMonth && "text-fd-muted-foreground/40",
                 dayCell.isCurrentMonth &&
                   !isTodayDate &&
