@@ -583,7 +583,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                 {showToolsDropdown && (
                   <motion.div
                     {...DROPDOWN_ANIMATION}
-                    className="absolute top-full left-0 mt-2 w-48 md:w-64 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[100]"
+                    className="absolute top-full left-0 mt-2 w-40 md:w-64 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[100]"
                   >
                     <div className="p-4">
                       {/* Style Selector */}
@@ -615,7 +615,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                               initial={{ opacity: 0, x: 10 }}
                               animate={{ opacity: 1, x: 0 }}
                               exit={{ opacity: 0, x: 10 }}
-                              className="absolute top-0 left-full ml-2 w-44 md:w-64 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[110]"
+                              className="absolute top-0 left-full ml-2 w-40 md:w-64 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[110]"
                             >
                               <div className="py-1 px-2  overflow-y-auto">
                                 {STYLE_OPTIONS.map((style) => (
@@ -635,7 +635,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                                       <div className="font-medium text-sm">
                                         {style.name}
                                       </div>
-                                      <div className="text-xs truncate w-28 md:truncate-none md:w-auto text-fd-muted-foreground">
+                                      <div className="text-xs truncate w-20 md:truncate-none md:w-auto text-fd-muted-foreground">
                                         {style.description}
                                       </div>
                                     </div>
@@ -654,47 +654,24 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                       <div className="border-t border-fd-border my-4"></div>
 
                       {/* Toggle Options */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         <label className="flex items-center justify-between py-1">
-                          <span className="text-sm font-medium">
+                          <span className="text-xs md:text-sm font-medium">
                             Web Search
                           </span>
                           <button
                             type="button"
                             onClick={() => setWebSearch(!webSearch)}
                             className={cn(
-                              "relative w-11 h-6 rounded-full transition-colors",
+                              "relative w-9 md:w-11 h-5 md:h-6 rounded-full transition-colors",
                               webSearch ? "bg-fd-primary" : "bg-fd-muted"
                             )}
                           >
                             <div
                               className={cn(
-                                "absolute top-0.5 w-5 h-5 bg-fd-muted-foreground rounded-full transition-transform shadow-sm",
+                                "absolute top-0.5 w-4 md:w-5 h-4 md:h-5 bg-fd-muted-foreground rounded-full transition-transform shadow-sm",
                                 webSearch
-                                  ? "translate-x-5  "
-                                  : "translate-x-0.5 "
-                              )}
-                            />
-                          </button>
-                        </label>
-
-                        <label className="flex items-center justify-between py-1">
-                          <span className="text-sm font-medium">
-                            Reddit Search
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setRedditSearch(!redditSearch)}
-                            className={cn(
-                              "relative w-11 h-6 rounded-full transition-colors",
-                              redditSearch ? "bg-fd-primary" : "bg-fd-muted"
-                            )}
-                          >
-                            <div
-                              className={cn(
-                                "absolute top-0.5 w-5 h-5 bg-fd-muted-foreground  rounded-full transition-transform shadow-sm",
-                                redditSearch
-                                  ? "translate-x-5"
+                                  ? "translate-x-4 md:translate-x-5"
                                   : "translate-x-0.5"
                               )}
                             />
@@ -702,22 +679,45 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                         </label>
 
                         <label className="flex items-center justify-between py-1">
-                          <span className="text-sm font-medium">
+                          <span className="text-xs md:text-sm font-medium">
+                            Reddit Search
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setRedditSearch(!redditSearch)}
+                            className={cn(
+                              "relative w-9 md:w-11 h-5 md:h-6 rounded-full transition-colors",
+                              redditSearch ? "bg-fd-primary" : "bg-fd-muted"
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "absolute top-0.5 w-4 md:w-5 h-4 md:h-5 bg-fd-muted-foreground rounded-full transition-transform shadow-sm",
+                                redditSearch
+                                  ? "translate-x-4 md:translate-x-5"
+                                  : "translate-x-0.5"
+                              )}
+                            />
+                          </button>
+                        </label>
+
+                        <label className="flex items-center justify-between py-1">
+                          <span className="text-xs md:text-sm font-medium">
                             Create Image
                           </span>
                           <button
                             type="button"
                             onClick={() => setCreateImage(!createImage)}
                             className={cn(
-                              "relative w-11 h-6 rounded-full transition-colors",
+                              "relative w-9 md:w-11 h-5 md:h-6 rounded-full transition-colors",
                               createImage ? "bg-fd-primary" : "bg-fd-muted"
                             )}
                           >
                             <div
                               className={cn(
-                                "absolute top-0.5 w-5 h-5 bg-fd-muted-foreground  rounded-full transition-transform shadow-sm",
+                                "absolute top-0.5 w-4 md:w-5 h-4 md:h-5 bg-fd-muted-foreground rounded-full transition-transform shadow-sm",
                                 createImage
-                                  ? "translate-x-5"
+                                  ? "translate-x-4 md:translate-x-5"
                                   : "translate-x-0.5"
                               )}
                             />
@@ -762,7 +762,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                 {showModelDropdown && (
                   <motion.div
                     {...DROPDOWN_ANIMATION}
-                    className="absolute top-full left-0 mt-2 w-56 md:w-72 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[100]"
+                    className="absolute top-full left-0 mt-2 w-52 md:w-72 rounded-xl border border-fd-border bg-fd-card backdrop-blur-xl shadow-xl z-[100]"
                   >
                     {/* Search Input */}
                     <div className="p-2 border-b border-fd-border">
