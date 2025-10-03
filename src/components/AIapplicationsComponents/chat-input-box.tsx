@@ -481,7 +481,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                   className="relative group"
                 >
                   {/* File Preview Card */}
-                  <div className="w-20 h-20 rounded-xl overflow-hidden border border-fd-border bg-fd-background/50 flex items-center justify-center">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-fd-border bg-fd-background/50 flex items-center justify-center">
                     {file.isUploading ? (
                       // Loading State
                       <Loader2 className="h-8 w-8 animate-spin text-fd-primary" />
@@ -490,8 +490,9 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                       <Image
                         src={file.url}
                         alt={`Preview of ${file.name}`}
-                        fill
-                        className="object-cover"
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       // File Icon
@@ -505,13 +506,13 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                   <button
                     type="button"
                     onClick={() => removeFile(file.id)}
-                    className="absolute -top-2 -right-2 p-1 rounded-full bg-fd-background border border-fd-border hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                    className="absolute -top-2 -right-2 p-1 rounded-full bg-fd-background border border-fd-border hover:bg-red-500 transition-colors md:opacity-0 md:group-hover:opacity-100"
                   >
                     <X className="h-3 w-3 text-fd-accent-foreground" />
                   </button>
 
                   {/* File Name Tooltip */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-fd-background/90 backdrop-blur-sm px-2 py-1 text-xs text-fd-foreground rounded-b-xl truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute bottom-0 left-0 right-0 bg-fd-background/90 backdrop-blur-sm px-2 py-1 text-xs text-fd-foreground rounded-b-xl truncate md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                     {file.name}
                   </div>
                 </motion.div>
