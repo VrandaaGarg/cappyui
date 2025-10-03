@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import {
   Send,
   Upload,
@@ -9,7 +10,7 @@ import {
   Paperclip,
   X,
   FileText,
-  Image,
+  Image as ImageIcon,
   File,
   Loader2,
   Search,
@@ -242,10 +243,11 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
 
   // Utility functions
   const getFileIcon = useCallback((type: string) => {
-    if (type.startsWith("image/")) return <Image className={ICON_SIZE} />;
+    if (type.startsWith("image/"))
+      return <ImageIcon className={ICON_SIZE} aria-label="Image file" />;
     if (type === "application/pdf" || type.includes("document"))
-      return <FileText className={ICON_SIZE} />;
-    return <File className={ICON_SIZE} />;
+      return <FileText className={ICON_SIZE} aria-label="Document file" />;
+    return <File className={ICON_SIZE} aria-label="File" />;
   }, []);
 
   // File processing helpers
@@ -485,10 +487,11 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                       <Loader2 className="h-8 w-8 animate-spin text-fd-primary" />
                     ) : file.type.startsWith("image/") && file.url ? (
                       // Image Preview
-                      <img
+                      <Image
                         src={file.url}
                         alt={`Preview of ${file.name}`}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     ) : (
                       // File Icon

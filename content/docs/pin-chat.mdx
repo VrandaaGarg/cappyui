@@ -68,6 +68,7 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/pin-chat.json
         <SourceCodeBlock filePath="src/components/AIapplicationsComponents/pin-chat.tsx" />
       </Step>
     </Steps>
+
   </Tab>
 </Tabs>
 
@@ -85,29 +86,6 @@ export default function MyComponent() {
 }
 ```
 
-## Key Features
-
-### Pinning System
-
-- Click on any chat item to toggle its pinned status
-- Pinned chats appear in a separate "Pinned Chats" section at the top
-- Unpinned chats appear in the "Other Chats" section below
-- If no chats are pinned, all chats appear under "All Chats"
-
-### Smooth Animations
-
-- **Layout Animations**: Chats smoothly move to their correct positions when pinned/unpinned
-- **Pin Icon**: Rotates 45° with spring animation when a chat is pinned
-- **Spring Physics**: Natural, realistic movement with optimized spring physics
-- **Hover Effects**: Scale and shadow animations on interaction
-
-### Data Persistence
-
-- Uses localStorage to remember pinned chat preferences
-- Automatically loads saved state on component mount
-- Graceful fallback to default state if localStorage fails
-- Debounced saves to prevent excessive writes
-
 ## Props
 
 This component is designed as a self-contained demo and doesn't accept props. To customize it for your use case:
@@ -116,17 +94,6 @@ This component is designed as a self-contained demo and doesn't accept props. To
 - Modify `DEFAULT_PINNED_CHATS` to set initial pinned items
 - Change `STORAGE_KEY` to use a unique localStorage key
 - Customize the styling using Tailwind classes
-
-## Sample Data
-
-The component comes with 6 pre-configured chats covering various topics:
-
-- Architecture of Cloud
-- React Best Practices
-- Database Design
-- API Development
-- DevOps Pipeline
-- Machine Learning
 
 Each chat includes a title, last message preview, and timestamp for realistic demonstration.
 

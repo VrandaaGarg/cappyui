@@ -1,0 +1,106 @@
+---
+title: Multi-Factor Authentication
+description: An animated OTP input component that showcases multi-factor authentication with sequential digit entry animation, border highlighting, and smooth transitions.
+---
+
+## Preview
+
+<div className="border border-neutral-300 dark:border-neutral-600/30 rounded-lg md:rounded-xl py-6">
+  <MultiFactor />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/multiFactor.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/multi-factor-authentication.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/multi-factor-authentication.tsx`
+        <SourceCodeBlock filePath="src/components/components/MultiFactor.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { MultiFactor } from "@/components/ui/multi-factor-authentication";
+
+export default function Page() {
+  return <MultiFactor />;
+}
+```
+
+## Customization
+
+### Animation Timing
+
+Adjust the animation timing by modifying these constants in the component:
+
+```tsx
+const MOVE_DURATION = 0.3; // Duration to move border to next field
+const DIGIT_DELAY = 0.2; // Delay after border arrives before digit appears
+const COMPLETE_DELAY = 0.15; // Delay before showing all borders
+const POP_DURATION = 0.4; // Duration for popping animation
+const HOLD_DURATION = 0.5; // How long to hold the complete code
+const CYCLE_DELAY = 0.4; // Delay before starting next cycle
+```
+
+### OTP Digits
+
+Customize the digits that appear in the animation:
+
+```tsx
+const OTP_DIGITS = ["3", "5", "8", "1", "2", "9"]; // Change to any 6 digits
+```
+
+### Styling
+
+The component uses Tailwind classes for styling. Key customizable elements:
+
+- **Container**: Rounded border with responsive padding and backdrop blur
+- **Input Fields**: Customizable size (responsive), border colors, and background
+- **Moving Border**: Blue border with glow effect that moves between fields
+- **Active State**: Blue border with shadow and scale animation
+- **Typography**: Responsive text sizes with monospace font
+
+## Props
+
+| Prop        | Type     | Default     | Description                                      |
+| ----------- | -------- | ----------- | ------------------------------------------------ |
+| `className` | `string` | `undefined` | Additional CSS classes to apply to the component |

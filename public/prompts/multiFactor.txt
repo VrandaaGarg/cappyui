@@ -1,0 +1,364 @@
+Multi-Factor Authentication Component - OTP Input with Animated Border
+
+Create an optimized, animated OTP (One-Time Password) input component that showcases multi-factor authentication with sequential digit entry animation, a moving border that highlights the active field, and smooth transitions. This implementation includes memory leak prevention and performance optimizations.
+
+Technical Requirements
+
+Dependencies to Install
+```bash
+npm install framer-motion clsx tailwind-merge
+```
+
+Required Files Structure
+```
+src/
+├── components/
+│   └── MultiFactor.tsx
+└── lib/
+    └── utils.ts
+```
+
+Implementation Details
+
+1. Utility Function (src/lib/utils.ts)
+```typescript
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+2. Multi-Factor Authentication Component (src/components/MultiFactor.tsx)
+
+Component Type:
+- "use client" directive (client-side React component)
+- TypeScript with proper interfaces
+- Memoized with React.memo for performance
+- Optimized to prevent memory leaks and unnecessary re-renders
+
+Props Interface:
+```typescript
+interface MultiFactorProps {
+  className?: string;
+}
+```
+
+IMPORTANT Performance Optimizations:
+
+1. **Pre-created Constants** (outside component):
+```typescript
+const BORDER_INDICES = Array.from({ length: 6 }, (_, i) => i);
+const EMPTY_DIGITS = Array(6).fill("");
+```
+These prevent array creation on every render.
+
+2. **Timeout Tracking** (prevent memory leaks):
+```typescript
+const timeoutIdsRef = useRef<Set<NodeJS.Timeout>>(new Set());
+```
+Track ALL timeouts in a Set for proper cleanup.
+
+3. **Use Set instead of Array** for poppingIndices:
+```typescript
+const [poppingIndices, setPoppingIndices] = useState<Set<number>>(new Set());
+```
+Set provides O(1) lookup vs Array's O(n) with .includes()
+
+4. **Debounced Resize Handler**:
+```typescript
+const handleResize = () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(checkScreenSize, 150);
+};
+window.addEventListener("resize", handleResize, { passive: true });
+```
+Use passive listener and debounce to prevent excessive re-renders.
+
+Key Features:
+- 6 OTP input fields arranged horizontally
+- Sequential animation from left to right
+- Moving blue border that travels from field to field
+- Active field gets blue border with glow effect and underline
+- Smooth scale and opacity transitions
+- Auto-loop with hold and clear phases
+- Responsive design (smaller on mobile, larger on desktop)
+- Dark mode support with proper color transitions
+- Zero memory leaks with proper cleanup
+
+Animation Sequence:
+1. All fields start empty with neutral borders
+2. A moving blue border appears and travels to the first field
+3. After the border arrives (0.3s), the first digit appears
+4. Border moves to the next field, and the process repeats
+5. When all 6 digits are filled, the moving border disappears
+6. Individual borders appear on all 6 fields simultaneously
+7. After a short delay (0.15s), all borders pop (scale up) and fade out while digits scale up
+8. Complete OTP holds for 0.5 seconds
+9. All digits clear simultaneously
+10. Animation repeats continuously after 0.4s delay
+
+Animation Constants:
+```typescript
+const MOVE_DURATION = 0.3;      // Duration to move border to next field
+const DIGIT_DELAY = 0.2;        // Delay after border arrives before digit appears
+const COMPLETE_DELAY = 0.15;    // Delay before showing all borders
+const POP_DURATION = 0.4;       // Duration for popping animation
+const HOLD_DURATION = 0.5;      // How long to hold the complete code
+const CYCLE_DELAY = 0.4;        // Delay before starting next cycle
+```
+
+Sample OTP Digits:
+```typescript
+const OTP_DIGITS = ["3", "5", "8", "1", "2", "9"];
+```
+
+State Management:
+
+State Variables:
+```typescript
+const [displayedDigits, setDisplayedDigits] = useState<string[]>(EMPTY_DIGITS);
+const [borderPosition, setBorderPosition] = useState(-1);
+const [isAllComplete, setIsAllComplete] = useState(false);
+const [poppingIndices, setPoppingIndices] = useState<Set<number>>(new Set());
+const [isDesktop, setIsDesktop] = useState(false);
+const timeoutIdsRef = useRef<Set<NodeJS.Timeout>>(new Set());
+```
+
+Responsive Behavior (with debounce and optimization):
+```typescript
+useEffect(() => {
+  let resizeTimeout: NodeJS.Timeout;
+
+  const checkScreenSize = () => {
+    const isDesktopSize = window.innerWidth >= 768;
+    if (isDesktopSize !== isDesktop) {  // Only update if changed
+      setIsDesktop(isDesktopSize);
+    }
+  };
+
+  const handleResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(checkScreenSize, 150);
+  };
+
+  checkScreenSize();
+  window.addEventListener("resize", handleResize, { passive: true });
+
+  return () => {
+    window.removeEventListener("resize", handleResize);
+    clearTimeout(resizeTimeout);
+  };
+}, [isDesktop]);
+```
+
+Animation Logic (with proper cleanup):
+
+Main Animation Flow:
+```typescript
+useEffect(() => {
+  const addTimeout = (id: NodeJS.Timeout) => {
+    timeoutIdsRef.current.add(id);
+  };
+
+  const runAnimation = () => {
+    // Reset state with pre-created constants
+    setDisplayedDigits([...EMPTY_DIGITS]);
+    setBorderPosition(-1);
+    setIsAllComplete(false);
+    setPoppingIndices(new Set());
+
+    const startClearingSequence = () => {
+      const holdTimeout = setTimeout(() => {
+        setIsAllComplete(false);
+        setDisplayedDigits([...EMPTY_DIGITS]);
+
+        const cycleTimeout = setTimeout(() => {
+          runAnimation();
+        }, CYCLE_DELAY * 1000);
+        addTimeout(cycleTimeout);  // Track timeout
+      }, HOLD_DURATION * 1000);
+      addTimeout(holdTimeout);  // Track timeout
+    };
+
+    const animateNextDigit = (index: number) => {
+      if (index >= 6) {
+        setBorderPosition(-1);
+        setIsAllComplete(true);
+
+        const completeTimeout = setTimeout(() => {
+          setPoppingIndices(new Set([0, 1, 2, 3, 4, 5]));  // Use Set constructor
+
+          const popTimeout = setTimeout(() => {
+            startClearingSequence();
+          }, POP_DURATION * 1000);
+          addTimeout(popTimeout);  // Track timeout
+        }, COMPLETE_DELAY * 1000);
+        addTimeout(completeTimeout);  // Track timeout
+        return;
+      }
+
+      setBorderPosition(index);
+
+      const moveTimeout = setTimeout(() => {
+        setDisplayedDigits((prev) => {
+          const newDigits = [...prev];
+          newDigits[index] = OTP_DIGITS[index];
+          return newDigits;
+        });
+
+        const digitTimeout = setTimeout(() => {
+          animateNextDigit(index + 1);
+        }, DIGIT_DELAY * 1000);
+        addTimeout(digitTimeout);  // Track timeout
+      }, MOVE_DURATION * 1000);
+      addTimeout(moveTimeout);  // Track timeout
+    };
+
+    const initialTimeout = setTimeout(() => {
+      animateNextDigit(0);
+    }, 500);
+    addTimeout(initialTimeout);  // Track timeout
+  };
+
+  runAnimation();
+
+  // CRITICAL: Cleanup all timeouts on unmount
+  return () => {
+    const timeouts = timeoutIdsRef.current;
+    timeouts.forEach((id) => clearTimeout(id));
+    timeouts.clear();
+  };
+}, []);
+```
+
+Component Structure:
+
+Moving Blue Border (same as before):
+- Position: absolute with pointer-events-none and z-10
+- Size: w-9 h-12 (mobile) / w-16 h-20 (desktop)
+- Border: border-[3px] with blue-400/blue-500
+- Background: blue-50/30 (light) / blue-950/30 (dark)
+- Shadow: shadow-lg with shadow-blue-500/50
+- Underline element: absolute bottom-2, h-[1.5px], w-[70%], bg-blue-500
+
+Individual Borders for Complete State (OPTIMIZED):
+```typescript
+{BORDER_INDICES.map((index) => {
+  const isPopping = poppingIndices.has(index);  // O(1) lookup with Set
+  return (
+    <motion.div
+      key={`border-${index}`}
+      // ... styling
+      animate={{
+        opacity: isPopping ? [1, 0] : isAllComplete ? 1 : 0,
+        scale: isPopping ? [1, 1.3] : 1,
+      }}
+      style={{
+        left: `${index * (isDesktop ? 80 : 48)}px`,
+        top: 0,
+      }}
+    />
+  );
+})}
+```
+
+Input Fields (OPTIMIZED):
+```typescript
+{BORDER_INDICES.map((index) => {
+  const isPopping = poppingIndices.has(index);  // Compute once
+  const hasDigit = !!displayedDigits[index];     // Compute once
+  return (
+    <div key={index} /* ... styling ... */>
+      <motion.span
+        animate={{
+          opacity: hasDigit ? (isPopping ? [1, 0] : 1) : 0,
+          scale: hasDigit ? (isPopping ? [1, 1.15] : 1) : 0.3,
+          y: hasDigit ? 0 : 10,
+        }}
+        transition={{
+          opacity: { duration: isPopping ? 0.5 : 0.2, ease: "easeOut" },
+          scale: {
+            duration: isPopping ? 0.5 : 0.2,
+            ease: isPopping ? [0.34, 1.56, 0.64, 1] : "easeOut",
+          },
+          y: { duration: 0.2, ease: "easeOut" },
+        }}
+      >
+        {displayedDigits[index]}
+      </motion.span>
+    </div>
+  );
+})}
+```
+
+Description Text Section:
+- Position: Below input fields
+- Text alignment: center
+- Font: font-mono
+- Flex column with gap-1
+- Margin top: mt-12
+
+First Description Line:
+- Text: "Enter the OTP sent to your Email"
+- Size: text-sm
+- Color: neutral-900 (light) / neutral-100 (dark)
+- Animation: fade in from y: 10 with 0.05s delay
+
+Second Description Line:
+- Text: "Check your inbox for the 6-digit verification code"
+- Size: text-xs
+- Color: neutral-600 (light) / neutral-400 (dark)
+- Animation: fade in from y: 10 with 0.2s delay
+
+Spacing Calculations:
+- Mobile gap: 48px (w-9 + gap-3)
+- Desktop gap: 80px (w-16 + gap-4)
+- Border x position: borderPosition * (isDesktop ? 80 : 48)
+
+Key Implementation Notes:
+
+1. ✅ Use framer-motion's motion.div and motion.span for all animations
+2. ✅ Track ALL timeouts in a Set using useRef
+3. ✅ Proper cleanup: clear all timeouts in useEffect cleanup function
+4. ✅ Memoize component with React.memo for performance
+5. ✅ Set displayName for better debugging
+6. ✅ Use proper TypeScript types for all props and state
+7. ✅ Debounce resize events (150ms) with passive listener
+8. ✅ Use Set for poppingIndices instead of Array (O(1) vs O(n))
+9. ✅ Pre-create constant arrays outside component
+10. ✅ Compute isPopping and hasDigit once per loop iteration
+11. ✅ Only update isDesktop state when value actually changes
+12. ✅ Use spread operator for immutable state updates
+
+Performance Checklist:
+- [ ] No memory leaks (all timeouts tracked and cleaned)
+- [ ] No unnecessary re-renders (debounced resize, conditional updates)
+- [ ] Optimized lookups (Set instead of Array.includes)
+- [ ] Pre-created constants (no array creation in render)
+- [ ] Passive event listeners for scroll performance
+
+Export:
+```typescript
+export const MultiFactor = memo(({ className }: MultiFactorProps) => {
+  // Component implementation
+});
+
+MultiFactor.displayName = "MultiFactor";
+```
+
+Usage Example:
+```tsx
+import { MultiFactor } from "@/components/MultiFactor";
+
+export default function Page() {
+  return (
+    <div>
+      <MultiFactor />
+    </div>
+  );
+}
+```
+
+The component should be fully self-contained, highly performant, with zero memory leaks, and follow React best practices with TypeScript support. The animation should loop continuously, creating an engaging demo of the OTP input flow.
