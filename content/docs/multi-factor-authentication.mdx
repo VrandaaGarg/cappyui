@@ -66,21 +66,6 @@ export default function Page() {
 }
 ```
 
-## Customization
-
-### Animation Timing
-
-Adjust the animation timing by modifying these constants in the component:
-
-```tsx
-const MOVE_DURATION = 0.3; // Duration to move border to next field
-const DIGIT_DELAY = 0.2; // Delay after border arrives before digit appears
-const COMPLETE_DELAY = 0.15; // Delay before showing all borders
-const POP_DURATION = 0.4; // Duration for popping animation
-const HOLD_DURATION = 0.5; // How long to hold the complete code
-const CYCLE_DELAY = 0.4; // Delay before starting next cycle
-```
-
 ### OTP Digits
 
 Customize the digits that appear in the animation:
@@ -88,16 +73,6 @@ Customize the digits that appear in the animation:
 ```tsx
 const OTP_DIGITS = ["3", "5", "8", "1", "2", "9"]; // Change to any 6 digits
 ```
-
-### Styling
-
-The component uses Tailwind classes for styling. Key customizable elements:
-
-- **Container**: Rounded border with responsive padding and backdrop blur
-- **Input Fields**: Customizable size (responsive), border colors, and background
-- **Moving Border**: Blue border with glow effect that moves between fields
-- **Active State**: Blue border with shadow and scale animation
-- **Typography**: Responsive text sizes with monospace font
 
 ## Props
 
