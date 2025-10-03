@@ -1,0 +1,252 @@
+---
+title: Chat Input Box
+description: A comprehensive AI chat input component with multi-provider model selection, file upload, drag-and-drop support, and customizable tools for modern AI chat applications.
+---
+
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Preview
+
+<ChatInputBox />
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/chat-input-box.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/chat-input-box.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion lucide-react clsx tailwind-merge react-icons
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/chat-input-box.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/chat-input-box.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import ChatInputBox from "@/components/ui/chat-input-box";
+
+export default function ChatPage() {
+  return (
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">AI Chat</h1>
+      <ChatInputBox />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default     | Description                     |
+| ----------- | -------- | ----------- | ------------------------------- |
+| `className` | `string` | `undefined` | Optional additional CSS classes |
+
+## Features
+
+### Multi-Provider AI Model Selection
+
+Choose from 17+ AI models across 5 major providers with searchable dropdown:
+
+**Claude (Anthropic)**
+
+- Claude Sonnet 4
+- Claude Sonnet 4.5
+- Claude Haiku 3.5
+
+**Google**
+
+- Gemini 2.5 Pro
+- Gemini 2.5 Flash
+
+**OpenAI**
+
+- OpenAI 5
+- OpenAI 5 Nano
+- OpenAI 5 Mini
+- OpenAI o4 Mini
+
+**Qwen**
+
+- Qwen3 Max
+- Qwen3 235B A22B
+- Qwen3 30B A3B Thinking 2507
+
+**DeepSeek**
+
+- DeepSeek R1 Fast
+- DeepSeek V3.1
+
+### Style Options
+
+Choose from 5 conversation styles with descriptions:
+
+- **Technical**: Detailed technical explanations
+- **Study**: Educational and learning focused
+- **Classic**: Traditional and formal tone
+- **Professional**: Business and work appropriate
+- **Formal**: Structured and official
+
+### AI Tools
+
+Toggle various AI capabilities:
+
+- **Web Search**: Enable real-time web search
+- **Reddit Search**: Search Reddit for community insights
+- **Create Image**: Generate images from text descriptions
+
+### File Upload Support
+
+Comprehensive file handling with multiple input methods:
+
+- **Click to Upload**: Paperclip button for traditional file selection
+- **Drag & Drop**: Visual feedback when dragging files over input area
+- **Clipboard Paste**: Paste images directly from clipboard (Ctrl/Cmd + V)
+- **Multiple Files**: Upload multiple files simultaneously
+- **Supported Types**: Images (PNG, JPG, GIF, WebP), Documents (PDF, TXT, DOC, DOCX)
+- **Visual Previews**: Image thumbnails and file type icons
+- **Upload Progress**: Animated progress indicators
+- **Easy Removal**: Hover to remove individual files
+
+## Keyboard Shortcuts
+
+- **Enter**: Send message
+- **Shift + Enter**: New line in message
+- **Ctrl/Cmd + V**: Paste content (including images)
+
+## Customization
+
+The component uses CSS custom properties for theming:
+
+```css
+:root {
+  --fd-background: white;
+  --fd-foreground: #1a1a1a;
+  --fd-card: rgba(255, 255, 255, 0.6);
+  --fd-border: #e5e7eb;
+  --fd-primary: #3b82f6;
+  --fd-primary-foreground: white;
+  --fd-muted: #f3f4f6;
+  --fd-muted-foreground: #6b7280;
+  --fd-accent: #f9fafb;
+  --fd-accent-foreground: #1a1a1a;
+}
+
+[data-theme="dark"] {
+  --fd-background: #0a0a0a;
+  --fd-foreground: #fafafa;
+  --fd-card: rgba(26, 26, 26, 0.6);
+  --fd-border: #262626;
+  --fd-primary: #3b82f6;
+  --fd-primary-foreground: white;
+  --fd-muted: #262626;
+  --fd-muted-foreground: #a3a3a3;
+  --fd-accent: #1f1f1f;
+  --fd-accent-foreground: #fafafa;
+}
+```
+
+## Examples
+
+### Basic Usage
+
+```tsx
+<ChatInputBox />
+```
+
+### With Custom Styling
+
+```tsx
+<ChatInputBox className="shadow-2xl" />
+```
+
+### Integration with Chat Interface
+
+```tsx
+function ChatInterface() {
+  return (
+    <div className="flex flex-col h-screen">
+      {/* Chat messages */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {/* Message components */}
+      </div>
+
+      {/* Input area */}
+      <div className="border-t p-4">
+        <ChatInputBox />
+      </div>
+    </div>
+  );
+}
+```
+
+## Component Behavior
+
+### Message Handling
+
+When a message is sent (Enter key or Send button):
+
+- Message must not be empty (whitespace trimmed)
+- Console logs the message with all settings:
+  - Message content
+  - Selected AI model
+  - Selected style
+  - Tool states (web search, Reddit search, create image)
+- Message input is cleared
+- In production, this is where you'd make your API call
+
+### File Upload Flow
+
+1. User uploads file(s) via click, drag-and-drop, or paste
+2. Files are processed and added to upload queue
+3. Upload progress is simulated with smooth animation
+4. Image files generate preview thumbnails using object URLs
+5. Document files display appropriate type icons
+6. Hover over files to see full filename and remove button
+7. Object URLs are properly cleaned up on removal or unmount
+
+### Dropdown Behavior
+
+- Click outside any dropdown to close it
+- Model dropdown search clears when closing or selecting
+- Style dropdown is nested within Tools dropdown
+- Opening one major dropdown (Model/Tools) doesn't affect the other
+- Smooth animations for all dropdown interactions
+
+<br />

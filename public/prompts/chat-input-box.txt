@@ -1,0 +1,141 @@
+# Chat Input Box Component - Complete Implementation Prompt
+
+Create a comprehensive AI chat input component with model selection, tools, file upload, and modern styling. This component should be feature-rich and production-ready with smooth animations and responsive design.
+
+## Required Dependencies
+
+Install the following packages:
+
+```bash
+npm install framer-motion lucide-react clsx tailwind-merge
+```
+
+## Technical Requirements
+
+### Component Structure
+- **File**: `src/components/ui/chat-input-box.tsx`
+- **Type**: Client-side React component ("use client")
+- **Props**: `className?: string` for additional styling
+
+### Core Features
+
+1. **Model Selection Dropdown**
+   - Claude models: Sonnet 4, Sonnet 4.5, Haiku 3.5
+   - Google models: Gemini 2.5 Pro, Gemini 2.5 Flash
+   - OpenAI models: OpenAI 5, 5 Nano, 5 Mini, o4 Mini
+   - Qwen models: Qwen3 Max, Qwen3 235B A22B, Qwen3 30B A3B Thinking 2507
+   - DeepSeek models: DeepSeek R1 Fast, DeepSeek V3.1
+
+2. **Tools Dropdown**
+   - Style selection: Technical, Study, Classic, Professional, Formal
+   - Tool toggles: Web Search, Reddit Search, Create Image
+   - Nested dropdown for style options
+
+3. **File Upload System**
+   - Drag and drop support
+   - Click to upload
+   - Paste from clipboard (images and text)
+   - File preview with thumbnails for images
+   - Progress bars during upload
+   - Remove file functionality
+   - Supported formats: Images (PNG, JPG, GIF, WebP), Documents (PDF, TXT, DOC, DOCX)
+
+4. **Input Area**
+   - Auto-resizing textarea
+   - Placeholder: "Ask anything you want !!"
+   - Keyboard shortcuts: Enter to send, Shift+Enter for new line
+   - Attach button inside input
+   - Send button with proper styling
+
+### State Management
+
+```typescript
+interface FileUpload {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  url?: string;
+  isUploading: boolean;
+  progress: number;
+}
+
+// State variables needed:
+- message: string
+- selectedModel: string
+- selectedStyle: string
+- enabledTools: string[]
+- uploadedFiles: FileUpload[]
+- showModelDropdown: boolean
+- showToolsDropdown: boolean
+- showStyleDropdown: boolean
+```
+
+### Styling Requirements
+
+- **Design System**: Use CSS custom properties (--fd-* variables)
+- **Colors**: Support both light and dark themes
+- **Animations**: Smooth transitions with framer-motion
+- **Layout**: Responsive design with proper spacing
+- **Dropdowns**: High z-index (999999) to appear above all content
+- **File Previews**: Rounded corners, proper spacing, hover effects (wrap preview container with `relative` and anchor the `<img>` using `absolute inset-0 h-full w-full object-cover` so thumbnails stay centered)
+
+### Animation Details
+
+- **Dropdown animations**: Fade in/out with scale effect
+- **File upload**: Slide in from left, slide out to right on remove
+- **Progress bars**: Smooth width animation
+- **Hover effects**: Subtle color transitions
+
+### Utility Functions
+
+Include helper functions for:
+- File size formatting (bytes to KB/MB)
+- File type icons (different icons for different file types)
+- File validation (size limits, type checking)
+- Drag and drop event handling
+- Clipboard paste handling
+
+### Accessibility
+
+- Proper ARIA labels
+- Keyboard navigation support
+- Focus management
+- Screen reader friendly
+
+### Key Implementation Notes
+
+1. Use `"use client"` directive at the top
+2. Implement proper cleanup for file URLs (URL.revokeObjectURL)
+3. Handle edge cases: large files, unsupported formats, network errors
+4. Use refs for textarea auto-resize functionality
+5. Implement proper TypeScript types for all props and state
+6. Use CSS-in-JS or Tailwind classes for styling
+7. Ensure dropdowns don't get clipped by parent containers
+8. Add loading states for file uploads
+9. Implement proper error handling and user feedback
+
+### Example Usage
+
+```tsx
+import ChatInputBox from "@/components/ui/chat-input-box";
+
+export default function ChatPage() {
+  return (
+    <div className="p-8">
+      <ChatInputBox className="max-w-4xl mx-auto" />
+    </div>
+  );
+}
+```
+
+## Design Specifications
+
+- **Border Radius**: Rounded corners (rounded-2xl, rounded-3xl)
+- **Spacing**: Consistent padding and margins
+- **Typography**: Proper font weights and sizes
+- **Colors**: Muted backgrounds, proper contrast ratios
+- **Shadows**: Subtle drop shadows for depth
+- **Borders**: Consistent border styling throughout
+
+Create a polished, production-ready component that feels modern and intuitive to use. Focus on smooth animations, proper error handling, and excellent user experience.
