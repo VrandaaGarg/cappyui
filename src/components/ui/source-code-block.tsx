@@ -72,7 +72,7 @@ export async function SourceCodeBlock({
   return (
     <div className="not-prose my-6 rounded-lg border border-fd-border bg-fd-background dark:bg-neutral-950/50">
       <div className="flex items-center justify-between px-4 py-2 border-b border-fd-border bg-fd-muted/30 dark:bg-neutral-900/50">
-        <div className="text-sm font-medium text-fd-muted-foreground">
+        <div className="text-sm break-all mr-3 font-medium text-fd-muted-foreground">
           {title || filePath}
         </div>
         <CopyButton content={content} />

@@ -565,7 +565,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
         <div className="h-[1px] bg-fd-border w-full"></div>
 
         {/* Controls Row */}
-        <div className="flex items-center p-4 justify-between flex-wrap">
+        <div className="flex items-center p-3 py-4 md:p-4 justify-between flex-wrap">
           <div className="flex justify-center gap-1.5 md:gap-2">
             {/* Tools Dropdown */}
             <div className="relative" ref={toolsDropdownRef}>
@@ -744,10 +744,10 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
               <button
                 type="button"
                 onClick={() => setShowModelDropdown(!showModelDropdown)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg  border border-fd-border bg-fd-background/50 hover:bg-fd-accent transition-colors"
+                className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-lg  border border-fd-border bg-fd-background/50 hover:bg-fd-accent transition-colors"
               >
                 {selectedModelDetails.icon}
-                <span className="text-sm font-medium w-24 md:w-auto truncate">
+                <span className="text-sm font-medium w-16 md:w-auto truncate">
                   {selectedModelDetails.name}
                 </span>
                 <ChevronDown
