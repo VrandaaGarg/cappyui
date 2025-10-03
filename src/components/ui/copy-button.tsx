@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy } from "lucide-react";
+import { Check, Clipboard, Copy } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 
@@ -27,20 +27,18 @@ export function CopyButton({ content, className }: CopyButtonProps) {
       type="button"
       onClick={handleCopy}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground",
+        "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-fd-muted-foreground transition-colors  hover:text-fd-accent-foreground",
         className
       )}
       aria-label="Copy code to clipboard"
     >
       {copied ? (
         <>
-          <Check className="h-3.5 w-3.5" />
-          Copied
+          <Check className="h-4 w-4" />
         </>
       ) : (
         <>
-          <Copy className="h-3.5 w-3.5" />
-          Copy
+          <Clipboard className="h-4 w-4" />
         </>
       )}
     </button>
