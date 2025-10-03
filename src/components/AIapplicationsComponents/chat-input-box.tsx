@@ -487,7 +487,7 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                       // Image Preview
                       <img
                         src={file.url}
-                        alt={file.name}
+                        alt={`Preview of ${file.name}`}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -596,7 +596,10 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                           className="w-full flex items-center justify-between transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-sm font-medium">Style</span>
+                            <span className="text-sm font-medium">Style:</span>
+                            <span className="text-sm text-fd-muted-foreground">
+                              {selectedStyleDetails.name}
+                            </span>
                           </div>
                           <ChevronDown
                             className={cn(
@@ -786,7 +789,8 @@ export default function ChatInputBox({ className }: ChatInputBoxProps) {
                     >
                       {Object.entries(filteredModels).length === 0 ? (
                         <div className="px-3 py-8 text-center text-sm text-fd-muted-foreground">
-                          No models found matching "{modelSearchQuery}"
+                          No models found matching &quot;{modelSearchQuery}
+                          &quot;
                         </div>
                       ) : (
                         Object.entries(filteredModels).map(
