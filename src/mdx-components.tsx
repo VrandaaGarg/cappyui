@@ -9,6 +9,7 @@ import PinChat from "@/components/AIapplicationsComponents/pin-chat";
 import ChatInputBox from "@/components/AIapplicationsComponents/chat-input-box";
 import { CalendarRange } from "@/components/components/calenderRange";
 import { CalendarCurrent } from "@/components/components/calenderCurent";
+import SpamNotifications from "@/components/components/spam-notifications";
 import { Puzzle } from "@/components/components/puzzle";
 import { ImagePuzzle } from "@/components/components/image-puzzle";
 import { MultiFactor } from "@/components/components/MultiFactor";
@@ -33,6 +34,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Puzzle,
     ImagePuzzle,
     MultiFactor,
+    SpamNotifications,
     CopyPromptButton,
     SourceCodeBlock,
     pre: ({ ...props }) => (

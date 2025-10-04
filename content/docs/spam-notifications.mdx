@@ -1,0 +1,99 @@
+---
+title: Spam Notifications
+description: An animated notification stack component showcasing spam-like notifications with glassmorphism effects and smooth pop-in animations.
+---
+
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { Steps, Step } from "fumadocs-ui/components/steps";
+import SpamNotifications from "@/components/components/spam-notifications";
+
+## Preview
+
+<div className="border border-neutral-300 dark:border-neutral-600/40 rounded-xl md:rounded-3xl">
+  <SpamNotifications />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/spam-notifications.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/spam-notifications.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion lucide-react clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/spam-notifications.tsx`
+        <SourceCodeBlock filePath="src/components/components/spam-notifications.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import SpamNotifications from "@/components/spam-notifications";
+
+export default function Example() {
+  return (
+    <div className="w-full h-screen">
+      <SpamNotifications />
+    </div>
+  );
+}
+```
+
+### Custom Messages
+
+You can customize the notification messages by modifying the `ALL_NOTIFICATION_MESSAGES` array:
+
+```tsx
+const ALL_NOTIFICATION_MESSAGES = [
+  {
+    id: "1",
+    icon: Gift, // Any lucide-react icon
+    title: "Custom Title",
+    time: "just now",
+    subtitle: "Your custom notification message here",
+    color: "bg-blue-500/90", // Tailwind color with opacity
+  },
+  // Add more messages...
+];
+```
+
+## Props
+
+| Prop        | Type     | Default     | Description                              |
+| ----------- | -------- | ----------- | ---------------------------------------- |
+| `className` | `string` | `undefined` | Additional CSS classes for the container |

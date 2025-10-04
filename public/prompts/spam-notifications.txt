@@ -1,0 +1,126 @@
+Spam Notifications Component - LLM Prompt
+Create a React component called SpamNotifications that displays an animated stack of spam-like notification messages with glassmorphism effects.
+
+Dependencies to Install
+npm install framer-motion lucide-react clsx tailwind-merge
+Requirements
+
+1. Component Structure
+   Create a "use client" component named SpamNotifications
+   Accept a className prop for custom styling
+   Use TypeScript with proper type definitions
+2. Notification Data Structure
+   Create 8 spam notification messages with this interface:
+
+interface NotificationMessage {
+id: string;
+icon: React.ComponentType<{ className?: string }>;
+title: string;
+subtitle: string;
+time: string;
+color: string;
+}
+The 8 notifications should be:
+
+Amazon - "Congratulations! You've won a $1,000 gift card.Offer ends in 2 days. So hurry up and claim it before it's too late!" - Time: "6 min ago" - Color: bg-orange-500/90 - Icon: Gift
+Security Alert - "Unusual activity detected. Verify your identity now to avoid account suspension. Offer ends in 2 days. So hurry up and claim it before it's too late!" - Time: "10 min ago" - Color: bg-red-500/90 - Icon: Mail
+Dating App - "You have 23 new matches.nearby Offer ends in 2 days. So hurry up and claim it before it's too late!" - Time: "15 min ago" - Color: bg-pink-500/90 - Icon: Bell
+Flash Sale - "90% off everything - ends in 5 minutes. you should claimed it before it's too late!" - Time: "24 min ago" - Color: bg-yellow-500/90 - Icon: Zap
+McAfee Security - "3 viruses detected on your device.Go and remove them before it's too late!" - Time: "2:48 PM" - Color: bg-blue-500/90 - Icon: Shield
+Apple Store - "You're our millionth visitor! Claim your iPhone. It is the best deal!" - Time: "3:12 PM" - Color: bg-purple-500/90 - Icon: Trophy
+Investment Opportunity - "Make $5,000/day working from home.Just click the link and start earning now!" - Time: "3:15 PM" - Color: bg-green-500/90 - Icon: Rocket
+Exclusive Reward - "Spin the wheel to unlock hidden bonuses.You can win a lifetime supply of apple products." - Time: "3:17 PM" - Color: bg-amber-500/90 - Icon: Star
+Use icons from lucide-react: Bell, Mail, Star, Gift, Zap, Trophy, Shield, Rocket
+
+3. Animation Configuration
+   Define these constants:
+
+MAX_NOTIFICATIONS = 8
+STAGGER_DELAY = 450 (ms between each notification appearing)
+DISPLAY_DURATION = 4500 (ms to display all notifications)
+FADE_DURATION = 1200 (ms for fade out) 4. State Management
+Use these state variables:
+
+visibleNotifications - array of currently visible notifications
+animationPhase - one of: "stacking" | "displaying" | "fading"
+animationCycle - number to track animation cycles
+isMounted - boolean for hydration safety
+isActiveRef - useRef to track component mount state
+timeoutIdsRef - useRef to store and cleanup timeouts 5. Animation Logic
+Implement a startAnimation function that:
+
+Clears all previous timeouts
+Resets visible notifications
+Increments animation cycle
+Adds notifications one by one with STAGGER_DELAY between each
+After stacking phase, waits DISPLAY_DURATION before fading
+After fading, clears notifications and restarts the cycle
+Uses isActiveRef.current checks to prevent updates after unmount 6. Notification Positions
+Define 8 predefined positions with x, y offsets and rotation:
+
+[
+{ x: 0, y: 0, rotate: 0 },
+{ x: 30, y: -40, rotate: 5 },
+{ x: -35, y: 35, rotate: -6 },
+{ x: 85, y: -20, rotate: 3 },
+{ x: -70, y: 55, rotate: -4 },
+{ x: 100, y: -60, rotate: 4 },
+{ x: -45, y: 20, rotate: -3 },
+{ x: 65, y: -75, rotate: 6 },
+] 7. Glassmorphism Card Design
+Each notification card should have:
+
+Rounded corners: rounded-2xl
+Border: border-white/30 (light) / border-white/20 (dark)
+Backdrop blur: backdrop-blur-2xl
+Semi-transparent background: bg-white/80 (light) / bg-neutral-900/80 (dark)
+Shadow: shadow-2xl shadow-neutral-200 (light mode)
+Gradient overlay: from-white/50 to-transparent (light) / from-white/5 to-transparent (dark) 8. Card Layout
+Each card contains:
+
+Top row: Icon (small colored square), Title, Time (right-aligned)
+Bottom row: Subtitle (2 lines max with line-clamp-2)
+Icon size: w-5 h-5 with icon inside at w-3 h-3
+Padding: p-4 9. Framer Motion Configuration
+Use motion.div with:
+
+Initial state: opacity: 0, scale: 0.5, centered with x: "-50%", y: "-50%", rotate: 0
+Animate state: Opacity and scale based on animation phase, position based on index
+Exit state: opacity: 0, scale: 0.5, duration 0.4s
+Transition: duration: 0.8, custom ease curve [0.2, 0.8, 0.2, 1]
+Style: zIndex based on index, willChange: "transform, opacity"
+Key: Unique key combining animationCycle, notification.id, and index 10. Container
+Main container: min-h-[400px] centered with flex
+Inner container: h-[400px] with max-w-4xl
+Each notification: w-80 positioned absolutely
+Use AnimatePresence from framer-motion 11. Hydration Safety
+Only render notifications when isMounted is true
+Set isMounted to true in useEffect after mount
+Start animation only after mounting 12. Cleanup
+Implement proper cleanup in useEffect return function
+Set isActiveRef.current = false on unmount
+Clear all timeouts on unmount 13. Utility Function
+Create or use a cn() utility function to merge Tailwind classes:
+
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+return twMerge(clsx(inputs));
+}
+Key Implementation Details
+Use useCallback for startAnimation, scheduleTimeout, and clearAllTimeouts
+Use useMemo for positions array and fallback position
+Use useRef to track active state and timeout IDs
+Ensure all timeout callbacks check isActiveRef.current before executing
+Calculate positions dynamically based on notification index
+Support both light and dark mode with appropriate color schemes
+Expected Behavior
+Component mounts and waits for client-side hydration
+Notifications pop in one by one from the center to their positions
+Each notification has a bouncy pop-in animation
+After all notifications appear, they stay visible for a few seconds
+All notifications fade out together
+The cycle repeats infinitely
+Notifications have glassmorphism effect with blur and transparency
+Component properly cleans up on unmount
