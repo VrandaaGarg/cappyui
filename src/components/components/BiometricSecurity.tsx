@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
-import { LuCamera, LuSparkles, LuSunMedium } from "react-icons/lu";
+import { LuCamera, LuSunMedium } from "react-icons/lu";
 import { PiLockKeyOpenFill } from "react-icons/pi";
 import { MdBattery60 } from "react-icons/md";
 import { GiNetworkBars } from "react-icons/gi";
@@ -62,10 +62,31 @@ export const BiometricSecurity = memo(
     const pulseControls = useAnimationControls();
     const resetRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Create animation controls for each path
-    const pathControls = useRef(
-      fingerprintPaths.map(() => useAnimationControls())
-    ).current;
+    const control0 = useAnimationControls();
+    const control1 = useAnimationControls();
+    const control2 = useAnimationControls();
+    const control3 = useAnimationControls();
+    const control4 = useAnimationControls();
+    const control5 = useAnimationControls();
+    const control6 = useAnimationControls();
+    const control7 = useAnimationControls();
+    const control8 = useAnimationControls();
+    const control9 = useAnimationControls();
+    const control10 = useAnimationControls();
+
+    const pathControls = useRef<ReturnType<typeof useAnimationControls>[]>([
+      control0,
+      control1,
+      control2,
+      control3,
+      control4,
+      control5,
+      control6,
+      control7,
+      control8,
+      control9,
+      control10,
+    ]);
 
     const clearReset = useCallback(() => {
       if (resetRef.current) {
@@ -76,7 +97,7 @@ export const BiometricSecurity = memo(
 
     const applyInitialState = useCallback(() => {
       // Reset all paths to filled neutral state
-      pathControls.forEach((control) => {
+      pathControls.current.forEach((control) => {
         control.set({
           pathLength: 1,
           fill: "#525252",
@@ -86,7 +107,7 @@ export const BiometricSecurity = memo(
       });
       shineControls.set(shineVariants.initial);
       pulseControls.set(pulseVariants.initial);
-    }, [pathControls, pulseControls, shineControls]);
+    }, [pulseControls, shineControls]);
 
     useEffect(() => {
       applyInitialState();
@@ -115,8 +136,8 @@ export const BiometricSecurity = memo(
 
       try {
         // Animate each path sequentially with fill
-        for (let i = 0; i < pathControls.length; i++) {
-          pathControls[i].start({
+        for (let i = 0; i < pathControls.current.length; i++) {
+          pathControls.current[i].start({
             fill: "#22d3ee",
             stroke: "#22d3ee",
             opacity: 1,
@@ -134,13 +155,12 @@ export const BiometricSecurity = memo(
         await shineControls.start("active");
         await pulseControls.start("active");
         scheduleReset();
-      } catch (error) {
+      } catch {
         setStatus("idle");
       }
     }, [
       applyInitialState,
       clearReset,
-      pathControls,
       pulseControls,
       shineControls,
       scheduleReset,
@@ -183,7 +203,7 @@ export const BiometricSecurity = memo(
               <motion.button
                 type="button"
                 aria-label="Unlock with biometric scan"
-                className="relative flex h-28 w-28 mb-3 items-center justify-center rounded-full bg-neutral-900/70 p-4 text-cyan-200/80 shadow-sm shadow-neutral-500/10 outline-none transition focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+                className="relative flex h-24 w-24 mb-3 items-center justify-center rounded-full bg-neutral-900/70 p-4 text-cyan-200/80 shadow-sm shadow-neutral-500/10 outline-none transition focus-visible:ring-2 focus-visible:ring-cyan-400/70"
                 whileHover={{ scale: 1 }}
                 whileTap={{ scale: 0.98 }}
                 onHoverStart={startScan}
@@ -209,7 +229,7 @@ export const BiometricSecurity = memo(
                       <motion.path
                         key={index}
                         d={path}
-                        animate={pathControls[index]}
+                        animate={pathControls.current[index]}
                         initial={{
                           pathLength: 1,
                           fill: "#525252",

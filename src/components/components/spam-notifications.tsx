@@ -13,7 +13,6 @@ import {
   Rocket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FaBell } from "react-icons/fa";
 
 interface NotificationMessage {
   id: string;

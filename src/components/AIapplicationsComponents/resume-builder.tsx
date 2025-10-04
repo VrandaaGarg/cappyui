@@ -4,7 +4,6 @@ import {
   ChangeEvent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -37,12 +36,7 @@ const PROCESSING_STEPS = [
   "Preparing tailored resume output",
 ];
 
-const formatFileSize = (bytes: number) => {
-  if (!bytes) return "0 Bytes";
-  const units = ["Bytes", "KB", "MB", "GB"];
-  const exponent = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, exponent)).toFixed(1)} ${units[exponent]}`;
-};
+
 
 const ResumeBuilder = ({ className }: ResumeBuilderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,21 +47,7 @@ const ResumeBuilder = ({ className }: ResumeBuilderProps) => {
     PROCESSING_STEPS.map(() => "pending")
   );
   const [currentFile, setCurrentFile] = useState<StoredResume | null>(null);
-  const [storedResume, setStoredResume] = useState<StoredResume | null>(null);
   const [justCompleted, setJustCompleted] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const saved = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        const parsed: StoredResume = JSON.parse(saved);
-        setStoredResume(parsed);
-      }
-    } catch (error) {
-      console.error("Unable to read stored resume", error);
-    }
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -95,8 +75,6 @@ const ResumeBuilder = ({ className }: ResumeBuilderProps) => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
     }
-
-    setStoredResume(payload);
   }, []);
 
   const beginProcessing = useCallback(
@@ -163,10 +141,7 @@ const ResumeBuilder = ({ className }: ResumeBuilderProps) => {
     fileInputRef.current?.click();
   }, [viewState]);
 
-  const lastUploadLabel = useMemo(() => {
-    if (!storedResume) return null;
-    return `${storedResume.name} · ${formatFileSize(storedResume.size)}`;
-  }, [storedResume]);
+
 
   return (
     <div
