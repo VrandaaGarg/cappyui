@@ -1,0 +1,79 @@
+---
+title: Biometric Security
+description: An animated biometric security component with fingerprint scanning, sequential path-by-path fill animation, tilted shine effect, and pulse animations, perfect for showcasing secure login experiences.
+---
+
+## Preview
+
+<div className="border border-neutral-300 dark:border-neutral-600/30 rounded-xl md:rounded-3xl py-2">
+  <BiometricSecurity />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/biometric-security.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/biometric-security.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge react-icons
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/biometric-security.tsx`
+        <SourceCodeBlock filePath="src/components/components/BiometricSecurity.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { BiometricSecurity } from "@/components/ui/biometric-security";
+
+export default function MyComponent() {
+  return (
+    <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+      <BiometricSecurity />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default | Description                     |
+| ----------- | -------- | ------- | ------------------------------- |
+| `className` | `string` | -       | Optional additional CSS classes |
+
+<br />
