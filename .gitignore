@@ -2,7 +2,7 @@
 /node_modules
 
 #registry
-# /registry
+/registry
 
 # generated content
 .contentlayer
