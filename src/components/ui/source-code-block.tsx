@@ -78,7 +78,7 @@ export async function SourceCodeBlock({
         <CopyButton content={content} />
       </div>
       <div
-        className="overflow-auto max-h-[800px] [&>pre]:!mt-0 [&>pre]:!mb-0 [&>pre]:!bg-transparent [&>pre]:!border-0 [&>pre]:rounded-none [&>pre]:p-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-fd-muted/50 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-fd-muted/70"
+        className="overflow-auto max-h-[600px] [&>pre]:!mt-0 [&>pre]:!mb-0 [&>pre]:!bg-transparent [&>pre]:!border-0 [&>pre]:rounded-none [&>pre]:p-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-fd-muted/50 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-fd-muted/70"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "rgba(156, 163, 175, 0.5) transparent",

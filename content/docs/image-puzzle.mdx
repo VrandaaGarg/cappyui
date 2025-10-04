@@ -1,0 +1,86 @@
+---
+title: Image Puzzle
+description: An animated image puzzle component with sequential piece animations and custom image support.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl md:rounded-3xl py-6">
+  <ImagePuzzle />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/image-puzzle.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/image-puzzle.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/image-puzzle.tsx`
+        <SourceCodeBlock filePath="src/components/components/image-puzzle.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { ImagePuzzle } from "@/components/ui/image-puzzle";
+
+export default function MyComponent() {
+  return <ImagePuzzle />;
+}
+```
+
+With custom image URL:
+
+```tsx
+import { ImagePuzzle } from "@/components/ui/image-puzzle";
+
+export default function MyComponent() {
+  return <ImagePuzzle imageSrc="https://example.com/your-image.jpg" />;
+}
+```
+
+## Props
+
+| Prop        | Type     | Default       | Description                               |
+| ----------- | -------- | ------------- | ----------------------------------------- |
+| `className` | `string` | -             | Optional additional CSS classes           |
+| `imageSrc`  | `string` | Default image | URL of the image to display in the puzzle |
+
+<br />

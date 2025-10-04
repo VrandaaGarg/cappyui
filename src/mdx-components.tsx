@@ -10,6 +10,7 @@ import ChatInputBox from "@/components/AIapplicationsComponents/chat-input-box";
 import { CalendarRange } from "@/components/components/calenderRange";
 import { CalendarCurrent } from "@/components/components/calenderCurent";
 import { Puzzle } from "@/components/components/puzzle";
+import { ImagePuzzle } from "@/components/components/image-puzzle";
 import { MultiFactor } from "@/components/components/MultiFactor";
 import { CopyPromptButton } from "@/components/ui/copy-prompt-button";
 import { SourceCodeBlock } from "@/components/ui/source-code-block";
@@ -28,6 +29,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     CalendarCurrent,
     TeamCard,
     Puzzle,
+    ImagePuzzle,
     MultiFactor,
     CopyPromptButton,
     SourceCodeBlock,

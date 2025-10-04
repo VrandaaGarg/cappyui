@@ -83,7 +83,7 @@ export const Puzzle = memo(({ className }: PuzzleProps) => {
 
   return (
     <div className={cn("flex items-center justify-center p-8", className)}>
-      <div className="relative w-full max-w-md aspect-square">
+      <div className="relative w-full max-w-xs aspect-square">
         {/* Puzzle piece container */}
         <div className="relative w-full h-full">
           {/* Top-left puzzle piece - First animation */}
