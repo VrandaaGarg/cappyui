@@ -1,0 +1,79 @@
+---
+title: Secure App
+description: An animated secure app authentication component with fingerprint scanning, orbiting security provider icons, and beam animations, perfect for showcasing multi-factor authentication or secure login systems.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl md:rounded-3xl py-6">
+  <SecureApp />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/secure-app.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/secure-app.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge react-icons
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/secure-app.tsx`
+        <SourceCodeBlock filePath="src/components/components/secure-app.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { SecureApp } from "@/components/ui/secure-app";
+
+export default function MyComponent() {
+  return (
+    <div className="">
+      <SecureApp />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default | Description                     |
+| ----------- | -------- | ------- | ------------------------------- |
+| `className` | `string` | -       | Optional additional CSS classes |
+
+<br />
