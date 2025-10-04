@@ -224,8 +224,8 @@ export default function SpamNotifications({
       { x: 85, y: -20, rotate: 3 },
       { x: -70, y: 55, rotate: -4 },
       { x: 100, y: -60, rotate: 4 },
-      { x: -45, y: 20, rotate: -3 },
-      { x: 65, y: -75, rotate: 6 },
+      { x: -25, y: 20, rotate: -3 },
+      { x: 0, y: 0, rotate: 0 },
     ],
     []
   );
