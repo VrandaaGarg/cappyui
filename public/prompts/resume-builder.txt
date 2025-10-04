@@ -1,0 +1,88 @@
+Create a modern AI Resume Builder component with the following specifications:
+
+COMPONENT REQUIREMENTS:
+- Build a React component called "ResumeBuilder" that demonstrates an AI-powered resume processing flow
+- Use TypeScript for type safety
+- Implement with "use client" directive for Next.js client-side rendering
+
+FEATURES:
+1. File Upload Interface:
+   - Clean upload card with drag-and-drop visual design
+   - File input accepting: .pdf, .doc, .docx, .txt, .rtf
+   - Display upload icon (UploadCloud from lucide-react)
+   - "Select file" button to trigger file picker
+   - Descriptive text: "Upload resume" title and "Choose a PDF or DOCX to preview the AI resume building journey" subtitle
+
+2. Processing Animation:
+   - Show file details card with FileText icon and filename
+   - Display 4 sequential processing steps with animated states:
+     * "Parsing data from resume"
+     * "Collecting and analysing experience"
+     * "Extracting skills and keywords"
+     * "Preparing tailored resume output"
+   - Each step should have 3 states: pending (small dot), active (spinning loader), complete (green checkmark)
+   - Steps animate sequentially with 1100ms delay between each
+   - Show Loader2 spinner in file card header during processing
+
+3. Success Toast:
+   - After processing completes, show success toast notification at top
+   - Toast content: CheckCircle2 icon + "Resume processed successfully"
+   - Toast auto-dismisses after 2200ms
+   - Toast has dark background with light text (inverted in dark mode)
+
+4. Local Storage Persistence:
+   - Store uploaded file metadata (name, size, type, uploadedAt) in localStorage
+   - Key: "resume-builder-demo"
+   - Restore stored resume data on component mount
+   - Only store metadata, not actual file content
+
+5. State Management:
+   - viewState: "idle" | "processing"
+   - stepStatuses: array of "pending" | "active" | "complete"
+   - currentFile: stores current processing file metadata
+   - storedResume: persisted resume from localStorage
+   - justCompleted: triggers success toast display
+
+STYLING:
+- Use Tailwind CSS with neutral color palette
+- Dark mode support throughout
+- Main container: max-w-xl, rounded-lg, border, gradient background blur effect
+- Decorative gradient blob at top: purple/violet gradient with blur-3xl
+- Upload card: border-dashed, rounded-xl, centered content
+- Processing card: solid border, rounded-lg, white/dark background
+- Step items: rounded-lg cards with borders, icon on left, status indicator on right
+- Use motion from framer-motion for all animations
+- AnimatePresence for smooth enter/exit transitions
+- File card: neutral background, border, displays filename and "Processing resume" label
+
+ANIMATIONS:
+- Upload card: fade in with y: 20 slide
+- Processing card: fade in with y: 20 slide
+- Success toast: fade + slide from top (y: -12)
+- Step items: staggered fade in (delay: index * 0.05)
+- All transitions use duration: 0.3-0.4s with easeOut
+- Button whileTap scale: 0.97
+
+TECHNICAL DETAILS:
+- Use useRef for file input and timers management
+- Clean up all timers on unmount
+- Format file size helper: converts bytes to KB/MB/GB
+- Prevent file picker opening during processing
+- Reset file input value after selection
+- Type-safe interfaces for all props and state
+
+COMPONENT STRUCTURE:
+- Single wrapper div with gradient background and decorative blob
+- Hidden file input element
+- AnimatePresence with mode="wait" for view transitions
+- Idle view: upload prompt card
+- Processing view: file card + steps list
+- Success toast: absolute positioned, conditionally rendered
+
+DEPENDENCIES:
+- react (useState, useEffect, useCallback, useMemo, useRef)
+- framer-motion (motion, AnimatePresence)
+- lucide-react (CheckCircle2, FileText, Loader2, UploadCloud)
+- @/lib/utils (cn utility function)
+
+Make sure the component is fully self-contained, production-ready, and follows React best practices with proper cleanup and memoization.

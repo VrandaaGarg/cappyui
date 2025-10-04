@@ -1,0 +1,79 @@
+---
+title: AI Resume Builder
+description: A modern AI resume upload experience with animated processing steps, local persistence, and premium UI polish.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl py-8 px-6 ">
+  <ResumeBuilder />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/resume-builder.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/resume-builder.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge lucide-react
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/resume-builder.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/resume-builder.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import ResumeBuilder from "@/components/AIapplicationsComponents/resume-builder";
+
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-neutral-100 p-10">
+      <ResumeBuilder />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default | Description                     |
+| ----------- | -------- | ------- | ------------------------------- |
+| `className` | `string` | -       | Optional additional CSS classes |
+
+<br />

@@ -14,6 +14,7 @@ import { ImagePuzzle } from "@/components/components/image-puzzle";
 import { MultiFactor } from "@/components/components/MultiFactor";
 import { CopyPromptButton } from "@/components/ui/copy-prompt-button";
 import { SourceCodeBlock } from "@/components/ui/source-code-block";
+import ResumeBuilder from "./components/AIapplicationsComponents/resume-builder";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -26,6 +27,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     PinChat,
     ChatInputBox,
     CalendarRange,
+    ResumeBuilder,
     CalendarCurrent,
     TeamCard,
     Puzzle,
