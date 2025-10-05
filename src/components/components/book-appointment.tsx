@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -52,9 +52,16 @@ export const BookAppointment = ({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(TIME_SLOTS[0]);
-  const [direction, setDirection] = useState(0); // -1 for previous, 1 for next
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isScrollingRef = useRef(false);
+  const animationFrameRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+
+  const todayStart = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -84,29 +91,30 @@ export const BookAppointment = ({
 
   // Check if date is today
   const isToday = (date: Date) => {
-    const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate.getTime() === todayStart.getTime();
+  };
+
+  // Check if date is in the past
+  const isPastDate = (date: Date) => {
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate.getTime() < todayStart.getTime();
   };
 
   // Navigate months
   const goToPreviousMonth = () => {
-    setDirection(-1);
     setCurrentDate(new Date(year, month - 1, 1));
   };
 
   const goToNextMonth = () => {
-    setDirection(1);
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
   // Handle date selection
-  const handleDateClick = (day: number) => {
-    const newDate = new Date(year, month, day);
-    setSelectedDate(newDate);
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
   };
 
   // Format date for display
@@ -156,10 +164,30 @@ export const BookAppointment = ({
       });
     };
 
+    const schedulePerspectiveUpdate = () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      animationFrameRef.current = requestAnimationFrame(() => {
+        updatePerspective();
+        animationFrameRef.current = null;
+      });
+    };
+
+    const resetScrollingFlag = () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = window.setTimeout(() => {
+        isScrollingRef.current = false;
+        timeoutRef.current = null;
+      }, 50);
+    };
+
     const handleScroll = () => {
       if (isScrollingRef.current) return;
 
-      updatePerspective();
+      schedulePerspectiveUpdate();
 
       const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
       const scrollThreshold = 100;
@@ -169,17 +197,13 @@ export const BookAppointment = ({
         isScrollingRef.current = true;
         scrollContainer.scrollTop =
           scrollHeight - clientHeight - scrollThreshold;
-        setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 50);
+        resetScrollingFlag();
       }
       // Scrolled near bottom - loop to top
       else if (scrollTop > scrollHeight - clientHeight - scrollThreshold) {
         isScrollingRef.current = true;
         scrollContainer.scrollTop = scrollThreshold;
-        setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 50);
+        resetScrollingFlag();
       }
     };
 
@@ -194,17 +218,52 @@ export const BookAppointment = ({
 
     return () => {
       scrollContainer.removeEventListener("scroll", handleScroll);
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
   }, []);
 
   // Generate calendar days
-  const calendarDays = [];
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarDays.push(null);
-  }
-  for (let day = 1; day <= daysInMonth; day++) {
-    calendarDays.push(day);
-  }
+  const calendarDays = useMemo(() => {
+    const days: { day: number; isCurrentMonth: boolean; date: Date }[] = [];
+
+    const prevMonthDays = new Date(year, month, 0).getDate();
+    const prevMonthStart = prevMonthDays - firstDayOfMonth + 1;
+
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      const day = prevMonthStart + i;
+      days.push({
+        day,
+        isCurrentMonth: false,
+        date: new Date(year, month - 1, day),
+      });
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push({
+        day,
+        isCurrentMonth: true,
+        date: new Date(year, month, day),
+      });
+    }
+
+    while (days.length < 42) {
+      const day = days.length - (firstDayOfMonth + daysInMonth) + 1;
+      days.push({
+        day,
+        isCurrentMonth: false,
+        date: new Date(year, month + 1, day),
+      });
+    }
+
+    return days;
+  }, [daysInMonth, firstDayOfMonth, month, year]);
 
   return (
     <div
@@ -256,38 +315,41 @@ export const BookAppointment = ({
             ))}
 
             {/* Calendar days */}
-            {calendarDays.map((day, index) => {
-              if (day === null) {
-                return <div key={`empty-${index}`} />;
-              }
-
-              const date = new Date(year, month, day);
+            {calendarDays.map(({ day, isCurrentMonth, date }, index) => {
               const booked = isDateBooked(date);
+              const past = isPastDate(date);
               const selected = isDateSelected(date);
               const today = isToday(date);
+              const isDisabled = booked || past || !isCurrentMonth;
 
               return (
                 <motion.button
-                  key={`${year}-${month}-${day}`}
-                  onClick={() => !booked && handleDateClick(day)}
-                  disabled={booked}
+                  key={`${date.getFullYear()}-${date.getMonth()}-${day}`}
+                  onClick={() => !isDisabled && handleDateClick(date)}
+                  disabled={isDisabled}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.01 }}
                   className={cn(
                     "aspect-square md:w-8 md:h-8 w-6 h-6 rounded flex items-center justify-center text-[9px] md:text-xs font-medium transition-all relative",
+                    !isCurrentMonth &&
+                      "text-neutral-300 dark:text-neutral-700 cursor-not-allowed",
                     booked
-                      ? " text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+                      ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+                      : past
+                      ? "text-neutral-300 dark:text-neutral-700 cursor-not-allowed"
                       : selected
                       ? "bg-neutral-950 dark:bg-neutral-100 text-white dark:text-neutral-950"
                       : today
                       ? "bg-neutral-200 dark:bg-neutral-800"
-                      : "hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                      : isCurrentMonth
+                        ? "hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        : "text-neutral-300 dark:text-neutral-700 cursor-not-allowed"
                   )}
-                  whileHover={!booked ? { scale: 1.05 } : {}}
-                  whileTap={!booked ? { scale: 0.95 } : {}}
+                  whileHover={!isDisabled && isCurrentMonth ? { scale: 1.05 } : {}}
+                  whileTap={!isDisabled && isCurrentMonth ? { scale: 0.95 } : {}}
                 >
-                  <span className={cn(booked && "line-through")}>{day}</span>
+                  <span className={cn((booked || past) && "line-through")}>{day}</span>
                 </motion.button>
               );
             })}

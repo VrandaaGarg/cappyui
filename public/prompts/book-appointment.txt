@@ -21,6 +21,7 @@ Create a React component called "Book Appointment" with the following specificat
    - **Today**: Highlighted with neutral background (bg-neutral-200 dark:bg-neutral-800)
    - **Selected**: Dark background (bg-neutral-950 dark:bg-neutral-100)
    - **Booked dates**: Strikethrough text, neutral color, non-selectable, cursor-not-allowed
+   - **Past dates**: Strikethrough text, muted color, non-selectable, cursor-not-allowed
    - **Regular dates**: Hover effect with scale animation
    - Fade-in animation on month change with staggered delay
 
@@ -63,7 +64,8 @@ Create a React component called "Book Appointment" with the following specificat
    - Monitor scroll position with useEffect
    - When scrolling near top (< 100px): Jump to bottom
    - When scrolling near bottom (> scrollHeight - clientHeight - 100px): Jump to top
-   - Update perspective effect on every scroll
+   - Schedule perspective updates with `requestAnimationFrame`
+   - Debounce scroll loop resets with `setTimeout` and clear timers on cleanup
    - Initial scroll position set to middle
 
 9. **Perspective Effect Calculation**:
@@ -81,15 +83,15 @@ Create a React component called "Book Appointment" with the following specificat
     - `currentDate` - Currently displayed month/year
     - `selectedDate` - User-selected date (default: today)
     - `selectedTime` - User-selected time slot (default: first slot)
-    - `direction` - Navigation direction for animations (-1 or 1)
+    - Memoize today's start-of-day value and calendar grid with `useMemo`
 
 12. **Helper Functions**:
     - `generateTimeSlots()` - Creates array of time slots from 9 AM to 5 PM
     - `isDateBooked()` - Checks if a date is in bookedDates array
     - `isDateSelected()` - Checks if a date matches selectedDate
     - `isToday()` - Checks if a date is today
+    - `isPastDate()` - Checks if a date is before today
     - `formatDate()` - Formats date for footer display
-    - `updatePerspective()` - Applies 3D transforms to time slot buttons
 
 ## Dependencies:
 - framer-motion (for animations)
@@ -99,8 +101,11 @@ Create a React component called "Book Appointment" with the following specificat
 ## Technical Details:
 - Use TypeScript with proper interfaces
 - Use refs for scroll container and scroll state
+- Memoize calendar calculations and today's baseline date
 - Clean up event listeners on unmount
+- Cancel animation frames and clear timers on unmount to avoid leaks
 - Prevent booked dates from being selected
+- Prevent past dates from being selected
 - Responsive text sizes and spacing
 - Full dark mode support with neutral color palette
 
