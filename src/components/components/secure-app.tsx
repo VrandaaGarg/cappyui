@@ -31,14 +31,12 @@ interface SecureAppProps {
   className?: string;
 }
 
-type OrbitLayoutKey = "desktop" | "compact";
-
 interface OrbitNodeConfig {
   id: string;
   direction: "left" | "right" | "center";
   icon: IconType;
-  positions: Record<OrbitLayoutKey, { x: number; y: number }>;
-  connectors: Record<OrbitLayoutKey, string>;
+  position: { x: number; y: number };
+  connector: string;
 }
 
 const ORBIT_CONFIG: OrbitNodeConfig[] = [
@@ -46,79 +44,43 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     id: "top-left",
     direction: "left",
     icon: MdEmail,
-    positions: {
-      desktop: { x: 150, y: 180 },
-      compact: { x: 150, y: 180 },
-    },
-    connectors: {
-      desktop: "M150 180 H206 Q 220 186 238 220 T 256 256",
-      compact: "M150 180 H206 Q 220 186 238 220 T 256 256",
-    },
+    position: { x: 150, y: 180 },
+    connector: "M150 180 H206 Q 220 186 238 220 T 256 256",
   },
   {
     id: "top-right",
     direction: "right",
     icon: SiAppwrite,
-    positions: {
-      desktop: { x: 362, y: 180 },
-      compact: { x: 362, y: 180 },
-    },
-    connectors: {
-      desktop: "M362 180 H306 Q 292 186 274 220 T 256 256",
-      compact: "M362 180 H306 Q 292 186 274 220 T 256 256",
-    },
+    position: { x: 362, y: 180 },
+    connector: "M362 180 H306 Q 292 186 274 220 T 256 256",
   },
   {
     id: "mid-right",
     direction: "right",
     icon: FaApple,
-    positions: {
-      desktop: { x: 362, y: 260 },
-      compact: { x: 362, y: 260 },
-    },
-    connectors: {
-      desktop: "M362 260 L 256 256",
-      compact: "M362 260 L 256 256",
-    },
+    position: { x: 362, y: 260 },
+    connector: "M362 260 L 256 256",
   },
   {
     id: "bottom-right",
     direction: "right",
     icon: SiMongodb,
-    positions: {
-      desktop: { x: 362, y: 332 },
-      compact: { x: 362, y: 332 },
-    },
-    connectors: {
-      desktop: "M362 332 H306 Q 292 326 274 292 T 256 256",
-      compact: "M362 332 H306 Q 292 326 274 292 T 256 256",
-    },
+    position: { x: 362, y: 332 },
+    connector: "M362 332 H306 Q 292 326 274 292 T 256 256",
   },
   {
     id: "bottom-left",
     direction: "left",
     icon: SiClerk,
-    positions: {
-      desktop: { x: 150, y: 332 },
-      compact: { x: 150, y: 332 },
-    },
-    connectors: {
-      desktop: "M150 332 H206 Q 220 326 238 292 T 256 256",
-      compact: "M150 332 H206 Q 220 326 238 292 T 256 256",
-    },
+    position: { x: 150, y: 332 },
+    connector: "M150 332 H206 Q 220 326 238 292 T 256 256",
   },
   {
     id: "mid-left",
     direction: "left",
     icon: RiFirebaseFill,
-    positions: {
-      desktop: { x: 150, y: 260 },
-      compact: { x: 150, y: 260 },
-    },
-    connectors: {
-      desktop: "M150 260 L 256 256",
-      compact: "M150 260 L 256 256",
-    },
+    position: { x: 150, y: 260 },
+    connector: "M150 260 L 256 256",
   },
 ];
 
@@ -188,8 +150,6 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
   const [beamActive, setBeamActive] = useState(false);
   const [nodesShifted, setNodesShifted] = useState(false);
   const [phase, setPhase] = useState<OrbitPhase>("scanning");
-  const [layoutKey, setLayoutKey] = useState<OrbitLayoutKey>("desktop");
-  // Theme detection no longer needed for SVG gradients as we use CSS classes
 
   const cancelRef = useRef(false);
   const timeoutsRef = useRef<number[]>([]);
@@ -213,41 +173,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia("(max-width: 520px)");
-
-    const applyMatch = (matches: boolean) => {
-      setLayoutKey(matches ? "compact" : "desktop");
-    };
-
-    applyMatch(mediaQuery.matches);
-
-    const handler = (event: MediaQueryListEvent) => applyMatch(event.matches);
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", handler);
-      return () => {
-        mediaQuery.removeEventListener("change", handler);
-      };
-    }
-
-    mediaQuery.addListener(handler);
-    return () => {
-      mediaQuery.removeListener(handler);
-    };
-  }, []);
-
-  const orbitNodes = useMemo(() => {
-    return ORBIT_CONFIG.map(({ connectors, positions, ...rest }) => ({
-      ...rest,
-      connector: connectors[layoutKey],
-      position: positions[layoutKey],
-    }));
-  }, [layoutKey]);
+  const orbitNodes = useMemo(() => ORBIT_CONFIG, []);
 
   const runSequence = useCallback(async () => {
     setPhase("scanning");
@@ -433,7 +359,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
             </svg>
           </div>
 
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-50 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 dark:from-neutral-800 dark:via-neutral-900 dark:to-black">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-50 flex h-12 w-12 md:h-20 md:w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 dark:from-neutral-800 dark:via-neutral-900 dark:to-black">
             {/* Animated border overlay */}
             <motion.div
               className="absolute inset-0 rounded-full border-[2px] border-neutral-400/70 dark:border-neutral-400/30 bg-neutral-200/20 dark:bg-neutral-100/10 pointer-events-none"
@@ -453,7 +379,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
                 },
               }}
             />
-            <div className="relative h-16 w-16">
+            <div className="relative h-9 w-9 md:h-16 md:w-16">
               {isScanningPhase ? (
                 <motion.div
                   key={`scan-halo-${scanIteration}`}
