@@ -48,11 +48,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: MdEmail,
     positions: {
       desktop: { x: 150, y: 180 },
-      compact: { x: 132, y: 208 },
+      compact: { x: 150, y: 180 },
     },
     connectors: {
       desktop: "M150 180 H206 Q 220 186 238 220 T 256 256",
-      compact: "M132 208 H194 Q 212 218 236 236 T 256 256",
+      compact: "M150 180 H206 Q 220 186 238 220 T 256 256",
     },
   },
   {
@@ -61,11 +61,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: SiAppwrite,
     positions: {
       desktop: { x: 362, y: 180 },
-      compact: { x: 380, y: 208 },
+      compact: { x: 362, y: 180 },
     },
     connectors: {
       desktop: "M362 180 H306 Q 292 186 274 220 T 256 256",
-      compact: "M380 208 H318 Q 300 218 276 236 T 256 256",
+      compact: "M362 180 H306 Q 292 186 274 220 T 256 256",
     },
   },
   {
@@ -74,11 +74,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: FaApple,
     positions: {
       desktop: { x: 362, y: 260 },
-      compact: { x: 376, y: 260 },
+      compact: { x: 362, y: 260 },
     },
     connectors: {
       desktop: "M362 260 L 256 256",
-      compact: "M376 260 L 256 256",
+      compact: "M362 260 L 256 256",
     },
   },
   {
@@ -87,11 +87,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: SiMongodb,
     positions: {
       desktop: { x: 362, y: 332 },
-      compact: { x: 380, y: 304 },
+      compact: { x: 362, y: 332 },
     },
     connectors: {
       desktop: "M362 332 H306 Q 292 326 274 292 T 256 256",
-      compact: "M380 304 H318 Q 300 294 276 276 T 256 256",
+      compact: "M362 332 H306 Q 292 326 274 292 T 256 256",
     },
   },
   {
@@ -100,11 +100,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: SiClerk,
     positions: {
       desktop: { x: 150, y: 332 },
-      compact: { x: 132, y: 304 },
+      compact: { x: 150, y: 332 },
     },
     connectors: {
       desktop: "M150 332 H206 Q 220 326 238 292 T 256 256",
-      compact: "M132 304 H194 Q 212 294 236 276 T 256 256",
+      compact: "M150 332 H206 Q 220 326 238 292 T 256 256",
     },
   },
   {
@@ -113,11 +113,11 @@ const ORBIT_CONFIG: OrbitNodeConfig[] = [
     icon: RiFirebaseFill,
     positions: {
       desktop: { x: 150, y: 260 },
-      compact: { x: 136, y: 260 },
+      compact: { x: 150, y: 260 },
     },
     connectors: {
       desktop: "M150 260 L 256 256",
-      compact: "M136 260 L 256 256",
+      compact: "M150 260 L 256 256",
     },
   },
 ];
@@ -527,7 +527,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
           {orbitNodes.map((node) => (
             <motion.div
               key={node.id}
-              className="pointer-events-none absolute z-50 backdrop-blur-2xl flex md:h-14 w-7 h-7 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 shadow-[0_8px_24px_rgba(0,0,0,0.25)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.55)]"
+              className="pointer-events-none absolute z-50 backdrop-blur-2xl flex md:h-14 w-11 h-11 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 shadow-[0_8px_24px_rgba(0,0,0,0.25)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.55)]"
               animate={{
                 x: nodesShifted ? DIRECTION_SHIFT[node.direction] : 0,
               }}
@@ -541,7 +541,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
                 top: `${(node.position.y / 512) * 100}%`,
               }}
             >
-              <node.icon className="md:h-6 md:w-6 w-3 h-3 text-black dark:text-white" />
+              <node.icon className="md:h-6 md:w-6 w-5 h-5 text-black dark:text-white" />
             </motion.div>
           ))}
         </div>
