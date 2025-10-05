@@ -18,6 +18,7 @@ import { SourceCodeBlock } from "@/components/ui/source-code-block";
 import ResumeBuilder from "./components/AIapplicationsComponents/resume-builder";
 import { BiometricSecurity } from "./components/components/BiometricSecurity";
 import { SecureApp } from "./components/components/secure-app";
+import { SecureVault } from "./components/components/secure-vault";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -34,6 +35,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ResumeBuilder,
     CalendarCurrent,
     SecureApp,
+    SecureVault,
     TeamCard,
     Puzzle,
     ImagePuzzle,

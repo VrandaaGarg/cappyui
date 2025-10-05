@@ -1,0 +1,113 @@
+---
+title: Secure Vault
+description: An animated secure vault component with sequential circuit connection animations, lock opening effect, and vault door opening animation, perfect for showcasing secure storage or data protection systems.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl md:rounded-3xl py-6">
+  <SecureVault />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/secure-vault.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/secure-vault.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/secure-vault.tsx`
+        <SourceCodeBlock filePath="src/components/components/secure-vault.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { SecureVault } from "@/components/ui/secure-vault";
+
+export default function MyComponent() {
+  return (
+    <div className="">
+      <SecureVault />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default | Description                     |
+| ----------- | -------- | ------- | ------------------------------- |
+| `className` | `string` | -       | Optional additional CSS classes |
+
+<br />
+
+## Features
+
+- **Sequential Circuit Animation**: Circuit connection lines animate from center outward in sequence
+- **Lock Opening Effect**: Lock shackle animates to show unlocking
+- **Vault Opening Animation**: Dual SVG paths move apart to reveal vault opening
+- **Continuous Loop**: Animation cycles continuously with smooth transitions
+- **Theme Support**: Full dark mode support with appropriate color schemes
+- **Responsive Design**: Adapts to different screen sizes
+- **Smooth Transitions**: Uses Framer Motion for fluid animations
+
+## Animation Sequence
+
+1. **Circuit Activation** (960ms): Eight circuit connection lines animate from the center shield outward, one by one
+2. **Lock Opening** (400ms): The lock shackle animates to show the lock opening
+3. **Vault Opening** (600ms): Top and bottom vault door lines move apart
+4. **Hold State** (1500ms): Vault remains open before cycling back
+
+## Customization
+
+You can customize the component by passing a `className` prop:
+
+```tsx
+<SecureVault className="h-[500px] max-w-6xl" />
+```
+
+## Technical Details
+
+- Built with **Framer Motion** for smooth animations
+- Uses **SVG paths** for precise control over circuit lines and vault doors
+- Implements **sequential state management** for coordinated animations
+- Supports **light and dark themes** with CSS classes
+- **Optimized performance** with proper cleanup and memoization
+

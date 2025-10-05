@@ -1,0 +1,87 @@
+Create an animated secure vault React component with the following specifications:
+
+## Component Requirements
+
+Create a SecureVault component that visualizes a secure vault opening sequence with these features:
+
+### Visual Structure
+- A rounded container with a border and outline (rounded-32px)
+- Background that adapts to light/dark theme (white/neutral-950)
+- Centered security icon (96x96px) with a circular border that glows cyan when vault opens
+- Top and bottom animated vault doors that split apart when opening
+
+### SVG Security Icon (443x512 viewBox)
+The security icon should include these layered elements:
+1. **Shield path**: Main shield shape centered at (221, 225)
+2. **Lock body**: Rectangular lock body in the center
+3. **Lock shackle**: Curved shackle that rotates -28deg and moves up 12px when opening
+4. **Lock keyhole**: Keyhole that lights up (cyan-400/300) when circuits complete
+5. **Outer security circuits**: 4 decorative circuit/connection patterns around the main shield
+
+### Animation Sequence (Continuous Loop)
+1. **Circuit Activation Phase** (960ms total):
+   - Use an expanding circular mask centered on the security icon
+   - Animate the mask radius from 0 to 360 in 8 steps (CIRCUIT_STEP_COUNT = 8)
+   - Each step takes 120ms with 200ms pause after completion
+   - Reveals the cyan-colored security elements progressively from center outward
+   - Gray elements remain visible underneath at reduced opacity
+
+2. **Lock Opening Phase** (400ms):
+   - Rotate the lock shackle -28 degrees
+   - Translate it upward by -12px
+   - Transform origin should be at the bottom of the shackle (221.5px, 210px)
+
+3. **Vault Opening Phase** (600ms):
+   - Top door: SVG path moves up 60px (from -15px to -60px)
+   - Bottom door: Mirrored SVG path moves down 60px (from 15px to 60px)
+   - Both doors fade to 85% opacity
+   - The door paths should have curved corners using quadratic bezier curves
+
+4. **Glow Effect**:
+   - When vault opens, the circular border changes to cyan (#22d3ee)
+   - Add cyan box-shadow with multiple layers for glow effect
+   - Inner border also changes to cyan
+   - Trigger a shine effect (light sweep across the icon from left to right)
+
+5. **Hold State** (1500ms): Keep vault open before restarting loop
+
+### Door Path Geometry
+Create door paths with these characteristics:
+- Use SVG path commands (M, L, Q for curves, Z for close)
+- Top door should have curved notches that mirror on bottom door
+- ViewBox: 850x450
+- Door paths should extend beyond viewbox edges for seamless appearance
+- Use linear gradients for door fill (lighter in middle, darker at edges)
+
+### Color Scheme
+**Light mode:**
+- Background: white
+- Inactive elements: neutral-300 to neutral-400
+- Active elements: cyan-500
+- Doors: neutral-200/neutral-300 gradient
+
+**Dark mode:**
+- Background: neutral-950
+- Inactive elements: neutral-700 to neutral-800
+- Active elements: cyan-400
+- Doors: neutral-800/neutral-900 gradient
+
+### Technical Implementation
+- Use framer-motion for all animations
+- Use useState for: circuitStep, lockOpen, vaultOpen, isDark
+- Use useAnimationControls for the shine effect
+- Use useId for unique mask ID (remove colons for SVG compatibility)
+- Implement continuous loop with async/await sequence
+- Add proper cleanup with cancelRef and timeout tracking
+- Use MutationObserver to detect theme changes
+- Memoize the component with React.memo
+
+### Props
+- className?: string (for additional styling)
+
+### Responsive Design
+- Container: h-[300px] w-full max-w-xs
+- Padding adjusts on mobile (left-4/right-4) vs desktop (left-8/right-8)
+- Icon scales proportionally within container
+
+The component should feel like a high-tech security system activation sequence with smooth, coordinated animations that loop continuously. Use easeInOut easing for all transitions to create a polished feel.
