@@ -1,0 +1,225 @@
+---
+title: Book Appointment
+description: An interactive appointment booking component with calendar and time slot selection. Features month navigation, booked date indicators, and real-time selection display.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl py-8 px-6">
+  <BookAppointment
+    bookedDates={[
+      new Date(2025, 9, 15),
+      new Date(2025, 9, 20),
+      new Date(2025, 9, 25),
+    ]}
+  />
+</div>
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/book-appointment.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge lucide-react
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/components/book-appointment.tsx`
+        <SourceCodeBlock filePath="src/components/components/book-appointment.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { BookAppointment } from "@/components/components/book-appointment";
+
+export default function Page() {
+  // Define booked dates
+  const bookedDates = [
+    new Date(2025, 9, 15), // October 15, 2025
+    new Date(2025, 9, 20), // October 20, 2025
+    new Date(2025, 9, 25), // October 25, 2025
+  ];
+
+  return (
+    <div className="min-h-screen bg-neutral-100 p-10">
+      <BookAppointment bookedDates={bookedDates} />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Interactive Calendar**: Full calendar with month navigation and fade-in animations
+- **Booked Date Indicators**: Strikethrough styling for already booked dates (non-selectable)
+- **Infinite Scroll Time Slots**: Seamlessly loops from 9 AM to 5 PM (15-minute intervals)
+- **3D Perspective Effect**: Unique circular strip appearance with items bending at top/bottom
+- **Dynamic Transforms**: Time slots scale, rotate, and fade based on distance from center
+- **Real-time Display**: Selected date and time shown in footer
+- **Today Highlight**: Current date highlighted in calendar
+- **Month Navigation**: Previous/next month buttons with staggered fade animations
+- **Compact Design**: Mobile-optimized with responsive text sizes
+- **Responsive Layout**: 8-column grid (5 for calendar, 3 for time slots)
+- **Dark Mode Support**: Full dark mode compatibility with neutral palette
+- **Smooth Animations**: Framer Motion animations throughout
+
+## Props
+
+| Prop          | Type     | Default | Description                                                                       |
+| ------------- | -------- | ------- | --------------------------------------------------------------------------------- |
+| `className`   | `string` | -       | Optional additional CSS classes                                                   |
+| `bookedDates` | `Date[]` | `[]`    | Array of dates that are already booked (shown with strikethrough, non-selectable) |
+
+## Customization
+
+### Change Time Range
+
+Modify the `generateTimeSlots` function to change the time range:
+
+```tsx
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 8; hour <= 18; hour++) {
+    // 8 AM to 6 PM
+    for (let minute = 0; minute < 60; minute += 30) {
+      // 30-minute intervals
+      // ... rest of the logic
+    }
+  }
+  return slots;
+};
+```
+
+### Customize Time Interval
+
+Change the interval from 15 minutes to another value:
+
+```tsx
+for (let minute = 0; minute < 60; minute += 30) {
+  // 30-minute intervals
+  // ...
+}
+```
+
+### Add Booking Logic
+
+Add functionality to the BOOK button:
+
+```tsx
+const handleBooking = () => {
+  console.log("Booking appointment for:", selectedDate, selectedTime);
+  // Add your booking logic here
+};
+
+<button onClick={handleBooking}>BOOK</button>;
+```
+
+### Disable Past Dates
+
+Prevent selection of past dates:
+
+```tsx
+const isPastDate = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date < today;
+};
+
+// In the calendar button
+<button
+  disabled={isPastDate(date)}
+  className={cn(
+    // ... other classes
+    isPastDate(date) && "opacity-50 cursor-not-allowed"
+  )}
+>
+```
+
+### Adjust 3D Perspective Intensity
+
+Modify the perspective effect strength:
+
+```tsx
+// In updatePerspective function
+if (normalizedDistance > 0.5) {
+  const intensity = (normalizedDistance - 0.5) * 2;
+  const rotateX = distanceFromCenter > 0 ? intensity * 60 : -intensity * 60; // Increase from 45 to 60
+  const scale = 1 - intensity * 0.5; // Increase scale reduction
+  const opacity = 1 - intensity * 0.7; // Increase fade
+}
+```
+
+### Adjust Infinite Scroll Threshold
+
+Change when the scroll loops:
+
+```tsx
+const scrollThreshold = 150; // Increase from 100 for later loop trigger
+```
+
+### Disable 3D Perspective Effect
+
+Remove the perspective transforms:
+
+```tsx
+// Remove or comment out the updatePerspective() calls
+// Remove style={{ perspective: "500px" }} from container
+// Remove transformStyle: "preserve-3d" from elements
+```
+
+### Custom Styling
+
+Modify colors and borders:
+
+```tsx
+// Change border style
+className = "border border-blue-500 dark:border-blue-400";
+
+// Change selected date color
+className = "bg-blue-600 text-white";
+
+// Change time slot styling
+className = "border border-blue-500 rounded-lg";
+
+// Adjust grid layout (calendar vs time slots ratio)
+<div className="grid grid-cols-8">
+  {" "}
+  // Change to cols-10 for different ratio
+  <div className="col-span-6">
+    {" "}
+    // Adjust calendar width
+    <div className="col-span-4"> // Adjust time slots width</div>
+  </div>
+</div>;
+```
+
+<br />

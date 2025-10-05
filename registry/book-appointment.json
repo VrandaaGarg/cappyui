@@ -1,0 +1,16 @@
+{
+  "name": "book-appointment",
+  "type": "registry:ui",
+  "title": "Book Appointment",
+  "description": "A compact, interactive appointment booking component with calendar and 3D time slot selection. Features month navigation with fade animations, booked date indicators (strikethrough, non-selectable), infinite scrolling time slots from 9 AM to 5 PM with 15-minute intervals, unique 3D perspective scroll effects creating a circular strip appearance, and real-time selection display. Fully responsive with mobile-optimized sizing. Perfect for scheduling and booking interfaces.",
+  "dependencies": ["framer-motion", "tailwind-merge", "clsx", "lucide-react"],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/components/book-appointment.tsx",
+      "content": "",
+      "type": "registry:ui",
+      "target": "components/ui/book-appointment.tsx"
+    }
+  ]
+}

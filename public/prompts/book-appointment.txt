@@ -1,0 +1,117 @@
+Create a React component called "Book Appointment" with the following specifications:
+
+## Component Requirements:
+
+1. **Layout**:
+   - Create a compact appointment booking interface with rounded borders
+   - 8-column grid layout: 5 columns for calendar, 3 columns for time slots
+   - Header with "Book an appointment" title
+   - Footer displaying selected date and time
+   - Responsive design with smaller text on mobile
+
+2. **Calendar Section (Left - 5 columns)**:
+   - Month navigation with previous/next buttons (ChevronLeft/ChevronRight icons)
+   - Display current month and year
+   - 7-column grid for days of the week (Sun-Sat)
+   - Calendar grid showing all days of the month
+   - Empty cells for days before the first day of the month
+   - Date buttons: 6x6 on mobile, 8x8 on desktop
+
+3. **Date States**:
+   - **Today**: Highlighted with neutral background (bg-neutral-200 dark:bg-neutral-800)
+   - **Selected**: Dark background (bg-neutral-950 dark:bg-neutral-100)
+   - **Booked dates**: Strikethrough text, neutral color, non-selectable, cursor-not-allowed
+   - **Regular dates**: Hover effect with scale animation
+   - Fade-in animation on month change with staggered delay
+
+4. **Time Slots Section (Right - 3 columns)**:
+   - Scrollable time slots from 9:00 AM to 5:00 PM (15-minute intervals)
+   - **Infinite scroll**: Loops seamlessly when reaching top or bottom
+   - **3D Perspective effect**: 
+     * Items at center are flat and fully visible
+     * Items at top/bottom bend backward/forward with rotateX transform
+     * Scale down and fade opacity as they move away from center
+     * Creates circular/cylindrical strip appearance
+   - Triple rendering of time slots for smooth infinite scroll
+   - Selected time highlighted with dark background
+   - Positioned absolutely at bottom of container
+
+5. **Book Button**:
+   - Positioned absolutely at bottom center of time slots section
+   - Responsive width: max-w-20 on mobile, max-w-40 on desktop
+   - Dark background with white text
+   - Scale animation on hover and tap
+   - Non-functional (showcase only)
+
+6. **Styling Details**:
+   - Border colors: neutral-400/50 (light), neutral-800 (dark)
+   - Text sizes: Responsive with smaller sizes on mobile (text-[9px], text-[10px])
+   - Rounded corners: rounded-2xl for container, rounded-lg for buttons
+   - Max width: max-w-lg
+   - Compact padding throughout (p-2, p-3)
+
+7. **Animations**:
+   - **Month transition**: Fade-in animation for dates with staggered delay (index * 0.01)
+   - **Date buttons**: Scale on hover (1.05) and tap (0.95)
+   - **Time slots**: 
+     * Perspective transform based on distance from center
+     * Smooth transitions (0.1s) for transform and opacity
+     * Scale on tap (0.95)
+   - **Book button**: Scale on hover (1.05) and tap (0.95)
+
+8. **Infinite Scroll Logic**:
+   - Monitor scroll position with useEffect
+   - When scrolling near top (< 100px): Jump to bottom
+   - When scrolling near bottom (> scrollHeight - clientHeight - 100px): Jump to top
+   - Update perspective effect on every scroll
+   - Initial scroll position set to middle
+
+9. **Perspective Effect Calculation**:
+   - Calculate distance of each button from container center
+   - Normalize distance (0 to 1)
+   - Apply transforms only when normalized distance > 0.5
+   - Intensity increases from 0.5 to 1.0
+   - RotateX: ±45deg max, Scale: down to 0.7, Opacity: down to 0.5
+
+10. **Props**:
+    - `className?: string` - Optional additional CSS classes
+    - `bookedDates?: Date[]` - Array of dates that are already booked
+
+11. **State Management**:
+    - `currentDate` - Currently displayed month/year
+    - `selectedDate` - User-selected date (default: today)
+    - `selectedTime` - User-selected time slot (default: first slot)
+    - `direction` - Navigation direction for animations (-1 or 1)
+
+12. **Helper Functions**:
+    - `generateTimeSlots()` - Creates array of time slots from 9 AM to 5 PM
+    - `isDateBooked()` - Checks if a date is in bookedDates array
+    - `isDateSelected()` - Checks if a date matches selectedDate
+    - `isToday()` - Checks if a date is today
+    - `formatDate()` - Formats date for footer display
+    - `updatePerspective()` - Applies 3D transforms to time slot buttons
+
+## Dependencies:
+- framer-motion (for animations)
+- lucide-react (for ChevronLeft, ChevronRight icons)
+- tailwind-merge and clsx (for className utilities)
+
+## Technical Details:
+- Use TypeScript with proper interfaces
+- Use refs for scroll container and scroll state
+- Clean up event listeners on unmount
+- Prevent booked dates from being selected
+- Responsive text sizes and spacing
+- Full dark mode support with neutral color palette
+
+## Key Features:
+- Compact, professional design
+- Interactive calendar with month navigation
+- Infinite scrolling time slots with 3D perspective
+- Booked date indicators (strikethrough, non-selectable)
+- Real-time selection display in footer
+- Smooth animations throughout
+- Fully responsive and accessible
+
+The component should provide a polished, modern appointment booking experience with unique 3D scroll effects and seamless interactions.
+

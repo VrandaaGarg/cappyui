@@ -20,6 +20,7 @@ import ToolGrid from "./components/AIapplicationsComponents/tool-grid";
 import { BiometricSecurity } from "./components/components/BiometricSecurity";
 import { SecureApp } from "./components/components/secure-app";
 import { SecureVault } from "./components/components/secure-vault";
+import { BookAppointment } from "./components/components/book-appointment";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -38,6 +39,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     CalendarCurrent,
     SecureApp,
     SecureVault,
+    BookAppointment,
     TeamCard,
     Puzzle,
     ImagePuzzle,
