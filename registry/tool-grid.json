@@ -1,0 +1,16 @@
+{
+  "name": "tool-grid",
+  "type": "registry:ui",
+  "title": "Tool Grid",
+  "description": "An animated 4x4 grid showcasing various tool and service icons with custom sequence animations. Features hex color backgrounds, varied neutral shades for empty cells, scale and shadow effects on active icons, smooth transitions, and excellent dark mode support. Perfect for displaying tech stack or tool collections.",
+  "dependencies": ["framer-motion", "tailwind-merge", "clsx", "react-icons"],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/AIapplicationsComponents/tool-grid.tsx",
+      "content": "",
+      "type": "registry:ui",
+      "target": "components/ui/tool-grid.tsx"
+    }
+  ]
+}

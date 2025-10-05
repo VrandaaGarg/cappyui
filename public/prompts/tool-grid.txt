@@ -1,0 +1,92 @@
+Create a React component called "Tool Grid" with the following specifications:
+
+## Component Requirements:
+
+1. **Layout**:
+   - Create a 4x4 grid (16 cells total)
+   - Each cell should be a rounded square (14x14, w-14 h-14)
+   - Inside each bordered square, add another rounded square (inner square: 11x11, w-11 h-11)
+   - Leave 5 cells empty (no icons)
+   - Place tool/service icons in 11 cells
+   - Grid container: rounded-xl with padding, neutral background with border and outline
+
+2. **Icons**:
+   - Use react-icons library
+   - Include icons for various tools/services: Claude (SiClaude), VS Code (VscVscodeInsiders), Gemini (RiGeminiFill), Meta (SiMeta), OpenAI (SiOpenai), GitHub (FaGithubAlt), Clerk (SiClerk), Notion (SiNotion), Firebase (RiFirebaseFill), Appwrite (SiAppwrite), React (RiReactjsFill)
+   - Create an array with icon positions using row/col coordinates and hex color codes
+   - Example: `{ row: 3, col: 3, icon: <SiClaude />, name: "Claude", bgColor: "#D97757" }`
+
+3. **Animation**:
+   - Icons start in grayscale/neutral colors
+   - Custom sequence animation (not linear): Define ANIMATION_SEQUENCE array
+   - When an icon becomes active, it displays its unique hex color
+   - Previous active icon returns to grayscale
+   - Continuous loop through all icons following custom sequence
+   - Animation interval: 2000ms (2 seconds) per icon
+   - Active icon scales to 1.1 (10% larger)
+   - Active icon has neutral shadow (shadow-lg shadow-neutral-400/50 dark:shadow-neutral-900/80)
+   - NO rotation or colored glow effects
+
+4. **Styling**:
+   - Outer cell: 56px (w-14 h-14), rounded-lg
+   - Inner square: 44px (w-11 h-11), rounded-lg
+   - Empty cells:
+     * Gradient backgrounds with varied neutral shades
+     * Different shades for each empty cell based on position
+     * Example: "bg-neutral-50/80 dark:bg-neutral-900"
+   - Filled cells with icons:
+     * Outer: border with white/neutral-800 background
+     * Inner active: solid hex color background with white text
+     * Inner inactive: gradient neutral background with muted text
+   - Grid container: bg-neutral-100 dark:bg-neutral-900/40 with border-2 and outline
+   - Smooth transitions: 1.2s duration with easeInOut
+
+5. **Dark Mode**:
+   - Full support for light and dark themes
+   - Empty cells have different backgrounds for light/dark
+   - Borders adjust: neutral-200 (light) / neutral-700-800 (dark)
+   - Container background: neutral-100 (light) / neutral-900/40 (dark)
+   - Use Tailwind's dark: prefix throughout
+
+6. **Empty Cell Variations**:
+   - Create getEmptyBgColor function that returns different shades based on position
+   - Use (rowIndex + colIndex) % shades.length for variation
+   - 4 different shade combinations for empty cells
+
+7. **Technical Details**:
+   - Use framer-motion for all animations
+   - Use useState for tracking activeSequenceIndex
+   - Use useEffect with setInterval for animation loop
+   - Clean up interval on component unmount
+   - TypeScript support with proper interfaces (ToolGridProps, GridIcon)
+   - Initial staggered entrance animation with delay based on position
+   - Hex colors only (no Tailwind gradient classes for icon colors)
+
+8. **Props**:
+   - className?: string (optional additional CSS classes)
+
+## Dependencies:
+- framer-motion
+- react-icons (si, ri, fa, vsc)
+- tailwind-merge and clsx for className utilities
+
+## Animation Flow:
+1. Component mounts with staggered entrance animation (delay: position * 0.05s)
+2. After mount, start custom sequence animation
+3. Each icon lights up with its hex color for 2 seconds
+4. Active icon scales to 1.1 and shows neutral shadow
+5. Previous icon fades back to grayscale (opacity 0.6)
+6. Loop continues infinitely following ANIMATION_SEQUENCE
+7. Smooth transitions with 1.2s duration and easeInOut easing
+
+## Key Features:
+- Custom non-linear animation sequence
+- Hex color backgrounds for active icons
+- Varied neutral shades for empty cells
+- Scale and neutral shadow on active icons
+- No colored glow or rotation effects
+- Clean, professional appearance
+- Excellent dark mode support
+
+The component should be visually clean, professional, and showcase various tool/service icons in a smooth animated grid format.
+

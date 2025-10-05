@@ -16,6 +16,7 @@ import { MultiFactor } from "@/components/components/MultiFactor";
 import { CopyPromptButton } from "@/components/ui/copy-prompt-button";
 import { SourceCodeBlock } from "@/components/ui/source-code-block";
 import ResumeBuilder from "./components/AIapplicationsComponents/resume-builder";
+import ToolGrid from "./components/AIapplicationsComponents/tool-grid";
 import { BiometricSecurity } from "./components/components/BiometricSecurity";
 import { SecureApp } from "./components/components/secure-app";
 import { SecureVault } from "./components/components/secure-vault";
@@ -33,6 +34,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ChatInputBox,
     CalendarRange,
     ResumeBuilder,
+    ToolGrid,
     CalendarCurrent,
     SecureApp,
     SecureVault,

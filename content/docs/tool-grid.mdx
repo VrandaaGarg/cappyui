@@ -1,0 +1,157 @@
+---
+title: Tool Grid
+description: An animated 4x4 grid showcasing various AI model icons with sequential color animations.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl py-8 px-6">
+  <ToolGrid />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/tool-grid.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/tool-grid.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i framer-motion clsx tailwind-merge react-icons
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/tool-grid.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/tool-grid.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import ToolGrid from "@/components/AIapplicationsComponents/tool-grid";
+
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-neutral-100 p-10">
+      <ToolGrid />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **4x4 Grid Layout**: Clean grid with 16 cells, 11 containing tool/service icons, 5 empty cells
+- **Custom Sequence Animation**: Icons light up following a custom non-linear sequence
+- **Hex Color Backgrounds**: Each active icon displays its unique hex color
+- **Varied Empty Cells**: Empty cells have different neutral shades for visual interest
+- **Scale & Shadow Effects**: Active icons scale to 1.1x with neutral shadow
+- **Smooth Transitions**: All animations use 1.2s easeInOut transitions
+- **Excellent Dark Mode**: Comprehensive dark mode support with adjusted colors
+- **Icon Variety**: Features icons from popular tools (Claude, VS Code, Gemini, Meta, GitHub, Firebase, React, etc.)
+
+## Props
+
+| Prop        | Type     | Default | Description                     |
+| ----------- | -------- | ------- | ------------------------------- |
+| `className` | `string` | -       | Optional additional CSS classes |
+
+## Customization
+
+### Change Animation Speed
+
+Modify the interval duration in the component:
+
+```tsx
+const interval = setInterval(() => {
+  setActiveSequenceIndex((prev) => (prev + 1) % ANIMATION_SEQUENCE.length);
+}, 2000); // Change this value (in milliseconds)
+```
+
+### Customize Animation Sequence
+
+Modify the `ANIMATION_SEQUENCE` array to change the order:
+
+```tsx
+// Indices correspond to positions in ICON_POSITIONS array
+const ANIMATION_SEQUENCE = [0, 3, 1, 5, 9, 2, 7, 4, 10, 6, 8];
+```
+
+### Add More Icons
+
+Add new icons to the `ICON_POSITIONS` array with hex colors:
+
+```tsx
+const ICON_POSITIONS: GridIcon[] = [
+  // ... existing icons
+  {
+    row: 2,
+    col: 0,
+    icon: <YourIcon />,
+    name: "Your Tool",
+    bgColor: "#FF5733",
+  },
+];
+```
+
+### Change Icon Colors
+
+Modify the `bgColor` hex values in the `ICON_POSITIONS` array:
+
+```tsx
+{
+  row: 3,
+  col: 3,
+  icon: <SiClaude />,
+  name: "Claude",
+  bgColor: "#D97757", // Change this hex color
+}
+```
+
+### Customize Empty Cell Shades
+
+Modify the `getEmptyBgColor` function:
+
+```tsx
+const getEmptyBgColor = (rowIndex: number, colIndex: number) => {
+  const shades = [
+    "bg-neutral-50/80 dark:bg-neutral-900",
+    "bg-neutral-100 dark:bg-neutral-800/60",
+    // Add more shade variations
+  ];
+  return shades[(rowIndex + colIndex) % shades.length];
+};
+```
+
+<br />
