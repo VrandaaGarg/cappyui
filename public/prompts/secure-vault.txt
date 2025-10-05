@@ -7,43 +7,55 @@ Create a SecureVault component that visualizes a secure vault opening sequence w
 ### Visual Structure
 - A rounded container with a border and outline (rounded-32px)
 - Background that adapts to light/dark theme (white/neutral-950)
-- Centered security icon (96x96px) with a circular border that glows cyan when vault opens
+- Centered circular vault door mechanism (96x96px) with border that glows white/gray when vault opens
 - Top and bottom animated vault doors that split apart when opening
+- Rotating vault door icon inside a circular container with concentric circles
 
-### SVG Security Icon (443x512 viewBox)
-The security icon should include these layered elements:
-1. **Shield path**: Main shield shape centered at (221, 225)
-2. **Lock body**: Rectangular lock body in the center
-3. **Lock shackle**: Curved shackle that rotates -28deg and moves up 12px when opening
-4. **Lock keyhole**: Keyhole that lights up (cyan-400/300) when circuits complete
-5. **Outer security circuits**: 4 decorative circuit/connection patterns around the main shield
+### Vault Door Mechanism (74x74px circular container)
+The vault door should include these elements:
+1. **Concentric Circles Background** (12 circles):
+   - Alternating radial gradients for 3D metallic effect
+   - Even circles: Light source at 35% 35% (grooves)
+   - Odd circles: Light source at 65% 65% (ridges)
+   - Border opacity varies: neutral-400/30 to neutral-500/20 (light), neutral-900/20 to neutral-800/20 (dark)
+   - Creates realistic vault lock appearance with depth
+
+2. **Main Container Radial Gradient**:
+   - Dark theme: radial-gradient(circle at 30% 30%, #525252 0%, #404040 30%, #262626 60%, #171717 100%)
+   - Light theme: radial-gradient(circle at 30% 30%, #d4d4d4 0%, #a3a3a3 30%, #737373 60%, #525252 100%)
+   - Light source from top-left creates metallic depth
+
+3. **Rotating Vault Door SVG** (viewBox: 250 -25 200 500):
+   - Custom path with curved design
+   - Rotates 90 degrees when vault opens
+   - Size: 10x10 (w-10 h-10)
+   - Theme-aware colors: white (dark) / black (light)
+   - Stroke width: 3px with round caps and joins
 
 ### Animation Sequence (Continuous Loop)
-1. **Circuit Activation Phase** (960ms total):
-   - Use an expanding circular mask centered on the security icon
-   - Animate the mask radius from 0 to 360 in 8 steps (CIRCUIT_STEP_COUNT = 8)
-   - Each step takes 120ms with 200ms pause after completion
-   - Reveals the cyan-colored security elements progressively from center outward
-   - Gray elements remain visible underneath at reduced opacity
+1. **Icon Fade-In Phase** (960ms total):
+   - Animate vault door icon opacity from 0.3 to 1.0 in 8 steps (CIRCUIT_STEP_COUNT = 8)
+   - Each step takes 120ms with 300ms pause after completion
+   - Progressive opacity: 0.5 + (circuitStep / CIRCUIT_STEP_COUNT) * 0.5
 
-2. **Lock Opening Phase** (400ms):
-   - Rotate the lock shackle -28 degrees
-   - Translate it upward by -12px
-   - Transform origin should be at the bottom of the shackle (221.5px, 210px)
-
-3. **Vault Opening Phase** (600ms):
+2. **Vault Opening Phase** (800ms):
+   - Vault door icon rotates 90 degrees clockwise
    - Top door: SVG path moves up 60px (from -15px to -60px)
    - Bottom door: Mirrored SVG path moves down 60px (from 15px to 60px)
    - Both doors fade to 85% opacity
    - The door paths should have curved corners using quadratic bezier curves
 
-4. **Glow Effect**:
-   - When vault opens, the circular border changes to cyan (#22d3ee)
-   - Add cyan box-shadow with multiple layers for glow effect
-   - Inner border also changes to cyan
+3. **Glow Effect**:
+   - When vault opens, the circular border changes color:
+     - Dark theme: white (#FFFFFF)
+     - Light theme: gray (#696969)
+   - Add white/black box-shadow with multiple layers for glow effect
+   - Inner border also changes to white/black
    - Trigger a shine effect (light sweep across the icon from left to right)
+     - Dark theme: white shine
+     - Light theme: neutral-200 shine
 
-5. **Hold State** (1500ms): Keep vault open before restarting loop
+4. **Hold State** (1500ms): Keep vault open before restarting loop
 
 ### Door Path Geometry
 Create door paths with these characteristics:
@@ -56,25 +68,35 @@ Create door paths with these characteristics:
 ### Color Scheme
 **Light mode:**
 - Background: white
-- Inactive elements: neutral-300 to neutral-400
-- Active elements: cyan-500
-- Doors: neutral-200/neutral-300 gradient
+- Vault door icon: black
+- Border when open: gray (#696969)
+- Shine effect: neutral-200
+- Doors: e5e5e5/f5f5f5/e5e5e5 gradient
+- Door lines: neutral-300
+- Concentric circles: neutral-400/30 to neutral-500/20 borders
+- Radial gradients: lighter neutrals (d4d4d4 to 525252)
 
 **Dark mode:**
 - Background: neutral-950
-- Inactive elements: neutral-700 to neutral-800
-- Active elements: cyan-400
-- Doors: neutral-800/neutral-900 gradient
+- Vault door icon: white
+- Border when open: white (#FFFFFF)
+- Shine effect: white
+- Doors: 171717/262626/171717 gradient
+- Door lines: neutral-700
+- Concentric circles: neutral-900/20 to neutral-800/20 borders
+- Radial gradients: darker neutrals (525252 to 171717)
 
 ### Technical Implementation
 - Use framer-motion for all animations
-- Use useState for: circuitStep, lockOpen, vaultOpen, isDark
+- Use useState for: circuitStep, vaultOpen, isDark (removed lockOpen)
 - Use useAnimationControls for the shine effect
-- Use useId for unique mask ID (remove colons for SVG compatibility)
+- Use useRef for: cancelRef, timeoutsRef, isMountedRef (memory leak prevention)
 - Implement continuous loop with async/await sequence
 - Add proper cleanup with cancelRef and timeout tracking
 - Use MutationObserver to detect theme changes
 - Memoize the component with React.memo
+- Stop animations on unmount with shineControls.stop()
+- Check isMountedRef.current before all state updates
 
 ### Props
 - className?: string (for additional styling)

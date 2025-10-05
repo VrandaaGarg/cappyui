@@ -78,23 +78,6 @@ export default function MyComponent() {
 
 <br />
 
-## Features
-
-- **Sequential Circuit Animation**: Circuit connection lines animate from center outward in sequence
-- **Lock Opening Effect**: Lock shackle animates to show unlocking
-- **Vault Opening Animation**: Dual SVG paths move apart to reveal vault opening
-- **Continuous Loop**: Animation cycles continuously with smooth transitions
-- **Theme Support**: Full dark mode support with appropriate color schemes
-- **Responsive Design**: Adapts to different screen sizes
-- **Smooth Transitions**: Uses Framer Motion for fluid animations
-
-## Animation Sequence
-
-1. **Circuit Activation** (960ms): Eight circuit connection lines animate from the center shield outward, one by one
-2. **Lock Opening** (400ms): The lock shackle animates to show the lock opening
-3. **Vault Opening** (600ms): Top and bottom vault door lines move apart
-4. **Hold State** (1500ms): Vault remains open before cycling back
-
 ## Customization
 
 You can customize the component by passing a `className` prop:
@@ -102,12 +85,3 @@ You can customize the component by passing a `className` prop:
 ```tsx
 <SecureVault className="h-[500px] max-w-6xl" />
 ```
-
-## Technical Details
-
-- Built with **Framer Motion** for smooth animations
-- Uses **SVG paths** for precise control over circuit lines and vault doors
-- Implements **sequential state management** for coordinated animations
-- Supports **light and dark themes** with CSS classes
-- **Optimized performance** with proper cleanup and memoization
-
