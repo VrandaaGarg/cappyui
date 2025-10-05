@@ -77,91 +77,11 @@ export default function Page() {
 }
 ```
 
-## Features
-
-- **Interactive Calendar**: Full calendar with month navigation and fade-in animations
-- **Booked Date Indicators**: Strikethrough styling for already booked dates (non-selectable)
-- **Infinite Scroll Time Slots**: Seamlessly loops from 9 AM to 5 PM (15-minute intervals)
-- **3D Perspective Effect**: Unique circular strip appearance with items bending at top/bottom
-- **Dynamic Transforms**: Time slots scale, rotate, and fade based on distance from center
-- **Real-time Display**: Selected date and time shown in footer
-- **Today Highlight**: Current date highlighted in calendar
-- **Month Navigation**: Previous/next month buttons with staggered fade animations
-- **Compact Design**: Mobile-optimized with responsive text sizes
-- **Responsive Layout**: 8-column grid (5 for calendar, 3 for time slots)
-- **Dark Mode Support**: Full dark mode compatibility with neutral palette
-- **Smooth Animations**: Framer Motion animations throughout
-
 ## Props
 
 | Prop          | Type     | Default | Description                                                                       |
 | ------------- | -------- | ------- | --------------------------------------------------------------------------------- |
 | `className`   | `string` | -       | Optional additional CSS classes                                                   |
 | `bookedDates` | `Date[]` | `[]`    | Array of dates that are already booked (shown with strikethrough, non-selectable) |
-
-## Customization
-
-### Change Time Range
-
-Modify the `generateTimeSlots` function to change the time range:
-
-```tsx
-const generateTimeSlots = () => {
-  const slots = [];
-  for (let hour = 8; hour <= 18; hour++) {
-    // 8 AM to 6 PM
-    for (let minute = 0; minute < 60; minute += 30) {
-      // 30-minute intervals
-      // ... rest of the logic
-    }
-  }
-  return slots;
-};
-```
-
-### Customize Time Interval
-
-Change the interval from 15 minutes to another value:
-
-```tsx
-for (let minute = 0; minute < 60; minute += 30) {
-  // 30-minute intervals
-  // ...
-}
-```
-
-### Add Booking Logic
-
-Add functionality to the BOOK button:
-
-```tsx
-const handleBooking = () => {
-  console.log("Booking appointment for:", selectedDate, selectedTime);
-  // Add your booking logic here
-};
-
-<button onClick={handleBooking}>BOOK</button>;
-```
-
-### Disable Past Dates
-
-Prevent selection of past dates:
-
-```tsx
-const isPastDate = (date: Date) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return date < today;
-};
-
-// In the calendar button
-<button
-  disabled={isPastDate(date)}
-  className={cn(
-    // ... other classes
-    isPastDate(date) && "opacity-50 cursor-not-allowed"
-  )}
->
-```
 
 <br />
