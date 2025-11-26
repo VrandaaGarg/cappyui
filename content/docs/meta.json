@@ -21,6 +21,7 @@
     "secure-app",
     "secure-vault",
     "spam-notifications",
-    "team-card"
+    "team-card",
+    "wave-effect-card"
   ]
 }

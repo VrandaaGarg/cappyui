@@ -1,0 +1,144 @@
+---
+title: Wave Effect Card
+description: An animated card grid component featuring a ripple wave effect that emanates from the center, creating a dynamic opacity reveal animation across button-style cards of varying widths.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Preview
+
+<WaveEffectCard />
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/wave-effect-card.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/wave-effect-card.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/wave-effect-card.tsx`
+        <SourceCodeBlock filePath="src/components/components/wave-effect-card.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { WaveEffectCard } from "@/components/ui/wave-effect-card";
+
+export default function Page() {
+  return <WaveEffectCard />;
+}
+```
+
+## Customization
+
+### Custom Card Labels
+
+Provide your own array of card labels:
+
+```tsx
+<WaveEffectCard
+  items={[
+    "Button 1",
+    "Action",
+    "Settings",
+    "Profile",
+    "Dashboard",
+    "Analytics",
+    "Reports",
+    "Users",
+  ]}
+/>
+```
+
+### Wave Animation Properties
+
+Customize the wave animation behavior:
+
+```tsx
+<WaveEffectCard
+  waveSpeed={200} // Pixels per second (default: 150)
+  waveThickness={120} // Ring thickness in pixels (default: 100)
+  fadeWidth={60} // Fade effect width on ring edges (default: 50)
+/>
+```
+
+### Opacity Settings
+
+Adjust the base and active opacity levels:
+
+```tsx
+<WaveEffectCard
+  baseOpacity={0.3} // Opacity when not in wave (default: 0.4)
+  activeOpacity={1} // Opacity when in wave (default: 1)
+/>
+```
+
+### Center Content
+
+Customize the center overlay with title, subtitle, description, and icon:
+
+```tsx
+<WaveEffectCard
+  title="We're serious about privacy."
+  subtitle="Your data is built with privacy at its core."
+  description="We never train on your data."
+  icon={<YourCustomIcon />}
+/>
+```
+
+## Props
+
+| Prop            | Type             | Default                                      | Description                                         |
+| --------------- | ---------------- | -------------------------------------------- | --------------------------------------------------- |
+| `items`         | `string[]`       | 80 "Ripple" labels                           | Array of card labels                                |
+| `waveSpeed`     | `number`         | `120`                                        | Wave animation speed in pixels per second           |
+| `waveThickness` | `number`         | `60`                                         | Thickness of the wave ring in pixels                |
+| `fadeWidth`     | `number`         | `30`                                         | Width of the fade effect on ring edges              |
+| `baseOpacity`   | `number`         | `0.4`                                        | Card opacity when outside the wave                  |
+| `activeOpacity` | `number`         | `1`                                          | Card opacity when inside the wave ring              |
+| `title`         | `string`         | `"We're serious about privacy."`             | Main heading text in center overlay                 |
+| `subtitle`      | `string`         | `"Your data is built with privacy..."`       | Subtitle text in center overlay                     |
+| `description`   | `string`         | `"We never train on your data."`             | Description text in center overlay                  |
+| `icon`          | `React.ReactNode`| Privacy lock icon                            | Custom icon for center overlay                      |
+| `className`     | `string`         | `undefined`                                  | Additional CSS classes to apply to the container    |
+
+
+<br />

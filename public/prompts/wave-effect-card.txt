@@ -1,0 +1,93 @@
+Create a React component called WaveEffectCard with the following specifications:
+
+## Visual Design
+- A grid of button-style cards arranged in rows with varying widths (sm, md, lg, xl)
+- Cards have rounded borders with neutral-200/80 border in light mode, neutral-700/80 in dark mode
+- Cards have bg-neutral-200/50 in light mode, bg-neutral-900/80 in dark mode
+- Cards display security-themed text labels (Encrypt, Shield, Guard, Secure, Protect, etc.)
+- Initial state: all cards have low opacity (default 0.2)
+- Container has radial gradient mask for smooth edge fading
+
+## Center Content Overlay
+- Centered icon button with gradient background (white to neutral-200 light, neutral-800 to neutral-900 dark)
+- Icon button has border styling and shadow-xl with blue tint
+- Title text (default: "We're serious about privacy.")
+- Subtitle and description text below title
+- Default icon: HiMiniLockClosed from react-icons/hi2
+
+## Animation Phases
+The component cycles through 4 phases:
+1. **charging**: Icon button scales up (1 -> 1.1 -> 1.08) with blue glow building
+2. **pulse**: Icon button scales down then back (1.08 -> 0.92 -> 1), ripple div emanates
+3. **wave**: Circular wave ripple propagates through cards, affecting their opacity
+4. **idle**: Brief rest before cycling back to charging
+
+## Wave Animation Effect
+- A circular wave ripple emanates from the center of the container
+- The wave is a ring with inner and outer radius (creating thickness)
+- Both radii increase over time, but the ring thickness remains constant
+- The ring edges have a smooth easing effect (easeInOutSine)
+- Cards within the wave ring have active opacity (default 0.75)
+- Cards outside the ring have base opacity (default 0.2)
+- AnimatePresence ripple visual with radial gradient blue glow
+
+## Technical Requirements
+- Use requestAnimationFrame for smooth 60fps animation
+- Proper cleanup on unmount to prevent memory leaks
+- ResizeObserver for responsive container sizing
+- Memoized components for performance (React.memo)
+- TypeScript with proper types
+- framer-motion for icon and ripple animations
+- "use client" directive for Next.js compatibility
+
+## Props
+- items: string[] - Array of card labels (default: 80 security-themed words)
+- waveSpeed: number - Animation speed in pixels per second (default: 100)
+- waveThickness: number - Ring thickness in pixels (default: 80)
+- fadeWidth: number - Soft edge fade width (default: 50)
+- baseOpacity: number - Opacity outside wave (default: 0.2)
+- activeOpacity: number - Opacity inside wave (default: 0.75)
+- className: string - Additional CSS classes
+- title: string - Main title text (default: "We're serious about privacy.")
+- subtitle: string - Subtitle text (default: "Your data is built with privacy at its core.")
+- description: string - Description text (default: "We never train on your data.")
+- icon: React.ReactNode - Custom icon element
+- glowDuration: number - Duration of charging glow animation (default: 0.6)
+
+## Opacity Calculation Logic
+For each card, calculate its center distance from the container center:
+1. If distance < innerRadius - fadeWidth: baseOpacity
+2. If distance in fade-in zone [innerRadius - fadeWidth, innerRadius]: eased gradient from base to active
+3. If distance in ring [innerRadius, outerRadius]: activeOpacity
+4. If distance in fade-out zone [outerRadius, outerRadius + fadeWidth]: eased gradient from active to base
+5. If distance > outerRadius + fadeWidth: baseOpacity
+Uses easeInOutSine for smooth transitions: -(Math.cos(Math.PI * t) - 1) / 2
+
+## Card Layout
+- Container: max-w-xl, h-96, rounded-2xl, overflow-hidden
+- Card grid positioned absolute with -top-8, -left-8 and calc(100%+4rem) width
+- Use flex-wrap with gap-2 for organic masonry-like appearance
+- Pre-defined width pattern cycling through 50 entries for varied look
+- Width classes: sm (w-14/w-16), md (w-18/w-20), lg (w-22/w-24), xl (w-26/w-28)
+- Height: h-7 sm:h-8 for all cards
+- Font: text-xs font-mono font-medium
+
+## Default Security Words Array
+["Encrypt", "Shield", "Guard", "Secure", "Protect", "Private", "Safety", "Locked", "Cipher", "Verify",
+"Trust", "Defense", "Firewall", "Auth", "Token", "Hash", "SSL", "VPN", "2FA", "Biometric",
+"Access", "Vault", "Key", "Secret", "Stealth", "Armor", "Sentinel", "Fortress", "Barrier", "Filter",
+"Sandbox", "Proxy", "Audit", "Comply", "GDPR", "Zero-Trust", "E2E", "AES", "RSA", "HTTPS"]
+
+## Animation Loop
+- Track elapsed time using requestAnimationFrame timestamp
+- Calculate current radius from elapsed time and speed
+- Reset radius and transition to charging phase when wave exceeds container diagonal + wave thickness + fade width
+- Update all card opacities each frame during wave phase
+
+## Dependencies
+- framer-motion (motion, AnimatePresence)
+- react-icons/hi2 (HiMiniLockClosed)
+- lucide-react (LockIcon - imported but using HiMiniLockClosed as default)
+- cn utility function from @/lib/utils
+
+Use modern React patterns (hooks, memo, useCallback, useMemo) and ensure the component is a "use client" component for Next.js compatibility.
