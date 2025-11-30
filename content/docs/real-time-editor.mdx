@@ -1,0 +1,165 @@
+---
+title: Real-Time Editor
+description: An optimized, animated text editor component with smooth selection animations, toolbar with animated cursor, text formatting (bold/italic/underline), color changes, and alignment controls.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Preview
+
+<RealTimeEditor />
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/real-time-editor.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/real-time-editor.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge framer-motion lucide-react react-icons
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/ui/real-time-editor.tsx`
+        <SourceCodeBlock filePath="src/components/components/real-time-editor.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { RealTimeEditor } from "@/components/ui/real-time-editor";
+
+export default function Page() {
+  return <RealTimeEditor />;
+}
+```
+
+## Customization
+
+### Custom Text Content
+
+Provide your own text content and selection:
+
+```tsx
+<RealTimeEditor
+  textContent="Your custom paragraph text goes here with some important words to highlight."
+  selectedText="important words"
+/>
+```
+
+### Animation Timing
+
+Customize the animation timing:
+
+```tsx
+<RealTimeEditor
+  selectionDelay={1000} // Duration of selection animation in ms (default: 800)
+  formatDelay={500} // Duration between format changes in ms (default: 600)
+  holdDelay={1500} // Duration to hold state in ms (default: 1000)
+/>
+```
+
+### Fast Animation
+
+For a quicker demonstration:
+
+```tsx
+<RealTimeEditor
+  selectionDelay={400}
+  formatDelay={400}
+  holdDelay={600}
+/>
+```
+
+## Props
+
+| Prop             | Type     | Default                                      | Description                                    |
+| ---------------- | -------- | -------------------------------------------- | ---------------------------------------------- |
+| `className`      | `string` | `undefined`                                  | Additional CSS classes for the container       |
+| `selectionDelay` | `number` | `800`                                        | Duration of the selection animation in ms      |
+| `formatDelay`    | `number` | `600`                                        | Duration between format changes in ms          |
+| `holdDelay`      | `number` | `1000`                                       | Duration to hold the state before next phase   |
+| `textContent`    | `string` | Design philosophy text                       | The full text content to display               |
+| `selectedText`   | `string` | `"Details Matter"`                           | The text to animate selection and formatting   |
+
+## Animation Phases
+
+The component cycles through the following animation phases with an animated cursor indicator:
+
+1. **Idle** - Initial state with no selection
+2. **Selecting** - Smooth text selection animation using requestAnimationFrame
+3. **Bold** - Cursor moves to Bold button, selected text becomes bold
+4. **Italic** - Cursor moves to Italic button, text becomes italic
+5. **Underline** - Cursor moves to Underline button, text becomes underlined
+6. **Text Color Red** - Cursor moves to color picker (shows red), text turns rose
+7. **Text Color Blue** - Color picker changes to blue, text turns blue
+8. **Text Color Green** - Color picker changes to green, text turns emerald
+9. **Hold 1** - Brief pause with all formatting applied
+10. **Select All** - Smooth line-by-line selection using Framer Motion staggered animations
+11. **Align Center** - Cursor moves to center align, text centers
+12. **Align Right** - Cursor moves to right align, text aligns right
+13. **Align Left** - Cursor moves to left align, text returns to left
+14. **Hold 2** - Final pause before animation loops
+
+## Key Features
+
+- **Optimized Performance** - Uses `useMemo`, `useCallback`, and `memo` to minimize re-renders
+- **Smooth Animations** - Selection uses `requestAnimationFrame` for 60fps smooth progress
+- **No Memory Leaks** - Proper cleanup of timeouts and animation frames on unmount
+- **Animated Cursor** - `BsCursorFill` icon smoothly animates between toolbar buttons using Framer Motion `layoutId`
+- **Dynamic Line Count** - Full text selection adapts to actual rendered line count with debounced resize handler
+- **Smart Color Picker** - Shows black/white (matching text color) when inactive, shows active color when formatting
+- **Smart Button States** - Format buttons become inactive during alignment phase
+- **Light/Dark Mode** - Full support for both themes
+
+## Toolbar Buttons
+
+| Button | Icon | Description |
+| ------ | ---- | ----------- |
+| Bold | `Bold` | Toggle bold formatting |
+| Italic | `Italic` | Toggle italic formatting |
+| Underline | `Underline` | Toggle underline formatting |
+| Color Picker | Circle | Text color selection (black/white default) |
+| Align Left | `AlignLeft` | Left text alignment |
+| Align Center | `AlignCenter` | Center text alignment |
+| Align Right | `AlignRight` | Right text alignment |
+| Font Increase | `MdOutlineTextIncrease` | Increase font size (decorative) |
+| Font Decrease | `MdOutlineTextDecrease` | Decrease font size (decorative) |
+| Comment | `MessageSquare` | Add comment (decorative) |
+| Export | `ExternalLink` | Export content (decorative) |
+| Link | `Link` | Insert link (decorative) |
+
+<br />

@@ -1,0 +1,106 @@
+Create an optimized Real-Time Editor component with the following specifications:
+
+COMPONENT OVERVIEW:
+A highly optimized text editor showcase component demonstrating real-time text formatting with smooth animations, toolbar interactions, and an animated cursor indicator. Uses React performance patterns (memo, useMemo, useCallback) and proper cleanup to prevent memory leaks.
+
+VISUAL DESIGN:
+- Light/Dark mode support
+- Light: white background, black text, neutral-50 toolbar/content
+- Dark: neutral-950 background, neutral-200 text, #111111 toolbar/content
+- Blue/cyan gradient glow effects for visual depth
+- Gradient border on toolbar and content area (blue-500/20 to cyan-500/15 to blue-700/20)
+- Rounded corners (2xl for container, xl for inner elements)
+- Shadow with theme-aware colors
+
+TOOLBAR STRUCTURE:
+1. Format buttons group: Bold (B), Italic (I), Underline (U)
+2. Color picker (circle that shows black/white when inactive, colored when active)
+3. Divider
+4. Alignment buttons: Left, Center, Right
+5. Divider
+6. Font size buttons: Increase (MdOutlineTextIncrease), Decrease (MdOutlineTextDecrease)
+7. Divider
+8. Comment button with icon and "Comment" text
+9. Export button (ExternalLink icon)
+10. Link button
+
+TOOLBAR BUTTON FEATURES:
+- Default: text-black dark:text-neutral-400, hover background
+- Active: text-blue-800 dark:text-blue-400 with blue-500/15 background
+- Moving cursor indicator (BsCursorFill) animates between active buttons using Framer Motion layoutId
+- Moving background highlight (toolbar-bg layoutId) slides between buttons
+- Spring animation config: stiffness 350, damping 30
+
+COLOR PICKER BEHAVIOR:
+- Inactive: Shows bg-black (light mode) or bg-white (dark mode) - matches default text color
+- Active: Shows the actual color being applied (#f43f5e red, #3b82f6 blue, #34d399 green)
+- Active state has blue ring and border
+
+ANIMATION SEQUENCE (looping):
+1. IDLE (500ms) - Initial state, no selection
+2. SELECTING - Smooth selection using requestAnimationFrame (not setTimeout steps)
+3. BOLD (600ms) - Cursor moves to Bold, text becomes bold
+4. ITALIC (600ms) - Cursor moves to Italic, text becomes italic
+5. UNDERLINE (600ms) - Cursor moves to Underline, text becomes underlined
+6. TEXT_COLOR_RED (600ms) - Cursor to color picker, color shows #f43f5e, text rose-400
+7. TEXT_COLOR_BLUE (600ms) - Color shows #3b82f6, text blue-400
+8. TEXT_COLOR_GREEN (600ms) - Color shows #34d399, text emerald-400
+9. HOLD1 (1000ms) - Pause with formatting
+10. SELECT_ALL - Line-by-line selection using Framer Motion staggered delays
+11. ALIGN_CENTER (600ms) - Cursor to center align
+12. ALIGN_RIGHT (600ms) - Cursor to right align
+13. ALIGN_LEFT (600ms) - Cursor to left align
+14. HOLD2 (1000ms) - Final pause before loop
+
+OPTIMIZATION REQUIREMENTS:
+1. Use memo() for all sub-components (ToolbarButton, ColorPicker, SelectionLine, SelectionOverlay)
+2. Use useMemo() for all derived values (cursorTarget, isColorPickerActive, isBoldActive, etc.)
+3. Use useCallback() for functions (resetAnimation, clearAllTimeouts, animateSelection, renderTextWithSelection)
+4. Use useRef() to store timeouts array and animation frame ID
+5. Implement clearAllTimeouts() that clears both setTimeout and requestAnimationFrame
+6. Use requestAnimationFrame for smooth selection progress (not discrete setTimeout steps)
+7. Debounce resize event handler (100ms)
+8. Use Framer Motion staggered animations for line-by-line selection instead of manual steps
+9. Consolidate boolean states into FormattingState object
+10. Extract constants (SPRING_CONFIG, INITIAL_FORMATTING)
+
+MEMORY LEAK PREVENTION:
+- Store timeouts in useRef, not local array
+- Store animationFrameRef for cancelAnimationFrame
+- clearAllTimeouts() cleans up both on unmount and animation restart
+- Proper cleanup in useEffect return function
+- Debounced resize handler with cleanup
+
+PROPS:
+- className: Additional CSS classes
+- selectionDelay: Duration of selection animation (default: 800ms)
+- formatDelay: Duration between format changes (default: 600ms)
+- holdDelay: Duration to hold state (default: 1000ms)
+- textContent: Full text to display
+- selectedText: Text portion to animate
+
+STATE STRUCTURE:
+- phase: AnimationPhase type
+- selectionProgress: number (0-1, animated with requestAnimationFrame)
+- formatting: FormattingState { isBold, isItalic, isUnderline, textColorClass }
+- isFullTextSelected: boolean
+- textAlignment: "left" | "center" | "right"
+- activeColor: string (hex color or empty)
+- lineCount: number (calculated from text height)
+
+MEMOIZED DERIVED VALUES:
+- cursorTarget: which button shows cursor
+- isColorPickerActive, isBoldActive, isItalicActive, isUnderlineActive
+- isAlignLeftActive, isAlignCenterActive, isAlignRightActive
+- beforeText, afterText, selectedIndex (text parsing)
+
+ICONS NEEDED:
+- lucide-react: Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, MessageSquare, Link, ExternalLink
+- react-icons/bs: BsCursorFill
+- react-icons/md: MdOutlineTextIncrease, MdOutlineTextDecrease
+
+TECHNICAL STACK:
+- React with TypeScript
+- Framer Motion (motion, AnimatePresence, layoutId)
+- Tailwind CSS
+- "use client" directive for Next.js

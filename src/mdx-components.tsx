@@ -22,6 +22,7 @@ import { SecureApp } from "./components/components/secure-app";
 import { SecureVault } from "./components/components/secure-vault";
 import { BookAppointment } from "./components/components/book-appointment";
 import { WaveEffectCard } from "./components/components/wave-effect-card";
+import { RealTimeEditor } from "./components/components/real-time-editor";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -43,6 +44,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     BookAppointment,
     TeamCard,
     WaveEffectCard,
+    RealTimeEditor,
     Puzzle,
     ImagePuzzle,
     MultiFactor,
