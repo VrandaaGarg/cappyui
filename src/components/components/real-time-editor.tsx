@@ -127,7 +127,7 @@ interface SelectionLineProps {
 
 const SelectionLine = memo(({ index, totalLines, isVisible, selectionDuration }: SelectionLineProps) => {
   const staggerDelay = (index / totalLines) * selectionDuration;
-  
+
   return (
     <motion.div
       className="bg-blue-500/30 rounded-[2px] origin-left will-change-transform"
@@ -153,7 +153,7 @@ interface SelectionOverlayProps {
 
 const SelectionOverlay = memo(({ lineCount, isVisible, selectionDuration }: SelectionOverlayProps) => {
   const lines = useMemo(() => Array.from({ length: lineCount }, (_, i) => i), [lineCount]);
-  
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -200,7 +200,7 @@ export const RealTimeEditor = memo(
     const [textAlignment, setTextAlignment] = useState<TextAlignment>("left");
     const [activeColor, setActiveColor] = useState("");
     const [lineCount, setLineCount] = useState(7);
-    
+
     const textRef = useRef<HTMLDivElement>(null);
     const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
     const animationFrameRef = useRef<number | null>(null);
@@ -217,7 +217,7 @@ export const RealTimeEditor = memo(
     // Debounced line calculation
     useEffect(() => {
       let resizeTimeout: NodeJS.Timeout;
-      
+
       const calculateLines = () => {
         if (textRef.current) {
           const lineHeight = parseFloat(getComputedStyle(textRef.current).lineHeight) || 20;
@@ -234,7 +234,7 @@ export const RealTimeEditor = memo(
 
       calculateLines();
       window.addEventListener("resize", debouncedCalculate);
-      
+
       return () => {
         window.removeEventListener("resize", debouncedCalculate);
         clearTimeout(resizeTimeout);
@@ -260,16 +260,16 @@ export const RealTimeEditor = memo(
       const animate = (currentTime: number) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        
+
         onProgress(progress);
-        
+
         if (progress < 1) {
           animationFrameRef.current = requestAnimationFrame(animate);
         } else {
           onComplete();
         }
       };
-      
+
       animationFrameRef.current = requestAnimationFrame(animate);
     }, []);
 
@@ -294,7 +294,7 @@ export const RealTimeEditor = memo(
             startTime,
             selectionDelay,
             (progress) => setSelectionProgress(progress),
-            () => {}
+            () => { }
           );
         }, currentTime);
 
@@ -406,34 +406,34 @@ export const RealTimeEditor = memo(
       }
     }, [phase]);
 
-    const isColorPickerActive = useMemo(() => 
+    const isColorPickerActive = useMemo(() =>
       !isFullTextSelected && (phase === "textColorRed" || phase === "textColorBlue" || phase === "textColorGreen"),
       [isFullTextSelected, phase]
     );
 
-    const isAlignLeftActive = useMemo(() => 
+    const isAlignLeftActive = useMemo(() =>
       textAlignment === "left" && (phase === "alignLeft" || phase === "hold2" || (!isFullTextSelected && phase !== "alignCenter" && phase !== "alignRight")),
       [textAlignment, phase, isFullTextSelected]
     );
 
-    const isAlignCenterActive = useMemo(() => 
+    const isAlignCenterActive = useMemo(() =>
       phase === "alignCenter" || (textAlignment === "center" && phase !== "alignLeft" && phase !== "alignRight"),
       [phase, textAlignment]
     );
 
     const isAlignRightActive = useMemo(() => phase === "alignRight", [phase]);
 
-    const isBoldActive = useMemo(() => 
+    const isBoldActive = useMemo(() =>
       !isFullTextSelected && (phase === "bold" || formatting.isBold),
       [isFullTextSelected, phase, formatting.isBold]
     );
 
-    const isItalicActive = useMemo(() => 
+    const isItalicActive = useMemo(() =>
       !isFullTextSelected && (phase === "italic" || (formatting.isItalic && phase !== "bold")),
       [isFullTextSelected, phase, formatting.isItalic]
     );
 
-    const isUnderlineActive = useMemo(() => 
+    const isUnderlineActive = useMemo(() =>
       !isFullTextSelected && (phase === "underline" || (formatting.isUnderline && phase !== "bold" && phase !== "italic")),
       [isFullTextSelected, phase, formatting.isUnderline]
     );
@@ -511,12 +511,12 @@ export const RealTimeEditor = memo(
         )}
       >
         <div className="max-w-xl p-4 md:my-8 relative mx-auto">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full bg-gradient-to-r from-blue-500/20 via-cyan-500/10 to-blue-500/20 blur-3xl pointer-events-none" />
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full bg-gradient-to-r from-blue-500/30 via-cyan-500/30 to-blue-500/30 blur-3xl pointer-events-none" />
 
           {/* Toolbar */}
-          <div className="relative z-10 p-[1px] rounded-xl bg-gradient-to-r from-blue-500/20 via-cyan-500/15 to-blue-700/20 shadow-neutral-100 dark:shadow-neutral-950 shadow-sm">
+          <div className="relative z-10 p-[1px] rounded-xl bg-gradient-to-r from-blue-500/20 via-cyan-500/15 to-blue-700/20 shadow-neutral-100 dark:shadow-neutral-900 shadow-md">
             <div className="relative flex-wrap justify-center flex items-center gap-1 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-[#111111] backdrop-blur-sm">
-              
+
               {/* Format buttons */}
               <div className="flex items-center gap-0.5">
                 <ToolbarButton isActive={isBoldActive} showCursor={cursorTarget === "bold"}>
@@ -599,7 +599,7 @@ export const RealTimeEditor = memo(
           </div>
 
           {/* Content area */}
-          <div className="relative p-[1px] mt-3 rounded-xl bg-gradient-to-r from-blue-500/20 via-cyan-500/15 to-blue-700/20 shadow-neutral-100 dark:shadow-neutral-950 shadow-sm">
+          <div className="relative p-[1px] mt-3 rounded-xl bg-gradient-to-r from-blue-500/20 via-cyan-500/15 to-blue-700/20 shadow-neutral-100 dark:shadow-neutral-900 shadow-md">
             <div className="relative overflow-hidden rounded-xl bg-neutral-50 dark:bg-[#111111] z-10 pb-12 p-6">
               <div className="relative">
                 <SelectionOverlay
