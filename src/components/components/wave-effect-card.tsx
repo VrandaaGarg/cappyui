@@ -122,8 +122,8 @@ const Card = memo(
     <div
       ref={cardRef}
       className={cn(
-        "h-7 sm:h-8 rounded-md border border-neutral-200/80 dark:border-neutral-700/80",
-        "bg-neutral-200/50 dark:bg-neutral-900/80 flex items-center justify-center",
+        "h-7 sm:h-8 rounded-md border border-neutral-200/80 dark:border-neutral-600/90",
+        "bg-neutral-200/50 dark:bg-neutral-800/80 flex items-center justify-center",
         "text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400",
         "transition-opacity duration-100",
         WIDTH_CLASSES[item.width]
@@ -148,9 +148,9 @@ export const WaveEffectCard = memo(
     baseOpacity = 0.2,
     activeOpacity = 0.75,
     className,
-    title = "We're serious about privacy.",
-    subtitle = "Your data is built with privacy at its core.",
-    description = "We never train on your data.",
+    title = "Enterprise-grade security.",
+    subtitle = "Your data is protected with military-grade encryption.",
+    description = "End-to-end secured, always.",
     icon,
     glowDuration = 0.6,
   }: WaveEffectCardProps) => {
