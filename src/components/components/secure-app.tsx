@@ -339,7 +339,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
             </svg>
 
           {/* Center fingerprint button */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-50 flex h-12 w-12 md:h-20 md:w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 dark:from-neutral-800 dark:via-neutral-900 dark:to-black">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-12 w-12 md:h-20 md:w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 dark:from-neutral-800 dark:via-neutral-900 dark:to-black">
             {/* Animated border overlay */}
             <motion.div
               className="absolute inset-0 rounded-full border-[2px] border-neutral-400/70 dark:border-neutral-400/30 bg-neutral-200/20 dark:bg-neutral-100/10 pointer-events-none"
@@ -433,7 +433,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
           {orbitNodes.map((node) => (
             <motion.div
               key={node.id}
-              className="pointer-events-none absolute z-50 backdrop-blur-2xl flex md:h-14 w-11 h-11 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 "
+              className="pointer-events-none absolute z-10 backdrop-blur-2xl flex md:h-14 w-11 h-11 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 "
               animate={{
                 x: nodesShifted ? DIRECTION_SHIFT[node.direction] : 0,
               }}

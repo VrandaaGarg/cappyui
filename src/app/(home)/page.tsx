@@ -61,61 +61,61 @@ const BENTO_ITEMS: BentoItem[] = [
     id: "ai-chat",
     component: <AIChat />,
     href: "/docs/ai-chat",
-    className: "md:col-span-4 md:row-span-2",
+    className: "p-4 md:p-0 md:col-span-4 md:row-span-2",
   },
   {
     id: "biometric",
     component: <BiometricSecurity />,
     href: "/docs/biometric-security",
-    className: "md:row-span-2 md:col-span-2",
+    className: "p-4 md:p-0 md:row-span-2 md:col-span-2",
   },
   {
     id: "tool-grid",
     component: <ToolGrid />,
     href: "/docs/tool-grid",
-    className: "md:col-span-2",
+    className: "p-4 md:p-0 md:col-span-2",
   },
   {
     id: "puzzle",
     component: <ImagePuzzle />,
     href: "/docs/puzzle",
-    className: "md:col-span-2",
+    className: "p-4 md:p-0 md:col-span-2",
   },
   {
     id: "secure-vault",
     component: <SecureVault />,
     href: "/docs/secure-vault",
-    className: "md:col-span-2",
+    className: "p-4 md:p-0 md:col-span-2",
   },
   {
     id: "book-appointment",
     component: <BookAppointment />,
     href: "/docs/book-appointment",
-    className: "md:col-span-3",
+    className: "p-4 md:p-0 md:col-span-3",
   },
   {
     id: "secure-app",
     component: <SecureApp />,
     href: "/docs/secure-app",
-    className: "md:col-span-3",
+    className: " md:col-span-3",
   },
   {
     id: "pin-chat",
     component: <PinChat />,
     href: "/docs/pin-chat",
-    className: "md:col-span-3",
+    className: "p-4 md:p-0 md:col-span-3",
   },
   {
     id: "team-card",
     component: <TeamCard />,
     href: "/docs/team-card",
-    className: "md:row-span-2 md:col-span-3",
+    className: "p-4 md:p-0 md:row-span-2 md:col-span-3",
   },
   {
     id: "multi-factor",
     component: <MultiFactor />,
     href: "/docs/multi-factor-authentication",
-    className: "md:col-span-3",
+    className: "p-4 md:p-0 md:col-span-3",
   },
 ];
 
@@ -164,7 +164,7 @@ export default function HomePage() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
               <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                {BENTO_ITEMS.length}+ Components
+                The UI library your project deserves
               </span>
             </div>
           </motion.div>

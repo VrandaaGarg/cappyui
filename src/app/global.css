@@ -103,11 +103,11 @@ button:has(svg.lucide-sun):has(svg.lucide-moon) svg.lucide-sun {
 }
 
 /* Remove padding-top from home layout for transparent navbar overlay */
-.fd-layout-home,
+/* .fd-layout-home,
 [class*="HomeLayout"],
 main.flex-1 {
   padding-top: 0 !important;
-}
+} */
 
 /* Make navbar fixed on top with backdrop blur */
 header {
@@ -116,7 +116,7 @@ header {
   left: 0;
   right: 0;
   z-index: 50;
-  backdrop-filter: blur(16px) saturate(180%) !important;
+  backdrop-filter: blur(4px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   background: rgba(255, 255, 255, 0.7) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;

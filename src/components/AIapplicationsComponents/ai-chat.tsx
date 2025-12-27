@@ -175,7 +175,7 @@ const TypingCodeBlock = ({
   code,
   isVisible,
   delay = 0,
-  speed = 12,
+  speed = 35,
   onComplete,
   isDarkMode,
 }: TypingCodeBlockProps) => {
@@ -204,9 +204,11 @@ const TypingCodeBlock = ({
     const timer = window.setTimeout(
       () => {
         if (currentIndex < code.length) {
-          setDisplayedCode((prev) => prev + code[currentIndex]);
-          setCurrentIndex((prev) => prev + 1);
-        } else if (onComplete && currentIndex === code.length) {
+          // Batch 2 characters at a time for smoother animation
+          const charsToAdd = Math.min(2, code.length - currentIndex);
+          setDisplayedCode((prev) => prev + code.slice(currentIndex, currentIndex + charsToAdd));
+          setCurrentIndex((prev) => prev + charsToAdd);
+        } else if (onComplete && currentIndex >= code.length) {
           onComplete();
         }
       },
@@ -224,7 +226,7 @@ const TypingCodeBlock = ({
         className="text-sm font-mono overflow-x-auto bg-transparent min-w-0 max-w-full"
         showLanguage={false}
       >
-        {displayedCode}
+        {displayedCode || " "}
       </ShikiHighlighter>
     </div>
   );

@@ -4,6 +4,7 @@ import React, { memo, useCallback, useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pin, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BsFillPinAngleFill } from "react-icons/bs";
 
 interface Chat {
   id: string;
@@ -205,10 +206,10 @@ const ChatItem = memo(
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full border border-neutral-500/50 transition-all duration-200",
                   "shadow-sm hover:shadow-md",
-                  "bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 text-neutral-600 dark:text-neutral-300 hover:from-neutral-200 hover:to-neutral-300 dark:hover:from-neutral-700 dark:hover:to-neutral-600 shadow-neutral-200 dark:shadow-neutral-800"
+                  "bg-gradient-to-b -rotate-45 from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 text-neutral-600 dark:text-neutral-300 hover:from-neutral-200 hover:to-neutral-300 dark:hover:from-neutral-700 dark:hover:to-neutral-600 shadow-neutral-200 dark:shadow-neutral-800"
                 )}
               >
-                <Pin className="h-4 w-4" />
+                <BsFillPinAngleFill className="h-4 w-4" />
               </motion.div>
             </motion.div>
           )}
