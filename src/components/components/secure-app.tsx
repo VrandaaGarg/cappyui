@@ -35,52 +35,53 @@ interface OrbitNodeConfig {
   id: string;
   direction: "left" | "right" | "center";
   icon: IconType;
-  position: { x: number; y: number };
+  offset: { x: number; y: number };
   connector: string;
 }
 
+// Center-based coordinates: (0,0) is center, nodes positioned at fixed pixel offsets
 const ORBIT_CONFIG: OrbitNodeConfig[] = [
   {
     id: "top-left",
     direction: "left",
     icon: MdEmail,
-    position: { x: 150, y: 180 },
-    connector: "M150 180 H206 Q 220 186 238 220 T 256 256",
+    offset: { x: -106, y: -76 },
+    connector: "M -106 -76 L -50 -76 Q -35 -76 -25 -50 T 0 0",
   },
   {
     id: "top-right",
     direction: "right",
     icon: SiAppwrite,
-    position: { x: 362, y: 180 },
-    connector: "M362 180 H306 Q 292 186 274 220 T 256 256",
+    offset: { x: 106, y: -76 },
+    connector: "M 106 -76 L 50 -76 Q 35 -76 25 -50 T 0 0",
   },
   {
     id: "mid-right",
     direction: "right",
     icon: FaApple,
-    position: { x: 362, y: 260 },
-    connector: "M362 260 L 256 256",
+    offset: { x: 106, y: 0 },
+    connector: "M 106 0 L 0 0",
   },
   {
     id: "bottom-right",
     direction: "right",
     icon: SiMongodb,
-    position: { x: 362, y: 332 },
-    connector: "M362 332 H306 Q 292 326 274 292 T 256 256",
+    offset: { x: 106, y: 76 },
+    connector: "M 106 76 L 50 76 Q 35 76 25 50 T 0 0",
   },
   {
     id: "bottom-left",
     direction: "left",
     icon: SiClerk,
-    position: { x: 150, y: 332 },
-    connector: "M150 332 H206 Q 220 326 238 292 T 256 256",
+    offset: { x: -106, y: 76 },
+    connector: "M -106 76 L -50 76 Q -35 76 -25 50 T 0 0",
   },
   {
     id: "mid-left",
     direction: "left",
     icon: RiFirebaseFill,
-    position: { x: 150, y: 260 },
-    connector: "M150 260 L 256 256",
+    offset: { x: -106, y: 0 },
+    connector: "M -106 0 L 0 0",
   },
 ];
 
@@ -250,70 +251,49 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
     <div>
       <div
         className={cn(
-          "relative flex items-center mx-auto  justify-center h-[200px] md:h-[300px] max-w-lg  overflow-hidden rounded-[28px] ",
+          "relative flex items-center mx-auto justify-center w-full max-w-[500px] h-[300px] md:h-[400px] rounded-[28px]",
           className
         )}
       >
-        <div className="relative aspect-square w-full max-w-lg overflow-hidden rounded-[24px] ">
-          <div className="absolute inset-0 " />
-          <div className="absolute inset-0">
-            <div className="pointer-events-none absolute inset-0"></div>
-            <svg viewBox="0 0 512 512" className="relative z-10 h-full w-full">
-              <defs>
-                {/* Grey connector gradients for both modes */}
-                <linearGradient
-                  id="connectorGradient"
-                  x1="256"
-                  y1="256"
-                  x2="470"
-                  y2="470"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop offset="0%" stopColor="#9CA3AF" stopOpacity="0.75" />
-                  <stop offset="45%" stopColor="#6B7280" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#4B5563" stopOpacity="0.1" />
-                </linearGradient>
+        <div className="relative w-full h-full rounded-[24px]">
+          {/* SVG Connectors - sized to match node positions */}
+          <svg 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none"
+            width="212"
+            height="152"
+            viewBox="-106 -76 212 152"
+          >
+            <defs>
+              <linearGradient id="connectorGradientLeft" x1="-106" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#6B7280" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="connectorGradientRight" x1="106" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#6B7280" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="beamGradientLight" x1="106" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#000000" stopOpacity="0" />
+                <stop offset="100%" stopColor="#000000" stopOpacity="1" />
+              </linearGradient>
+              <linearGradient id="beamGradientDark" x1="106" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+              </linearGradient>
+            </defs>
 
-                {/* Light mode beam gradient */}
-                <linearGradient
-                  id="beamGradientLight"
-                  x1="256"
-                  y1="256"
-                  x2="460"
-                  y2="460"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop offset="0%" stopColor="#000000" stopOpacity="1" />
-                  <stop offset="45%" stopColor="#000000" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0" />
-                </linearGradient>
-
-                {/* Dark mode beam gradient */}
-                <linearGradient
-                  id="beamGradientDark"
-                  x1="256"
-                  y1="256"
-                  x2="460"
-                  y2="460"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                  <stop offset="45%" stopColor="#ffffff" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-
-              {orbitNodes.map((node) => (
-                <path
-                  key={node.id}
-                  d={node.connector}
-                  fill="none"
-                  stroke="url(#connectorGradient)"
-                  strokeWidth={1}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              ))}
+            {orbitNodes.map((node) => (
+              <path
+                key={node.id}
+                d={node.connector}
+                fill="none"
+                stroke="#6B7280"
+                strokeOpacity={0.5}
+                strokeWidth={1}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ))}
 
               {beamActive &&
                 orbitNodes.map((node) => (
@@ -357,8 +337,8 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
                   </g>
                 ))}
             </svg>
-          </div>
 
+          {/* Center fingerprint button */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-50 flex h-12 w-12 md:h-20 md:w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 dark:from-neutral-800 dark:via-neutral-900 dark:to-black">
             {/* Animated border overlay */}
             <motion.div
@@ -463,8 +443,8 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
                 damping: 16,
               }}
               style={{
-                left: `${(node.position.x / 512) * 100}%`,
-                top: `${(node.position.y / 512) * 100}%`,
+                left: `calc(50% + ${node.offset.x}px)`,
+                top: `calc(50% + ${node.offset.y}px)`,
               }}
             >
               <node.icon className="md:h-6 md:w-6 w-5 h-5 text-black dark:text-white" />
