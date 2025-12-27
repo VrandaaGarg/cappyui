@@ -129,3 +129,10 @@ header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
+/* Hide full search bar on mobile - keep only search icon */
+@media (max-width: 768px) {
+  button[data-search-full] {
+    display: none !important;
+  }
+}
+

@@ -1,11 +1,18 @@
 ---
 title: Installation
-description: Get started with our UI component library in your Next.js project.
+description: Get started with CappyUI in your Next.js project.
 ---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Node.js 18.17 or later
+- npm, yarn, pnpm, or bun
 
 ## Getting Started
 
-Follow these steps to set up a new Next.js project and start using our components.
+Follow these steps to set up a new Next.js project and start using CappyUI components.
 
 <Steps>
 
@@ -19,17 +26,17 @@ Create a new Next.js application using the latest version:
 npx create-next-app@latest my-app
 ```
 
-You'll be prompted with several configuration options. Here are the recommended settings:
+Select the following configuration options:
 
-```bash
-✔ Would you like to use TypeScript? … Yes
-✔ Would you like to use ESLint? … Yes
-✔ Would you like to use Tailwind CSS? … Yes
-✔ Would you like your code inside a `src/` directory? … Yes
-✔ Would you like to use App Router? … Yes
-✔ Would you like to use Turbopack for `next dev`? … Yes
-✔ Would you like to customize the import alias (`@/*` by default)? … No
-```
+| Option | Recommended |
+|--------|-------------|
+| TypeScript | Yes |
+| ESLint | Yes |
+| Tailwind CSS | Yes |
+| `src/` directory | Yes |
+| App Router | Yes |
+| Turbopack | Yes |
+| Import alias | Default (@/*) |
 
 Navigate to your project directory:
 
@@ -41,30 +48,32 @@ cd my-app
 
 <Step>
 
-## Install Required Dependencies
+## Install Dependencies
 
-Install the core dependencies needed for most components:
+Install the core dependencies required for CappyUI components:
 
 ```bash
 npm install framer-motion lucide-react clsx tailwind-merge
 ```
 
-### Dependency Overview
+### Core Dependencies
 
-- **framer-motion**: Animation library for smooth transitions and interactions
-- **lucide-react**: Beautiful, consistent icon library
-- **clsx**: Utility for constructing className strings conditionally
-- **tailwind-merge**: Merge Tailwind CSS classes without style conflicts
+| Package | Purpose |
+|---------|---------|
+| framer-motion | Animation library for smooth transitions |
+| lucide-react | Consistent icon library |
+| clsx | Conditional className utility |
+| tailwind-merge | Merge Tailwind classes without conflicts |
 
 ### Optional Dependencies
 
-Some components may require additional packages:
+Some components require additional packages:
 
 ```bash
-# For AI Chat component
+# For AI Chat component (syntax highlighting)
 npm install react-shiki shiki
 
-# For React Icons (if needed)
+# For additional icons
 npm install react-icons
 ```
 
@@ -74,7 +83,7 @@ npm install react-icons
 
 ## Set Up Utility Function
 
-Create a utility file for the `cn()` helper function that merges Tailwind classes:
+Create a utility file for the `cn()` helper function that merges Tailwind classes.
 
 Create `src/lib/utils.ts`:
 
@@ -93,9 +102,9 @@ export function cn(...inputs: ClassValue[]) {
 
 ## Add Components
 
-You can add components in two ways:
+You can add components using one of two methods:
 
-### Option A: Using CLI (Recommended)
+### Method 1: CLI Installation (Recommended)
 
 Use the shadcn CLI to automatically install components:
 
@@ -104,25 +113,38 @@ npx shadcn@latest add https://uiregistry.cappychat.com/registry/calendar-current
 ```
 
 This will:
-
-- Download the component
+- Download the component source code
 - Install required dependencies
 - Place the component in `src/components/ui/`
 
-### Option B: Manual Installation
+### Method 2: Manual Installation
 
 1. Copy the component code from the documentation
 2. Create a new file in `src/components/ui/`
 3. Paste the component code
-4. Install any required dependencies
+4. Install any required dependencies listed in the component docs
 
-### Example: Adding Calendar Component
+</Step>
+
+<Step>
+
+## Start Development Server
+
+Start your development server:
 
 ```bash
-npx shadcn@latest add https://uiregistry.cappychat.com/registry/calendar-current.json
+npm run dev
 ```
 
-Then use it in your app:
+Your application will be available at `http://localhost:3000`
+
+</Step>
+
+</Steps>
+
+## Usage Example
+
+After installing a component, import and use it in your application:
 
 ```tsx
 import { CalendarCurrent } from "@/components/ui/calendar-current";
@@ -137,60 +159,42 @@ export default function Page() {
 }
 ```
 
-</Step>
+## Project Structure
 
-<Step>
+After setup, your project structure should look like this:
 
-## Start Development Server
-
-Start your development server:
-
-```bash
-npm run dev
+```
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   ├── components/
+│   │   └── ui/
+│   │       └── [components here]
+│   └── lib/
+│       └── utils.ts
+├── package.json
+└── tailwind.config.ts
 ```
 
-Your app will be available at [http://localhost:3000](http://localhost:3000)
+## Troubleshooting
 
-</Step>
+### Components not styling correctly
 
-</Steps>
-
-## Configuration
-
-### Tailwind CSS Variables
-
-Our components use CSS custom properties for theming. Add these to your `src/app/globals.css`:
+Ensure Tailwind CSS is properly configured and your `globals.css` imports Tailwind:
 
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  :root {
-    --fd-background: 0 0% 100%;
-    --fd-foreground: 0 0% 10%;
-    --fd-muted: 0 0% 96%;
-    --fd-muted-foreground: 0 0% 42%;
-    --fd-border: 0 0% 90%;
-    --fd-accent: 0 0% 96%;
-    --fd-accent-foreground: 0 0% 10%;
-    --fd-primary: 217 91% 60%;
-    --fd-primary-foreground: 0 0% 100%;
-  }
-
-  .dark {
-    --fd-background: 0 0% 10%;
-    --fd-foreground: 0 0% 98%;
-    --fd-muted: 0 0% 15%;
-    --fd-muted-foreground: 0 0% 64%;
-    --fd-border: 0 0% 20%;
-    --fd-accent: 0 0% 15%;
-    --fd-accent-foreground: 0 0% 98%;
-    --fd-primary: 217 91% 60%;
-    --fd-primary-foreground: 0 0% 100%;
-  }
-}
 ```
 
-<br />
+### Animation not working
+
+Verify that `framer-motion` is installed and imported correctly in the component.
+
+### TypeScript errors
+
+Make sure you have the latest type definitions and your `tsconfig.json` includes the correct paths.

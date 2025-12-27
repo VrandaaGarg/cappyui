@@ -242,7 +242,7 @@ export default function HomePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="https://github.com"
+              href="https://github.com/VrandaaGarg/cappyui"
               className={cn(
                 "relative inline-flex items-center justify-center p-3 rounded-full",
                 "bg-neutral-100 dark:bg-neutral-800",
@@ -383,7 +383,7 @@ export default function HomePage() {
             </a>
             . The source code is available on{" "}
             <a
-              href="https://github.com"
+              href="https://github.com/VrandaaGarg/cappyui"
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-800 dark:text-neutral-200 underline underline-offset-4 hover:text-neutral-950 dark:hover:text-white transition-colors"

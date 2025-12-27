@@ -56,7 +56,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       {
         type: "icon",
-        url: "https://github.com",
+        url: "https://github.com/VrandaaGarg/cappyui",
         text: "GitHub",
         icon: <SiGithub className="w-5 h-5" />,
         external: true,
