@@ -1,0 +1,27 @@
+{
+  "name": "CappyUI - Beautiful Animated React Components",
+  "short_name": "CappyUI",
+  "description": "Copy-paste beautiful animated React components into your apps. Built with React, Tailwind CSS, and Framer Motion.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer tools", "utilities", "productivity"],
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/dyetf2h9n/image/upload/v1766867568/image_xij1nl.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "CappyUI Homepage"
+    }
+  ]
+}

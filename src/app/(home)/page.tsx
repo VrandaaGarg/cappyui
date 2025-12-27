@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Github, Plus, Star } from "lucide-react";
+import { ArrowRight, Plus, Star } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import {
   SiReact,
   SiTypescript,
@@ -226,7 +227,7 @@ export default function HomePage() {
                 "overflow-hidden"
               )}
             >
-              <Github className="w-5 h-5 relative z-10" />
+              <SiGithub className="w-5 h-5 relative z-10" />
               {/* Infinite shine effect */}
               <div className="absolute inset-0 animate-shine bg-gradient-to-r from-transparent via-white/60 dark:via-white/20 to-transparent" />
             </Link>
