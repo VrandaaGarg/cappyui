@@ -45,7 +45,7 @@ import { BiometricSecurity } from "@/components/components/BiometricSecurity";
 import BookAppointment from "@/components/components/book-appointment";
 import { MultiFactor } from "@/components/components/MultiFactor";
 import { TeamCard } from "@/components/components/TeamCard";
-
+import RealTimeEditor from "@/components/components/real-time-editor";
 import { SecureVault } from "@/components/components/secure-vault";
 import { SecureApp } from "@/components/components/secure-app";
 
@@ -57,6 +57,18 @@ interface BentoItem {
 }
 
 const BENTO_ITEMS: BentoItem[] = [
+  {
+    id: "book-appointment",
+    component: <RealTimeEditor />,
+    href: "/docs/book-appointment",
+    className: "p-4 md:col-span-3",
+  },
+  {
+    id: "secure-app",
+    component: <SecureApp />,
+    href: "/docs/secure-app",
+    className: "  md:col-span-3",
+  },
   {
     id: "ai-chat",
     component: <AIChat />,
@@ -87,18 +99,7 @@ const BENTO_ITEMS: BentoItem[] = [
     href: "/docs/secure-vault",
     className: "p-4 md:p-0 md:col-span-2",
   },
-  {
-    id: "book-appointment",
-    component: <BookAppointment />,
-    href: "/docs/book-appointment",
-    className: "p-4 md:p-0 md:col-span-3",
-  },
-  {
-    id: "secure-app",
-    component: <SecureApp />,
-    href: "/docs/secure-app",
-    className: " md:col-span-3",
-  },
+  
   {
     id: "pin-chat",
     component: <PinChat />,
@@ -124,35 +125,7 @@ export default function HomePage() {
     <main className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Elliptical light beams from corners - rotated toward center */}
-        {/* <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute -top-48 -rotate-45 -left-10 pointer-events-none"
-          style={{
-            width: "200px",
-            height: "700px",
-            borderRadius: "50%",
-            background: "rgba(130,130,130,0.3)",
-            transform: "rotate(45deg) translate(-40%, -40%)",
-            filter: "blur(40px)",
-          }}
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
-          className="absolute -top-48 rotate-45 -right-10 pointer-events-none"
-          style={{
-            width: "200px",
-            height: "700px",
-            borderRadius: "50%",
-            background: "rgba(130,130,130,0.3)",
-            transform: "rotate(-45deg) translate(40%, -40%)",
-            filter: "blur(40px)",
-          }}
-        /> */}
+       
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
           {/* Badge */}
@@ -358,7 +331,7 @@ export default function HomePage() {
                 item.className
               )}
             >
-              <div className="block h-full overflow-hidden">
+              <div className={`block h-full overflow-hidden ${item.id=="secure-app" ? "scale-115": ""} `}>
                 <div className="relative flex items-center justify-center h-full">
                   {item.component}
                 </div>
@@ -392,11 +365,7 @@ export default function HomePage() {
             </a>
             .
           </p>
-          {/* <div className="flex items-center justify-center">
-            <div className="px-4 py-2 rounded-full border border-neutral-700 text-neutral-500 text-sm">
-              CappyUI
-            </div>
-          </div> */}
+         
         </div>
       </footer>
     </main>
