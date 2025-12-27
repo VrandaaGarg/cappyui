@@ -352,7 +352,7 @@ export default function HomePage() {
               viewport={{ once: true, margin: "-50px" }}
               className={cn(
                 "group relative",
-                "border border-neutral-200 dark:border-neutral-800",
+                "border border-neutral-200 dark:border-neutral-900",
                 "-m-px",
                 "transition-all duration-300",
                 item.className
