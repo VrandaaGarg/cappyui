@@ -76,5 +76,16 @@ export function Highlighter({
     delay,
   ]);
 
-  return <span ref={elementRef}>{children}</span>;
+  return (
+    <span
+      ref={elementRef}
+      style={{
+        display: "inline",
+        position: "relative",
+        verticalAlign: "baseline"
+      }}
+    >
+      {children}
+    </span>
+  );
 }

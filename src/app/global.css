@@ -54,4 +54,78 @@
   animation: shine 2.5s ease-in-out infinite;
 }
 
+/* Navbar customization - Center navigation links */
+header nav,
+[class*="navbar"] {
+  @apply relative;
+}
+
+/* Center the nav links container */
+header nav > div,
+nav[class*="nav"] > div {
+  @apply flex items-center;
+}
+
+/* Theme toggle - Show single icon at a time */
+button[class*="theme"] > svg:first-child,
+button[data-theme] > svg:first-child,
+[class*="ThemeToggle"] > svg:first-child {
+  @apply block dark:hidden;
+}
+
+button[class*="theme"] > svg:last-child,
+button[data-theme] > svg:last-child,
+[class*="ThemeToggle"] > svg:last-child {
+  @apply hidden dark:block;
+}
+
+/* Fumadocs specific theme toggle fix */
+:root button svg.lucide-sun {
+  @apply block dark:hidden;
+}
+
+:root button svg.lucide-moon {
+  @apply hidden dark:block;
+}
+
+/* Hide the secondary icon in theme toggle */
+button:has(svg.lucide-sun):has(svg.lucide-moon) svg.lucide-moon {
+  @apply hidden dark:block;
+}
+
+button:has(svg.lucide-sun):has(svg.lucide-moon) svg.lucide-sun {
+  @apply block dark:hidden;
+}
+
+/* Radial gradient for lamp effect */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Remove padding-top from home layout for transparent navbar overlay */
+.fd-layout-home,
+[class*="HomeLayout"],
+main.flex-1 {
+  padding-top: 0 !important;
+}
+
+/* Make navbar fixed on top with backdrop blur */
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* Dark mode navbar */
+.dark header {
+  background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
 

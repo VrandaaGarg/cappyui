@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, Github, Plus, Star } from "lucide-react";
 import {
   SiReact,
   SiTypescript,
@@ -16,6 +16,15 @@ import {
 import { TbBrandNextjs } from "react-icons/tb";
 import { cn } from "@/lib/utils";
 import { Highlighter } from "@/components/ui/highlighter";
+import { SparklesText } from "@/components/ui/sparkles-text";
+
+const USER_AVATARS = [
+  { name: "Alex", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" },
+  { name: "Sarah", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" },
+  { name: "Mike", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" },
+  { name: "Emma", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" },
+  { name: "John", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" },
+];
 
 const TECH_STACK = [
   { icon: SiReact, name: "React.js" },
@@ -114,8 +123,38 @@ export default function HomePage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+      <section className="relative overflow-hidden">
+        {/* Elliptical light beams from corners - rotated toward center */}
+        {/* <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute -top-48 -rotate-45 -left-10 pointer-events-none"
+          style={{
+            width: "200px",
+            height: "700px",
+            borderRadius: "50%",
+            background: "rgba(130,130,130,0.3)",
+            transform: "rotate(45deg) translate(-40%, -40%)",
+            filter: "blur(40px)",
+          }}
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
+          className="absolute -top-48 rotate-45 -right-10 pointer-events-none"
+          style={{
+            width: "200px",
+            height: "700px",
+            borderRadius: "50%",
+            background: "rgba(130,130,130,0.3)",
+            transform: "rotate(-45deg) translate(40%, -40%)",
+            filter: "blur(40px)",
+          }}
+        /> */}
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,20 +177,25 @@ export default function HomePage() {
             className="text-4xl sm:text-5xl lg:text-7xl font-bold text-center tracking-tight text-neutral-900 dark:text-white mb-6"
           >
             Build{" "}
-            <Highlighter
-              action="highlight"
-              color="#069EFE"
-              strokeWidth={2}
-              animationDuration={1000}
-              iterations={1}
-              padding={4}
-              delay={700}
+            <SparklesText
+              colors={{ first: "#FFD700", second: "#FFA500" }}
+              sparklesCount={8}
             >
-              stunning
-            </Highlighter>{" "}
+              <Highlighter
+                action="highlight"
+                color="#069EFE"
+                strokeWidth={2}
+                animationDuration={1000}
+                iterations={1}
+                padding={4}
+                delay={500}
+              >
+                stunning
+              </Highlighter>
+            </SparklesText>{" "}
             interfaces
             <br />
-            <span className="text-neutral-400 dark:text-neutral-400">
+            <span className="text-neutral-800 dark:text-neutral-200">
               <Highlighter
                 action="underline"
                 color="#0588DA"
@@ -215,6 +259,55 @@ export default function HomePage() {
             </Link>
           </motion.div>
 
+          {/* Social Proof - User Avatars */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="flex flex-col items-center gap-3 mt-12"
+          >
+            <div className="flex items-center -space-x-3">
+              {USER_AVATARS.map((user, index) => (
+                <motion.div
+                  key={user.name}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+                  className="relative"
+                >
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full border-2 border-white dark:border-neutral-900 object-cover ring-2 ring-neutral-100 dark:ring-neutral-800"
+                  />
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.8 }}
+                className="w-10 h-10 z-20 rounded-full border-2 border-white dark:border-neutral-900 bg-neutral-900 dark:bg-white flex items-center justify-center ring-2 ring-neutral-100 dark:ring-neutral-800"
+              >
+                <span className=" text-xs font-semibold text-white dark:text-neutral-900">
+                  +2k
+                </span>
+              </motion.div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-4 h-4 fill-yellow-400 text-yellow-400"
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                Loved by <span className="font-semibold text-neutral-900 dark:text-white">2,000+</span> developers
+              </span>
+            </div>
+          </motion.div>
+
           {/* Tech Stack - Infinite Marquee */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -243,17 +336,24 @@ export default function HomePage() {
 
       {/* Bento Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
-        <div className="relative grid grid-cols-1 md:grid-cols-6">
+        <div className="relative grid grid-cols-1 md:grid-cols-6 border border-neutral-200 dark:border-neutral-800">
+          {/* Grid corner icons */}
+          <Plus className="absolute -top-3 -left-3 w-6 h-6 z-20 text-neutral-300 dark:text-neutral-700" strokeWidth={1} />
+          <Plus className="absolute -top-3 -right-3 w-6 h-6 z-20 text-neutral-300 dark:text-neutral-700" strokeWidth={1} />
+          <Plus className="absolute -bottom-3 -left-3 w-6 h-6 z-20 text-neutral-300 dark:text-neutral-700" strokeWidth={1} />
+          <Plus className="absolute -bottom-3 -right-3 w-6 h-6 z-20 text-neutral-300 dark:text-neutral-700" strokeWidth={1} />
+
           {BENTO_ITEMS.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0}}
+              whileInView={{ opacity: 1}}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               viewport={{ once: true, margin: "-50px" }}
               className={cn(
                 "group relative",
                 "border border-neutral-200 dark:border-neutral-800",
+                "-m-px",
                 "transition-all duration-300",
                 item.className
               )}
@@ -267,6 +367,38 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-16 bg-neutral-100 dark:bg-neutral-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-8">
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg text-center">
+            Built by{" "}
+            <a
+              href="https://github.com/vrandagarg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-800 dark:text-neutral-200 underline underline-offset-4 hover:text-neutral-950 dark:hover:text-white transition-colors"
+            >
+              Vranda Garg
+            </a>
+            . The source code is available on{" "}
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-800 dark:text-neutral-200 underline underline-offset-4 hover:text-neutral-950 dark:hover:text-white transition-colors"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+          {/* <div className="flex items-center justify-center">
+            <div className="px-4 py-2 rounded-full border border-neutral-700 text-neutral-500 text-sm">
+              CappyUI
+            </div>
+          </div> */}
+        </div>
+      </footer>
     </main>
   );
 }
