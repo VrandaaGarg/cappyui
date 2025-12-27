@@ -2,6 +2,11 @@
 @import "fumadocs-ui/css/black.css";
 @import "fumadocs-ui/css/preset.css";
 
+@theme {
+  --font-sans: var(--font-jakarta);
+  --font-display: var(--font-space-grotesk);
+}
+
 /* Hide scrollbar completely */
 .scrollbar-visible::-webkit-scrollbar {
   display: none;

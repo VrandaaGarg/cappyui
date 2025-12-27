@@ -1,10 +1,16 @@
 import '@/app/global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
-import { Inter } from 'next/font/google';
+import { Space_Grotesk, Plus_Jakarta_Sans } from 'next/font/google';
 import type { Metadata } from 'next';
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
+  variable: '--font-space-grotesk',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
 });
 
 export const metadata: Metadata = {
@@ -18,8 +24,8 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
+    <html lang="en" className={`${spaceGrotesk.variable} ${jakarta.variable}`} suppressHydrationWarning>
+      <body className="flex flex-col min-h-screen font-sans">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>

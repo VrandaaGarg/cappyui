@@ -174,7 +174,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-center tracking-tight text-neutral-900 dark:text-white mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold  text-center tracking-tight text-neutral-900 dark:text-white mb-6"
           >
             Build{" "}
             <SparklesText
