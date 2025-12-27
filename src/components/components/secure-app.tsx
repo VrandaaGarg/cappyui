@@ -433,7 +433,7 @@ export const SecureApp = memo(({ className }: SecureAppProps) => {
           {orbitNodes.map((node) => (
             <motion.div
               key={node.id}
-              className="pointer-events-none absolute z-50 backdrop-blur-2xl flex md:h-14 w-11 h-11 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 shadow-[0_8px_24px_rgba(0,0,0,0.25)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.55)]"
+              className="pointer-events-none absolute z-50 backdrop-blur-2xl flex md:h-14 w-11 h-11 md:w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-300/75 dark:border-neutral-600/75 bg-gradient-to-br from-neutral-200/85 via-neutral-300/90 to-neutral-400/95 dark:from-neutral-800/85 dark:via-neutral-900/90 dark:to-black/95 "
               animate={{
                 x: nodesShifted ? DIRECTION_SHIFT[node.direction] : 0,
               }}
