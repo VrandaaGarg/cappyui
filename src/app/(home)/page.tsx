@@ -348,7 +348,7 @@ export default function HomePage() {
           <p className="text-neutral-600 dark:text-neutral-400 text-lg text-center">
             Built by{" "}
             <a
-              href="https://github.com/vrandagarg"
+              href="https://github.com/VrandaaGarg/cappyui"
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-800 dark:text-neutral-200 underline underline-offset-4 hover:text-neutral-950 dark:hover:text-white transition-colors"

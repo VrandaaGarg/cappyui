@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     'Web Components',
     'Frontend Components',
   ],
-  authors: [{ name: siteConfig.creator, url: 'https://github.com/VrandaaGarg' }],
+  authors: [{ name: siteConfig.creator, url: 'https://github.com/VrandaaGarg/cappyui' }],
   creator: siteConfig.creator,
   publisher: siteConfig.name,
   formatDetection: {
@@ -119,7 +119,7 @@ const jsonLd = {
   author: {
     '@type': 'Person',
     name: siteConfig.creator,
-    url: 'https://github.com/VrandaaGarg',
+    url: 'https://github.com/VrandaaGarg/cappyui',
   },
   offers: {
     '@type': 'Offer',
