@@ -1,11 +1,11 @@
 # CappyUI - Beautiful Animated React Components
-# https://cappyui.com
+# https://ui.cappychat.com
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://cappyui.com/sitemap.xml
+Sitemap: https://ui.cappychat.com/sitemap.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1

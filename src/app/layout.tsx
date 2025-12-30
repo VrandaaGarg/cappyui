@@ -16,11 +16,11 @@ const jakarta = Plus_Jakarta_Sans({
 
 const siteConfig = {
   name: 'CappyUI',
-  url: 'https://cappyui.com',
+  url: 'https://ui.cappychat.com',
   ogImage: 'https://res.cloudinary.com/dyetf2h9n/image/upload/v1766867568/image_xij1nl.png',
   description: 'Copy-paste beautiful animated React components into your apps. Built with React, Tailwind CSS, and Framer Motion. Open-source UI library with 20+ stunning components.',
   creator: 'Vranda Garg',
-  twitter: '@VrandaGarg',
+  twitter: '@VrandaaGarg',
 };
 
 export const metadata: Metadata = {
