@@ -145,6 +145,7 @@ Contributions are welcome! If you have ideas for new components or improvements:
 
 - GitHub: [@VrandaaGarg](https://github.com/VrandaaGarg)
 - Website: [ui.cappychat.com](https://ui.cappychat.com)
+- Portfolio: [vrandagarg.in](https://vrandagarg.in)
 
 ## License
 
