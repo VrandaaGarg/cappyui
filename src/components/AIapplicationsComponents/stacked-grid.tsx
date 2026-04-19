@@ -3,21 +3,10 @@
 import React, { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export type StackedGridCard = {
-  label: string;
-  sub: string;
-  tone?: "brand" | "neutral";
-  position: [number, number];
-  connector: [number, number, number, number];
-};
-
 export type StackedGridProps = {
   className?: string;
   gridSize?: number;
   unit?: number;
-  showCards?: boolean;
-  cards?: StackedGridCard[];
-  centerBadge?: string | null;
 };
 
 // true 2:1 isometric projection, light from top-left
@@ -35,21 +24,10 @@ const shade = (h: number) =>
       ? { top: "#242424", left: "#131313", right: "#1C1C1C" }
       : { top: "#1C1C1C", left: "#111", right: "#181818" };
 
-const DEFAULT_CARDS: StackedGridCard[] = [
-  { label: "Claude", sub: "mem_021 · synced", tone: "brand", position: [-240, -80], connector: [130, 22, 188, 8] },
-  { label: "Cursor", sub: "mem_048 · live", tone: "neutral", position: [160, -110], connector: [0, 22, -50, 12] },
-];
-
-const SANS = 'Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
-const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
-
 export default function StackedGrid({
   className,
   gridSize = 6,
   unit = 24,
-  showCards = false,
-  cards = DEFAULT_CARDS,
-  centerBadge = null,
 }: StackedGridProps) {
   const N = gridSize;
   const s = unit;
@@ -91,10 +69,7 @@ export default function StackedGrid({
   }, [N, s]);
 
   return (
-    <div
-      className={cn("relative flex items-center justify-center w-full", className)}
-      style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(31,122,84,0.10), transparent 60%)" }}
-    >
+    <div className={cn("relative flex items-center justify-center w-full", className)}>
       <svg
         viewBox="-180 -40 370 220"
         preserveAspectRatio="xMidYMid meet"
@@ -141,33 +116,6 @@ export default function StackedGrid({
             );
           })}
         </g>
-
-        {/* floating cards */}
-        {showCards &&
-          cards.map((card, idx) => {
-            const [px, py] = card.position;
-            const [cx1, cy1, cx2, cy2] = card.connector;
-            const iconFill = card.tone === "brand" ? "#1F7A54" : "#1F1F1F";
-            return (
-              <g key={idx} transform={`translate(${px},${py})`}>
-                <line x1={cx1} y1={cy1} x2={cx2} y2={cy2} stroke="#34D399" strokeWidth={1} strokeDasharray="3 3" opacity={0.6} />
-                <rect width={130} height={44} rx={8} fill="#1A1A1A" stroke="#333" strokeWidth={1} />
-                <rect x={10} y={12} width={20} height={20} rx={4} fill={iconFill} />
-                {card.label === "Cursor" && <path d="M17 18 L20 24 L23 18 Z" fill="#E6E4E1" />}
-                <text x={38} y={20} fontFamily={SANS} fontSize={11} fontWeight={500} fill="#FFFFFF">{card.label}</text>
-                <text x={38} y={33} fontFamily={MONO} fontSize={9} fill="#6B6762">{card.sub}</text>
-              </g>
-            );
-          })}
-
-        {/* center pill badge */}
-        {centerBadge && (
-          <g transform="translate(-52,110)">
-            <rect width={104} height={30} rx={15} fill="rgba(31,122,84,0.18)" stroke="#1F7A54" strokeWidth={1} />
-            <circle cx={14} cy={15} r={4} fill="#34D399" />
-            <text x={24} y={19} fontFamily={MONO} fontSize={11} fill="#34D399">{centerBadge}</text>
-          </g>
-        )}
       </svg>
     </div>
   );

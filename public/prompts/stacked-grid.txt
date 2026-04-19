@@ -1,35 +1,29 @@
-Build a React component named StackedGrid that renders a pixel-faithful isometric "stacked grid" illustration as inline SVG. No external libraries (no three.js, no framer-motion unless explicitly asked). TypeScript preferred, Tailwind OK for the wrapper only — the illustration itself must be pure SVG so it scales crisply.
+Build a React component named StackedGrid that renders a pixel-faithful isometric "stacked pyramid" illustration as inline SVG. No external libraries. TypeScript preferred, Tailwind only on the wrapper — the illustration must be pure SVG.
 
 Visual intent
 A dark, emerald-accented, true 2:1 isometric scene:
-- A 6×6 grid of dark cuboids arranged on a subtle iso grid plate, heights falling off radially from the center so it reads as a stepped pyramid / ziggurat.
-- The center cube is solid emerald (gradient-shaded), marking the peak of the ziggurat.
-- Background: near-black (#0A0A0A), with a very faint grid line texture on the plate only.
+- A 6×6 grid of cuboids on a subtle iso grid plate, heights falling off radially from the center so it reads as a stepped pyramid / ziggurat.
+- The center cube is solid emerald (gradient-shaded), marking the peak.
+- Background near-black (#0A0A0A); iso plate has a very faint grid.
 
-Hard specs
 Palette (use exactly):
 brand      #1F7A54   brandHi #34D399   brandLo #0F3D2A
-brandWash  rgba(31,122,84,0.18)
-ink        #0A0A0A   ink2 #121212   ink3 #1A1A1A   ink4 #222
-line       #262626   line2 #333
-fg         #FFFFFF   fg2 #E6E4E1   fg3 #A8A29E   fg4 #6B6762
-
-Fonts: Geist (sans) for names, Geist Mono for subtitles/badge. Fall back to system.
+ink        #0A0A0A   ink2 #121212   ink3 #1A1A1A
+line2 #333
 
 Isometric projection (true 2:1, light from top-left):
-const iso = (x: number, y: number, z: number, s = 24) =>
-  [(x - y) * s, (x + y) * 0.5 * s - z * s] as const;
+const iso = (x, y, z, s = 24) => [(x - y) * s, (x + y) * 0.5 * s - z * s];
 
-Every cuboid is drawn as three polygons (left face, right face, top face) using these 8 corners, with stroke-linejoin="round". Paint back-to-front (sort by x + y ascending).
+Every cuboid = three polygons (left, right, top) from its 8 corners, stroke-linejoin="round". Paint back-to-front (sort by x + y ascending).
 
-Cuboid face shading tiers (by cube height h):
+Cuboid face shading tiers (by height h):
 h > 1.3 → top #2E2E2E, left #161616, right #222
 h > 0.7 → top #242424, left #131313, right #1C1C1C
 else     → top #1C1C1C, left #111, right #181818
 Center cube → top gradient #34D399 → #1F7A54, left #0F3D2A, right #1F7A54, stroke #34D399 @ 1.2px.
 All others stroke #333 @ 0.8px.
 
-Grid + heights:
+Geometry:
 N = 6, unit s = 24, cube footprint w = d = 0.92.
 Height field: h[i][j] = max(0, 1.8 - dist * 0.55) where dist = sqrt((i-2.5)² + (j-2.5)²). Skip cubes with h < 0.08.
 Center cube = (Math.floor(N/2) - 1, Math.floor(N/2) - 1) i.e. (2, 2).
@@ -37,17 +31,14 @@ Center cube = (Math.floor(N/2) - 1, Math.floor(N/2) - 1) i.e. (2, 2).
 Component API:
 type StackedGridProps = {
   className?: string;
-  gridSize?: number;          // default 6
-  unit?: number;              // default 24
-  showCards?: boolean;        // default false
-  cards?: Array<{ label: string; sub: string; tone?: 'brand' | 'neutral'; position: [number, number]; connector: [number, number, number, number] }>;
-  centerBadge?: string | null;// default null
+  gridSize?: number;   // default 6
+  unit?: number;       // default 24
 };
 
-Derive cubes via a memoized helper; don't hardcode 36 <g> tags.
+Derive cubes via a memoized helper; don't hand-write 36 <g> tags.
 
 Do NOT:
-- Don't use canvas or WebGL.
-- Don't introduce any dependency.
+- No canvas / WebGL / three.js.
+- No drop-shadows, glows, or blur filters — flat shaded faces only.
+- No floating label cards, pills, badges, connectors, radial gradient backgrounds, or extra copy — just the iso stacked pyramid inside a plain dark wrapper.
 - Don't change the palette, projection ratio, or the painter's-algorithm ordering.
-- Don't add drop-shadows or blur filters on the cubes (flat shaded faces only).

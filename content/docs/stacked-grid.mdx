@@ -76,43 +76,13 @@ export default function Page() {
 - True 2:1 isometric projection with painter's-algorithm occlusion
 - Radial height field produces a stepped-pyramid shape
 - Emerald gradient peak at the center
-- Optional floating cards and center badge (both off by default)
 
 ## Props
 
-| Prop           | Type                  | Default  | Description                                     |
-| -------------- | --------------------- | -------- | ----------------------------------------------- |
-| `className`    | `string`              | -        | Extra classes for the wrapper                   |
-| `gridSize`     | `number`              | `6`      | N×N cube grid dimension                         |
-| `unit`         | `number`              | `24`     | Iso projection unit in SVG pixels               |
-| `showCards`    | `boolean`             | `false`  | Render floating label cards                     |
-| `cards`        | `StackedGridCard[]`   | Defaults | Floating label card definitions                 |
-| `centerBadge`  | `string \| null`      | `null`   | Pill badge text below the grid                  |
-
-### `StackedGridCard`
-
-```ts
-type StackedGridCard = {
-  label: string;
-  sub: string;
-  tone?: "brand" | "neutral";
-  position: [number, number];
-  connector: [number, number, number, number];
-};
-```
-
-## Customization
-
-### Show optional cards and badge
-
-```tsx
-<StackedGrid showCards centerBadge="one memory layer" />
-```
-
-### Change grid size
-
-```tsx
-<StackedGrid gridSize={8} unit={20} />
-```
+| Prop        | Type     | Default | Description                        |
+| ----------- | -------- | ------- | ---------------------------------- |
+| `className` | `string` | -       | Extra classes for the wrapper      |
+| `gridSize`  | `number` | `6`     | N×N cube grid dimension            |
+| `unit`      | `number` | `24`    | Iso projection unit in SVG pixels  |
 
 <br />
