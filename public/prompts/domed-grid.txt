@@ -1,0 +1,59 @@
+Build a React component named DomedGrid that renders a pixel-faithful wide isometric memory grid as inline SVG. No external libraries (no three.js, no framer-motion unless asked). TypeScript preferred; Tailwind only on the wrapper — the illustration must be pure SVG.
+
+Visual intent
+A dark, terracotta-accented, true 2:1 isometric scene that reads as "a city of memories":
+- A wide 9×9 iso grid of cuboids on a subtle grid plate.
+- Cube heights fall off radially from the center so the cluster looks like a soft domed plateau — tallest at the middle, tapering to nothing at the edges.
+- The innermost ~3×3 region is highlighted: every other cube (checkerboard pattern) is rendered in brand orange. Everything else is near-black with mid-grey edges.
+- Painted back-to-front so occlusion is correct.
+
+Palette (use exactly):
+brand      #A9432A   brandHi #D96B3F   brandLo #6B2A1A
+ink        #0A0A0A   plateFill #0D0D0D
+line       #262626   line2 #333
+
+Isometric projection (true 2:1):
+const iso = (x, y, z, s = 20) => [(x - y) * s, (x + y) * 0.5 * s - z * s];
+
+Each cuboid = three polygons (left, right, top) from its 8 corners, stroke-linejoin="round". Sort cubes by x + y ascending before rendering.
+
+Geometry:
+Unit s = 20, grid N = 9, cube footprint w = d = 0.9.
+Plate at origin (-N/2, -N/2), 9×9 tiles, fill #0D0D0D, grid lines 0.5px rgba(255,255,255,0.04), plate-edge stroke #262626.
+For every cell (i, j) where i, j ∈ [0..8]:
+  dx = i - 4, dy = j - 4, dist = sqrt(dx² + dy²)
+  Height h = max(0, 1.6 - dist * 0.45). Skip if h < 0.1.
+  brand = abs(dx) < 1.5 && abs(dy) < 1.5 && (i + j) % 2 === 0
+
+Cuboid shading:
+Brand — top #D96B3F, left #6B2A1A, right #A9432A, stroke #D96B3F @ 0.9px, opacity 0.95.
+Dark  — top #1C1C1C, left #0D0D0D, right #151515, stroke #333 @ 0.6px, opacity 0.8.
+
+SVG wrapper:
+<svg viewBox="-280 -140 560 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+
+Usage:
+Drop the component into a dark rounded card — no radial glows, no grid overlay, no copy:
+<section className="relative overflow-hidden rounded-2xl border border-[#262626] bg-[#0A0A0A] h-[420px]">
+  <div className="absolute inset-0 flex items-center justify-center">
+    <DomedGrid />
+  </div>
+</section>
+
+Component API:
+type DomedGridProps = {
+  className?: string;
+  gridSize?: number;        // default 9
+  unit?: number;            // default 20
+  maxHeight?: number;       // default 1.6
+  falloff?: number;         // default 0.45
+  brandRadius?: number;     // default 1.5
+};
+
+Memoize the cube list with useMemo keyed on the props. Don't hand-write cubes. Keep the file under ~180 lines.
+
+Do NOT:
+- No canvas / WebGL / three.js.
+- No drop-shadows, glows, or blur filters on the cubes or the wrapper — flat shaded faces only.
+- No CSS grid overlay, no radial gradient backgrounds, no CTA copy or buttons — just the iso design inside a plain dark rounded card.
+- Don't change the palette, the 2:1 projection, the x+y painter's order, or the brand-checker rule (i+j) % 2 === 0.

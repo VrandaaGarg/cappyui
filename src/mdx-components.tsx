@@ -64,6 +64,15 @@ const SpineCluster = dynamic(() => import("./components/AIapplicationsComponents
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-80 w-full" />,
 });
 
+const DomedGrid = dynamic(() => import("./components/AIapplicationsComponents/domed-grid"), {
+  loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-96 w-full" />,
+});
+
+const DomedGridShowcase = dynamic(
+  () => import("./components/AIapplicationsComponents/domed-grid").then(mod => mod.DomedGridShowcase),
+  { loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-96 w-full" /> },
+);
+
 const BiometricSecurity = dynamic(() => import("./components/components/BiometricSecurity").then(mod => mod.BiometricSecurity), {
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-64 w-full" />,
 });
@@ -104,6 +113,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ToolGrid,
     StackedGrid,
     SpineCluster,
+    DomedGrid,
+    DomedGridShowcase,
     CalendarCurrent,
     SecureApp,
     SecureVault,

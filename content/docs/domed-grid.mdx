@@ -1,0 +1,110 @@
+---
+title: Domed Grid
+description: A wide isometric grid backdrop — 9x9 cuboids forming a soft domed plateau with a terracotta-checkered center. Designed to sit behind hero/CTA copy as a dimmed decorative layer.
+---
+
+## Preview
+
+<div className="mx-auto">
+  <DomedGridShowcase />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/domed-grid.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/domed-grid.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/domed-grid.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/domed-grid.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+Drop it into a dark rounded card — the grid centers itself and scales to the container:
+
+```tsx
+import DomedGrid from "@/components/AIapplicationsComponents/domed-grid";
+
+export function Page() {
+  return (
+    <section className="relative overflow-hidden rounded-2xl border border-[#262626] bg-[#0A0A0A] h-[420px]">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <DomedGrid />
+      </div>
+    </section>
+  );
+}
+```
+
+## Features
+
+- Pure inline SVG — no dependencies, decorative `aria-hidden` layer
+- True 2:1 isometric projection with painter's-algorithm occlusion
+- 9×9 domed plateau with radial height falloff
+- Terracotta-checkered center ~3×3 over a near-black outer field
+- Full opacity by default — dim it from the wrapper (`opacity-[0.45]`) so the component stays reusable
+
+## Props
+
+| Prop           | Type     | Default | Description                                        |
+| -------------- | -------- | ------- | -------------------------------------------------- |
+| `className`    | `string` | -       | Extra classes on the SVG                           |
+| `gridSize`     | `number` | `9`     | N×N grid dimension                                 |
+| `unit`         | `number` | `20`    | Iso projection unit                                |
+| `maxHeight`    | `number` | `1.6`   | Dome peak height                                   |
+| `falloff`      | `number` | `0.45`  | Higher = flatter dome                              |
+| `brandRadius`  | `number` | `1.5`   | Cells from center that receive the brand checker   |
+
+## Customization
+
+### Wider brand checker
+
+```tsx
+<DomedGrid brandRadius={2.5} />
+```
+
+### Flatter dome
+
+```tsx
+<DomedGrid falloff={0.7} />
+```
+
+<br />
