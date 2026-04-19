@@ -1,0 +1,67 @@
+Build a React component named IsoIntelligentMemory that renders a pixel-faithful isometric illustration as inline SVG. No external libraries (no three.js, no framer-motion unless explicitly asked). TypeScript preferred, Tailwind only for the outer wrapper — the illustration must be pure SVG.
+
+Visual intent
+A dark, terracotta-accented, true 2:1 isometric scene that suggests "memory auto-saving into a structured store":
+
+A 3×3×3 cluster of cuboids sitting on a small iso grid plate. Most cubes are dark/neutral; a plus-shaped cross of brand-orange cubes runs through the middle layer, with one orange cap cube on top-center and one orange cube at the base center, making the orange read as a vertical axis / spine through the cluster.
+Tiny orange "saving" dots trail in from both sides of the cluster (like particles being ingested).
+A small "auto-saved" pill sits below-left of the cluster: dark rounded pill, green status dot, mono label.
+Background: the card the SVG lives in is near-black (#0A0A0A); the iso plate adds a very faint grid.
+
+Hard specs
+Palette (use exactly):
+brand      #A9432A   brandHi #D96B3F   brandLo #6B2A1A
+ink        #0A0A0A   ink2 #121212   ink3 #1A1A1A   ink4 #222
+line       #262626   line2 #333
+fg3 #A8A29E   fg4 #6B6762
+success #6AB28A
+
+Fonts: Geist Mono for the pill label. Fallback to system mono.
+
+Isometric projection (true 2:1):
+const iso = (x: number, y: number, z: number, s = 20) =>
+  [(x - y) * s, (x + y) * 0.5 * s - z * s] as const;
+
+Every cuboid = three polygons (left face, right face, top face) from its 8 corners, stroke-linejoin="round". Render back-to-front: sort cubes by x + y + z ascending.
+
+Cuboid shading:
+Mid (dark) cubes — top #2A2A2A, left #1A1A1A, right #232323, stroke #333 @ 0.8px.
+Brand (orange) cubes — top #D96B3F, left #6B2A1A, right #A9432A, stroke #D96B3F @ 0.8px.
+
+Geometry:
+Unit s = 20. Cube footprint/height w = d = h = 0.9.
+Plate at z = 0, origin (-2.5, -2.5), size 5×5 tiles, fill #0D0D0D, grid lines 0.5px rgba(255,255,255,0.04).
+Cluster pattern — a 3×3×3 grid translated by (-1, -1, 0) so it's centered on the plate. Brand cubes at:
+z = 0 (bottom): (1,1,0)
+z = 1 (middle): (1,0,1), (0,1,1), (1,1,1), (2,1,1), (1,2,1)   // plus shape
+z = 2 (top):    (1,1,2)                                       // cap cube
+
+All other lattice points are rendered as dark mid cubes, except omit (0,0,2), (2,0,2), (0,2,2), (2,2,2) (top corners). Bottom and middle layers are full 3×3.
+
+Decorations (drawn after cubes):
+Left trail dots: r=2.5 at (-80,-40) op 0.9, r=2 at (-64,-48) op 0.7, r=1.5 at (-48,-56) op 0.5. Fill #D96B3F.
+Right trail dots: r=2.5 at (80,-40) op 0.9, r=2 at (64,-48) op 0.7. Fill #D96B3F.
+
+"auto-saved" pill at translate(-120, 50):
+rect 84×20 rx=10 fill=#1A1A1A stroke=#333
+circle cx=12 cy=10 r=3 fill=#6AB28A
+text at (22, 14) — "auto-saved", font-size 9, Geist Mono, fill #A8A29E.
+
+SVG wrapper:
+<svg viewBox="-160 -130 320 240" preserveAspectRatio="xMidYMid meet">
+
+Component API:
+type IsoIntelligentMemoryProps = {
+  className?: string;
+  showPill?: boolean;      // default true
+  pillLabel?: string;      // default "auto-saved"
+  animateDots?: boolean;   // default false
+};
+
+Derive the 27-cube cluster from a data array + memoized helper. Don't hand-write 27 <g> blocks. Keep under ~200 lines.
+
+Do NOT:
+- No canvas / WebGL / three.js.
+- No drop-shadows, blurs, or filters on cubes — flat shaded faces only.
+- Don't change palette, projection ratio, cube footprint (0.9), or x+y+z painter order.
+- Don't omit bottom/middle layers — they are full 3×3; only top is cross-shaped (5 cubes).

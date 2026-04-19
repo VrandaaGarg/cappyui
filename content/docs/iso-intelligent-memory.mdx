@@ -1,0 +1,131 @@
+---
+title: Iso Intelligent Memory
+description: A pixel-faithful isometric illustration suggesting auto-saving memory into a structured store — 3x3x3 cuboid cluster with a brand-orange spine, trailing particle dots, and an auto-saved status pill.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-[#1A1A1A] rounded-2xl bg-[#0A0A0A] py-4 px-4">
+  <IsoIntelligentMemory />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/iso-intelligent-memory.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/iso-intelligent-memory.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/iso-intelligent-memory.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/iso-intelligent-memory.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import IsoIntelligentMemory from "@/components/AIapplicationsComponents/iso-intelligent-memory";
+
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-10">
+      <div className="border border-[#1A1A1A] rounded-2xl bg-[#0A0A0A] p-6">
+        <IsoIntelligentMemory />
+      </div>
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Pure inline SVG**: Zero dependencies beyond `clsx`/`tailwind-merge` — scales crisply at any size
+- **True 2:1 isometric projection**: `iso(x,y,z,s)` with light from top-left implied
+- **Painter's algorithm**: Back-to-front sorted by `x + y + z` for correct occlusion
+- **27-cube lattice**: 3×3×3 cluster with top-corner cubes omitted (top layer is cross-shaped)
+- **Orange spine**: Brand cubes form a vertical axis — base center, plus-shaped middle layer, cap on top
+- **Trail particle dots**: Orange dots flow in from both sides like data being ingested
+- **Auto-saved pill**: Dark rounded pill with green status dot and mono label
+- **Subtle plate**: 5×5 iso grid plate with 4% white gridlines
+- **Memoized derivation**: Cubes and plate lines computed once, never hand-written 27 times
+- **Optional dot animation**: CSS-only pulse loop when `animateDots` is true
+
+## Props
+
+| Prop           | Type      | Default         | Description                                                     |
+| -------------- | --------- | --------------- | --------------------------------------------------------------- |
+| `className`    | `string`  | -               | Extra classes applied to the wrapper                            |
+| `showPill`     | `boolean` | `true`          | Render the "auto-saved" status pill                             |
+| `pillLabel`    | `string`  | `"auto-saved"`  | Pill text content                                               |
+| `animateDots`  | `boolean` | `false`         | Enable a CSS-only pulse animation on the trailing dots          |
+
+## Customization
+
+### Animate the particle trails
+
+```tsx
+<IsoIntelligentMemory animateDots />
+```
+
+### Change the pill label
+
+```tsx
+<IsoIntelligentMemory pillLabel="syncing…" />
+```
+
+### Hide the pill
+
+```tsx
+<IsoIntelligentMemory showPill={false} />
+```
+
+## Palette
+
+Do not swap these without re-tuning the shading — the illustration is calibrated as a whole:
+
+| Token      | Value      | Purpose                       |
+| ---------- | ---------- | ----------------------------- |
+| `brand`    | `#A9432A`  | Orange cube right face        |
+| `brandHi`  | `#D96B3F`  | Orange cube top / stroke / dots |
+| `brandLo`  | `#6B2A1A`  | Orange cube left face         |
+| `ink3`     | `#1A1A1A`  | Pill fill                     |
+| `line2`    | `#333`     | Dark cube stroke, pill stroke |
+| `fg3`      | `#A8A29E`  | Pill label text               |
+| `success`  | `#6AB28A`  | Status indicator dot          |
+
+<br />

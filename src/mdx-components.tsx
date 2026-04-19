@@ -60,6 +60,10 @@ const IsoMemoryHero = dynamic(() => import("./components/AIapplicationsComponent
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-80 w-full" />,
 });
 
+const IsoIntelligentMemory = dynamic(() => import("./components/AIapplicationsComponents/iso-intelligent-memory"), {
+  loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-80 w-full" />,
+});
+
 const BiometricSecurity = dynamic(() => import("./components/components/BiometricSecurity").then(mod => mod.BiometricSecurity), {
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-64 w-full" />,
 });
@@ -99,6 +103,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ResumeBuilder,
     ToolGrid,
     IsoMemoryHero,
+    IsoIntelligentMemory,
     CalendarCurrent,
     SecureApp,
     SecureVault,
