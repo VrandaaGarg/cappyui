@@ -56,6 +56,10 @@ const ToolGrid = dynamic(() => import("./components/AIapplicationsComponents/too
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-64 w-full" />,
 });
 
+const IsoMemoryHero = dynamic(() => import("./components/AIapplicationsComponents/iso-memory-hero"), {
+  loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-80 w-full" />,
+});
+
 const BiometricSecurity = dynamic(() => import("./components/components/BiometricSecurity").then(mod => mod.BiometricSecurity), {
   loading: () => <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-xl h-64 w-full" />,
 });
@@ -94,6 +98,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     CalendarRange,
     ResumeBuilder,
     ToolGrid,
+    IsoMemoryHero,
     CalendarCurrent,
     SecureApp,
     SecureVault,

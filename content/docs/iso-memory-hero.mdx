@@ -1,0 +1,166 @@
+---
+title: Iso Memory Hero
+description: A pixel-faithful isometric memory grid hero illustration rendered as inline SVG, featuring a stepped-pyramid ziggurat with a brand-orange center marker, floating label cards, and a pill badge.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-neutral-300 dark:border-neutral-600/30 rounded-xl bg-[#0A0A0A] py-4 px-4">
+  <IsoMemoryHero />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/iso-memory-hero.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/iso-memory-hero.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/iso-memory-hero.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/iso-memory-hero.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import IsoMemoryHero from "@/components/AIapplicationsComponents/iso-memory-hero";
+
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-10">
+      <IsoMemoryHero />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Pure inline SVG**: No canvas, no WebGL, no external libraries — scales crisply at any size
+- **True 2:1 isometric projection**: Mathematically correct isometric with light from top-left
+- **Painter's algorithm**: Back-to-front sorting (by `x + y`) ensures correct cuboid occlusion
+- **Radial height field**: 6×6 grid forms a stepped pyramid via `max(0, 1.8 - dist * 0.55)`
+- **Brand-orange center marker**: Gradient-shaded central cube with a white dot + concentric ring "you are here" pin
+- **Three-tier face shading**: Cuboid faces shade darker at low heights for depth realism
+- **Floating label cards**: Dark rounded rects with sans name + mono subtitle, connected via dashed orange lines
+- **Pill badge**: Terracotta-washed status badge below the grid
+- **Subtle plate texture**: Faint grid lines at 4% white on the base plate only
+- **Soft radial vignette**: Brand-orange glow behind the SVG in the wrapper
+- **Fully configurable**: Grid size, unit scale, cards, and badge all prop-controlled
+- **Memoized cube derivation**: No hardcoded 36 group tags — all cubes computed from the height field
+
+## Props
+
+| Prop           | Type                    | Default               | Description                                              |
+| -------------- | ----------------------- | --------------------- | -------------------------------------------------------- |
+| `className`    | `string`                | -                     | Additional CSS classes applied to the wrapper            |
+| `gridSize`     | `number`                | `6`                   | The N×N cube grid dimension                              |
+| `unit`         | `number`                | `24`                  | The iso projection unit scale in SVG pixels              |
+| `showCards`    | `boolean`               | `true`                | Whether to render the floating label cards               |
+| `cards`        | `IsoMemoryHeroCard[]`   | `[Claude, Cursor]`    | Floating label cards with position + connector geometry  |
+| `centerBadge`  | `string \| null`        | `"one memory layer"`  | Pill badge text below the grid. `null` to hide           |
+
+### `IsoMemoryHeroCard`
+
+```ts
+type IsoMemoryHeroCard = {
+  label: string;
+  sub: string;
+  tone?: "brand" | "neutral";
+  position: [number, number];
+  connector: [number, number, number, number];
+};
+```
+
+## Customization
+
+### Change grid size
+
+Larger grids produce taller ziggurats. The height field auto-scales:
+
+```tsx
+<IsoMemoryHero gridSize={8} unit={20} />
+```
+
+### Custom floating cards
+
+Pass your own cards array — `position` is the screen-space SVG translate, `connector` is the dashed-line endpoints in the card's local coords:
+
+```tsx
+<IsoMemoryHero
+  cards={[
+    {
+      label: "Your App",
+      sub: "mem_003 · active",
+      tone: "brand",
+      position: [-240, -80],
+      connector: [130, 22, 188, 8],
+    },
+  ]}
+/>
+```
+
+### Hide the badge
+
+```tsx
+<IsoMemoryHero centerBadge={null} />
+```
+
+### Change the badge text
+
+```tsx
+<IsoMemoryHero centerBadge="persistent context" />
+```
+
+## Palette
+
+The illustration uses a fixed, hand-tuned palette. Do not swap these without re-tuning the shading tiers:
+
+| Token        | Value                     | Purpose                  |
+| ------------ | ------------------------- | ------------------------ |
+| `brand`      | `#A9432A`                 | Primary terracotta       |
+| `brandHi`    | `#D96B3F`                 | Highlight / top gradient |
+| `brandLo`    | `#6B2A1A`                 | Shadow side              |
+| `brandWash`  | `rgba(169,67,42,0.18)`    | Badge fill               |
+| `ink`        | `#0A0A0A`                 | Background               |
+| `line2`      | `#333`                    | Default cube stroke      |
+| `fg2`        | `#E6E4E1`                 | Cursor triangle icon     |
+| `fg4`        | `#6B6762`                 | Card subtitle mono       |
+
+<br />
