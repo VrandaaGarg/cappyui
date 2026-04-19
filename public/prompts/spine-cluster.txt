@@ -1,0 +1,48 @@
+Build a React component named SpineCluster that renders a pixel-faithful isometric illustration as inline SVG. No external libraries. TypeScript preferred, Tailwind only for the outer wrapper.
+
+Visual intent
+A dark, emerald-accented, true 2:1 isometric scene:
+- A 3×3×3 cluster of cuboids sitting on a small iso grid plate.
+- Most cubes are dark/neutral; an emerald plus-shaped cross runs through the middle layer, with one emerald cap cube on top-center and one at the base center — forming a vertical spine through the cluster.
+- Background near-black (#0A0A0A); iso plate has a very faint grid.
+
+Palette (use exactly):
+brand      #1F7A54   brandHi #34D399   brandLo #0F3D2A
+ink        #0A0A0A   ink2 #121212   ink3 #1A1A1A
+line2 #333
+
+Isometric projection (true 2:1):
+const iso = (x, y, z, s = 20) => [(x - y) * s, (x + y) * 0.5 * s - z * s];
+
+Every cuboid = three polygons (left/right/top) from its 8 corners, stroke-linejoin="round". Render back-to-front: sort by x + y + z ascending.
+
+Cuboid shading:
+Mid (dark) — top #2A2A2A, left #1A1A1A, right #232323, stroke #333 @ 0.8px.
+Brand (emerald) — top #34D399, left #0F3D2A, right #1F7A54, stroke #34D399 @ 0.8px.
+
+Geometry:
+Unit s = 20. Cube footprint/height w = d = h = 0.9.
+Plate at z = 0, origin (-2.5, -2.5), size 5×5 tiles, fill #0D0D0D, grid lines 0.5px rgba(255,255,255,0.04).
+Cluster 3×3×3 translated by (-1, -1, 0) so it's centered.
+Brand cubes at:
+z=0 (bottom): (1,1,0)
+z=1 (middle): (1,0,1), (0,1,1), (1,1,1), (2,1,1), (1,2,1)    // plus shape
+z=2 (top):    (1,1,2)                                         // cap only
+
+All other lattice points render as dark mid cubes, EXCEPT omit (0,0,2), (2,0,2), (0,2,2), (2,2,2) — top layer is cross-shaped only (5 cubes). Bottom & middle layers are full 3×3.
+
+SVG wrapper: <svg viewBox="-110 -80 220 160" preserveAspectRatio="xMidYMid meet">
+
+Component API:
+type SpineClusterProps = {
+  className?: string;
+};
+
+Derive the 27-cube cluster from loops + a Set of brand coords. No hand-written 27 <g> blocks.
+
+Do NOT:
+- No canvas / WebGL / three.js.
+- No drop-shadows, blurs, or filters on the cubes.
+- No pills, trailing dots, labels, or animations — just the cluster.
+- Don't change palette, projection ratio, cube footprint (0.9), or x+y+z painter order.
+- Don't omit bottom/middle layers — only the top is cross-shaped.

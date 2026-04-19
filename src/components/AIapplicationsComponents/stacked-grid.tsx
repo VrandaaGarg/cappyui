@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export type IsoMemoryHeroCard = {
+export type StackedGridCard = {
   label: string;
   sub: string;
   tone?: "brand" | "neutral";
@@ -11,12 +11,12 @@ export type IsoMemoryHeroCard = {
   connector: [number, number, number, number];
 };
 
-export type IsoMemoryHeroProps = {
+export type StackedGridProps = {
   className?: string;
   gridSize?: number;
   unit?: number;
   showCards?: boolean;
-  cards?: IsoMemoryHeroCard[];
+  cards?: StackedGridCard[];
   centerBadge?: string | null;
 };
 
@@ -35,7 +35,7 @@ const shade = (h: number) =>
       ? { top: "#242424", left: "#131313", right: "#1C1C1C" }
       : { top: "#1C1C1C", left: "#111", right: "#181818" };
 
-const DEFAULT_CARDS: IsoMemoryHeroCard[] = [
+const DEFAULT_CARDS: StackedGridCard[] = [
   { label: "Claude", sub: "mem_021 · synced", tone: "brand", position: [-240, -80], connector: [130, 22, 188, 8] },
   { label: "Cursor", sub: "mem_048 · live", tone: "neutral", position: [160, -110], connector: [0, 22, -50, 12] },
 ];
@@ -43,14 +43,14 @@ const DEFAULT_CARDS: IsoMemoryHeroCard[] = [
 const SANS = 'Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
 const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
 
-export default function IsoMemoryHero({
+export default function StackedGrid({
   className,
   gridSize = 6,
   unit = 24,
   showCards = false,
   cards = DEFAULT_CARDS,
   centerBadge = null,
-}: IsoMemoryHeroProps) {
+}: StackedGridProps) {
   const N = gridSize;
   const s = unit;
   const centerI = Math.floor(N / 2) - 1;
@@ -93,19 +93,19 @@ export default function IsoMemoryHero({
   return (
     <div
       className={cn("relative flex items-center justify-center w-full", className)}
-      style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(169,67,42,0.08), transparent 60%)" }}
+      style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(31,122,84,0.10), transparent 60%)" }}
     >
       <svg
-        viewBox="-155 -20 310 180"
+        viewBox="-180 -40 370 220"
         preserveAspectRatio="xMidYMid meet"
         className="w-full h-auto max-w-[1400px]"
         role="img"
-        aria-label="Isometric memory grid illustration"
+        aria-label="Isometric stacked grid"
       >
         <defs>
-          <linearGradient id="brandGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#D96B3F" />
-            <stop offset="100%" stopColor="#A9432A" />
+          <linearGradient id="stackedGridGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#34D399" />
+            <stop offset="100%" stopColor="#1F7A54" />
           </linearGradient>
         </defs>
 
@@ -127,24 +127,16 @@ export default function IsoMemoryHero({
             const [ftx, fty] = iso(i + w, j, h, s);
             const [btx, bty] = iso(i, j, h, s);
             const sh = shade(h);
-            const topFill = isCenter ? "url(#brandGrad)" : sh.top;
-            const leftFill = isCenter ? "#6B2A1A" : sh.left;
-            const rightFill = isCenter ? "#A9432A" : sh.right;
-            const stroke = isCenter ? "#D96B3F" : "#333";
+            const topFill = isCenter ? "url(#stackedGridGrad)" : sh.top;
+            const leftFill = isCenter ? "#0F3D2A" : sh.left;
+            const rightFill = isCenter ? "#1F7A54" : sh.right;
+            const stroke = isCenter ? "#34D399" : "#333";
             const sw = isCenter ? 1.2 : 0.8;
-            const cx = (ltx + rtx + ftx + btx) / 4;
-            const cy = (lty + rty + fty + bty) / 4;
             return (
               <g key={`${i}-${j}`}>
                 <polygon points={`${lbx},${lby} ${rbx},${rby} ${rtx},${rty} ${ltx},${lty}`} fill={leftFill} stroke={stroke} strokeWidth={sw} />
                 <polygon points={`${rbx},${rby} ${fbx},${fby} ${ftx},${fty} ${rtx},${rty}`} fill={rightFill} stroke={stroke} strokeWidth={sw} />
                 <polygon points={`${ltx},${lty} ${rtx},${rty} ${ftx},${fty} ${btx},${bty}`} fill={topFill} stroke={stroke} strokeWidth={sw} />
-                {isCenter && (
-                  <>
-                    <circle cx={cx} cy={cy - 2} r={11} fill="none" stroke="#D96B3F" strokeWidth={1.2} opacity={0.8} />
-                    <circle cx={cx} cy={cy - 2} r={5} fill="#FFFFFF" opacity={0.95} />
-                  </>
-                )}
               </g>
             );
           })}
@@ -155,10 +147,10 @@ export default function IsoMemoryHero({
           cards.map((card, idx) => {
             const [px, py] = card.position;
             const [cx1, cy1, cx2, cy2] = card.connector;
-            const iconFill = card.tone === "brand" ? "#A9432A" : "#1F1F1F";
+            const iconFill = card.tone === "brand" ? "#1F7A54" : "#1F1F1F";
             return (
               <g key={idx} transform={`translate(${px},${py})`}>
-                <line x1={cx1} y1={cy1} x2={cx2} y2={cy2} stroke="#D96B3F" strokeWidth={1} strokeDasharray="3 3" opacity={0.6} />
+                <line x1={cx1} y1={cy1} x2={cx2} y2={cy2} stroke="#34D399" strokeWidth={1} strokeDasharray="3 3" opacity={0.6} />
                 <rect width={130} height={44} rx={8} fill="#1A1A1A" stroke="#333" strokeWidth={1} />
                 <rect x={10} y={12} width={20} height={20} rx={4} fill={iconFill} />
                 {card.label === "Cursor" && <path d="M17 18 L20 24 L23 18 Z" fill="#E6E4E1" />}
@@ -171,9 +163,9 @@ export default function IsoMemoryHero({
         {/* center pill badge */}
         {centerBadge && (
           <g transform="translate(-52,110)">
-            <rect width={104} height={30} rx={15} fill="rgba(169,67,42,0.18)" stroke="#A9432A" strokeWidth={1} />
-            <circle cx={14} cy={15} r={4} fill="#D96B3F" />
-            <text x={24} y={19} fontFamily={MONO} fontSize={11} fill="#D96B3F">{centerBadge}</text>
+            <rect width={104} height={30} rx={15} fill="rgba(31,122,84,0.18)" stroke="#1F7A54" strokeWidth={1} />
+            <circle cx={14} cy={15} r={4} fill="#34D399" />
+            <text x={24} y={19} fontFamily={MONO} fontSize={11} fill="#34D399">{centerBadge}</text>
           </g>
         )}
       </svg>

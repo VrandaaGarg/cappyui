@@ -3,11 +3,8 @@
 import React, { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export type IsoIntelligentMemoryProps = {
+export type SpineClusterProps = {
   className?: string;
-  showPill?: boolean;
-  pillLabel?: string;
-  animateDots?: boolean;
 };
 
 // true 2:1 isometric projection
@@ -18,7 +15,7 @@ const iso = (x: number, y: number, z: number, s = 20): [number, number] => [
 
 type Cube = { x: number; y: number; z: number; brand: boolean; order: number };
 
-// brand positions keyed "x,y,z"
+// brand positions — base center + plus-shape middle layer + cap
 const BRAND_SET = new Set<string>([
   "1,1,0",
   "1,0,1",
@@ -29,18 +26,12 @@ const BRAND_SET = new Set<string>([
   "1,1,2",
 ]);
 
-// top-layer corners that should be omitted (top is cross-shaped only)
+// top-layer corners omitted (top is cross-shaped only)
 const TOP_OMIT = new Set<string>(["0,0,2", "2,0,2", "0,2,2", "2,2,2"]);
 
-const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
-
-export default function IsoIntelligentMemory({
-  className,
-  showPill = true,
-  pillLabel = "auto-saved",
-  animateDots = false,
-}: IsoIntelligentMemoryProps) {
+export default function SpineCluster({ className }: SpineClusterProps) {
   const s = 20;
+  const OFFSET = -1;
 
   const cubes = useMemo<Cube[]>(() => {
     const out: Cube[] = [];
@@ -56,8 +47,6 @@ export default function IsoIntelligentMemory({
     return out.sort((a, b) => a.order - b.order);
   }, []);
 
-  // plate geometry: 5×5 tiles centered at cluster origin, offset so cluster sits in middle
-  // cluster translated by (-1, -1, 0). Plate origin (-2.5, -2.5), size 5×5.
   const plate = useMemo(() => {
     const [ax, ay] = iso(-2.5, -2.5, 0, s);
     const [bx, by] = iso(2.5, -2.5, 0, s);
@@ -79,19 +68,14 @@ export default function IsoIntelligentMemory({
     return out;
   }, [s]);
 
-  // cluster offset so it's centered on plate
-  const OFFSET = -1;
-
   return (
-    <div
-      className={cn("relative flex items-center justify-center w-full", className)}
-    >
+    <div className={cn("relative flex items-center justify-center w-full", className)}>
       <svg
         viewBox="-160 -100 320 170"
         preserveAspectRatio="xMidYMid meet"
         className="w-full h-auto max-w-[1200px]"
         role="img"
-        aria-label="Isometric intelligent memory illustration"
+        aria-label="Isometric spine cluster"
       >
         {/* base plate */}
         <path d={plate} fill="#0D0D0D" />
@@ -111,10 +95,10 @@ export default function IsoIntelligentMemory({
             const [rtx, rty] = iso(X + w, Y + d, z + h, s);
             const [ftx, fty] = iso(X + w, Y, z + h, s);
             const [btx, bty] = iso(X, Y, z + h, s);
-            const topFill = brand ? "#D96B3F" : "#2A2A2A";
-            const leftFill = brand ? "#6B2A1A" : "#1A1A1A";
-            const rightFill = brand ? "#A9432A" : "#232323";
-            const stroke = brand ? "#D96B3F" : "#333";
+            const topFill = brand ? "#34D399" : "#2A2A2A";
+            const leftFill = brand ? "#0F3D2A" : "#1A1A1A";
+            const rightFill = brand ? "#1F7A54" : "#232323";
+            const stroke = brand ? "#34D399" : "#333";
             return (
               <g key={`${x}-${y}-${z}`}>
                 <polygon points={`${lbx},${lby} ${rbx},${rby} ${rtx},${rty} ${ltx},${lty}`} fill={leftFill} stroke={stroke} strokeWidth={0.8} />
@@ -124,38 +108,6 @@ export default function IsoIntelligentMemory({
             );
           })}
         </g>
-
-        {/* trail dots */}
-        {/* <g className={animateDots ? "iso-trail" : undefined}>
-          <circle cx={-80} cy={-40} r={2.5} fill="#D96B3F" opacity={0.9} />
-          <circle cx={-64} cy={-48} r={2} fill="#D96B3F" opacity={0.7} />
-          <circle cx={-48} cy={-56} r={1.5} fill="#D96B3F" opacity={0.5} />
-          <circle cx={80} cy={-40} r={2.5} fill="#D96B3F" opacity={0.9} />
-          <circle cx={64} cy={-48} r={2} fill="#D96B3F" opacity={0.7} />
-        </g> */}
-
-        {/* auto-saved pill */}
-        {/* {showPill && (
-          <g transform="translate(-120,50)">
-            <rect width={84} height={20} rx={10} fill="#1A1A1A" stroke="#333" strokeWidth={1} />
-            <circle cx={12} cy={10} r={3} fill="#6AB28A" />
-            <text x={22} y={14} fontFamily={MONO} fontSize={9} fill="#A8A29E">{pillLabel}</text>
-          </g>
-        )} */}
-
-        {animateDots && (
-          <style>{`
-            .iso-trail circle { animation: isoTrail 2s ease-in-out infinite; }
-            .iso-trail circle:nth-child(2) { animation-delay: 0.15s; }
-            .iso-trail circle:nth-child(3) { animation-delay: 0.3s; }
-            .iso-trail circle:nth-child(4) { animation-delay: 0.5s; }
-            .iso-trail circle:nth-child(5) { animation-delay: 0.65s; }
-            @keyframes isoTrail {
-              0%, 100% { opacity: var(--iso-op, 0.2); transform: translateX(0); }
-              50% { opacity: 1; }
-            }
-          `}</style>
-        )}
       </svg>
     </div>
   );

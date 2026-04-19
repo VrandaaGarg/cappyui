@@ -1,0 +1,118 @@
+---
+title: Stacked Grid
+description: An isometric stacked-pyramid illustration rendered as pure inline SVG, with an emerald-accented center peak on a dark grid plate.
+---
+
+## Preview
+
+<div className="border mx-auto overflow-hidden border-[#1A1A1A] rounded-2xl bg-[#0A0A0A] py-4 px-4">
+  <StackedGrid />
+</div>
+
+## Generate with AI
+
+Want to create this component using AI? Copy the prompt below and paste it into any LLM (ChatGPT, Claude, etc.):
+
+<CopyPromptButton promptPath="prompts/stacked-grid.txt" />
+
+## Installation
+
+<Tabs items={["CLI", "Manual"]}>
+  <Tab value="CLI">
+    ```npm
+npx shadcn@latest add https://uiregistry.cappychat.com/registry/stacked-grid.json
+```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        Install dependencies
+
+        ```bash
+        npm i clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        Add util file
+
+        `lib/utils.ts`
+        ```ts
+        import { ClassValue, clsx } from "clsx";
+        import { twMerge } from "tailwind-merge";
+
+        export function cn(...inputs: ClassValue[]) {
+          return twMerge(clsx(inputs));
+        }
+        ```
+      </Step>
+      <Step>
+        Copy the source code
+
+        `components/AIapplicationsComponents/stacked-grid.tsx`
+        <SourceCodeBlock filePath="src/components/AIapplicationsComponents/stacked-grid.tsx" />
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import StackedGrid from "@/components/AIapplicationsComponents/stacked-grid";
+
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-10">
+      <StackedGrid />
+    </div>
+  );
+}
+```
+
+## Features
+
+- Pure inline SVG — no dependencies, scales crisply
+- True 2:1 isometric projection with painter's-algorithm occlusion
+- Radial height field produces a stepped-pyramid shape
+- Emerald gradient peak at the center
+- Optional floating cards and center badge (both off by default)
+
+## Props
+
+| Prop           | Type                  | Default  | Description                                     |
+| -------------- | --------------------- | -------- | ----------------------------------------------- |
+| `className`    | `string`              | -        | Extra classes for the wrapper                   |
+| `gridSize`     | `number`              | `6`      | N×N cube grid dimension                         |
+| `unit`         | `number`              | `24`     | Iso projection unit in SVG pixels               |
+| `showCards`    | `boolean`             | `false`  | Render floating label cards                     |
+| `cards`        | `StackedGridCard[]`   | Defaults | Floating label card definitions                 |
+| `centerBadge`  | `string \| null`      | `null`   | Pill badge text below the grid                  |
+
+### `StackedGridCard`
+
+```ts
+type StackedGridCard = {
+  label: string;
+  sub: string;
+  tone?: "brand" | "neutral";
+  position: [number, number];
+  connector: [number, number, number, number];
+};
+```
+
+## Customization
+
+### Show optional cards and badge
+
+```tsx
+<StackedGrid showCards centerBadge="one memory layer" />
+```
+
+### Change grid size
+
+```tsx
+<StackedGrid gridSize={8} unit={20} />
+```
+
+<br />
