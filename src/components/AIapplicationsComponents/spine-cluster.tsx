@@ -69,7 +69,26 @@ export default function SpineCluster({ className }: SpineClusterProps) {
   }, [s]);
 
   return (
-    <div className={cn("relative flex items-center justify-center w-full", className)}>
+    <div className={cn("spine-cluster relative flex items-center justify-center w-full", className)}>
+      {/* Theme-aware palette via scoped CSS variables. Brand stays fixed. */}
+      <style>{`
+        .spine-cluster {
+          --sc-plate: #EBEBEB;
+          --sc-plate-line: rgba(0,0,0,0.05);
+          --sc-stroke: #A3A3A3;
+          --sc-top: #D4D4D4;
+          --sc-left: #A3A3A3;
+          --sc-right: #BDBDBD;
+        }
+        .dark .spine-cluster {
+          --sc-plate: #0D0D0D;
+          --sc-plate-line: rgba(255,255,255,0.04);
+          --sc-stroke: #333;
+          --sc-top: #2A2A2A;
+          --sc-left: #1A1A1A;
+          --sc-right: #232323;
+        }
+      `}</style>
       <svg
         viewBox="-160 -100 320 170"
         preserveAspectRatio="xMidYMid meet"
@@ -78,9 +97,9 @@ export default function SpineCluster({ className }: SpineClusterProps) {
         aria-label="Isometric spine cluster"
       >
         {/* base plate */}
-        <path d={plate} fill="#0D0D0D" />
+        <path d={plate} fill="var(--sc-plate)" />
         {plateLines.map((l, k) => (
-          <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
+          <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="var(--sc-plate-line)" strokeWidth={0.5} />
         ))}
 
         {/* cubes — painter's algorithm */}
@@ -95,10 +114,10 @@ export default function SpineCluster({ className }: SpineClusterProps) {
             const [rtx, rty] = iso(X + w, Y + d, z + h, s);
             const [ftx, fty] = iso(X + w, Y, z + h, s);
             const [btx, bty] = iso(X, Y, z + h, s);
-            const topFill = brand ? "#34D399" : "#2A2A2A";
-            const leftFill = brand ? "#0F3D2A" : "#1A1A1A";
-            const rightFill = brand ? "#1F7A54" : "#232323";
-            const stroke = brand ? "#34D399" : "#333";
+            const topFill = brand ? "#34D399" : "var(--sc-top)";
+            const leftFill = brand ? "#0F3D2A" : "var(--sc-left)";
+            const rightFill = brand ? "#1F7A54" : "var(--sc-right)";
+            const stroke = brand ? "#34D399" : "var(--sc-stroke)";
             return (
               <g key={`${x}-${y}-${z}`}>
                 <polygon points={`${lbx},${lby} ${rbx},${rby} ${rtx},${rty} ${ltx},${lty}`} fill={leftFill} stroke={stroke} strokeWidth={0.8} />

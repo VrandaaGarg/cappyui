@@ -75,69 +75,79 @@ export default function DomedGrid({
   }, [N, s, origin]);
 
   return (
-    <svg
-      viewBox="-280 -140 560 260"
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-      className={cn("w-full h-full", className)}
-    >
-      {/* base plate */}
-      <path d={plate} fill="#0D0D0D" stroke="#262626" strokeWidth={0.2} />
-      {plateLines.map((l, k) => (
-        <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
-      ))}
+    <div className={cn("domed-grid w-full h-full", className)}>
+      {/* Theme-aware palette via scoped CSS variables. Brand stays fixed. */}
+      <style>{`
+        .domed-grid {
+          --dg-plate: #EBEBEB;
+          --dg-plate-edge: #C8C8C8;
+          --dg-plate-line: rgba(0,0,0,0.05);
+          --dg-stroke: #A3A3A3;
+          --dg-top: #D4D4D4;
+          --dg-left: #A3A3A3;
+          --dg-right: #BDBDBD;
+        }
+        .dark .domed-grid {
+          --dg-plate: #0D0D0D;
+          --dg-plate-edge: #262626;
+          --dg-plate-line: rgba(255,255,255,0.04);
+          --dg-stroke: #333;
+          --dg-top: #1C1C1C;
+          --dg-left: #0D0D0D;
+          --dg-right: #151515;
+        }
+      `}</style>
+      <svg
+        viewBox="-280 -140 560 260"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+        className="w-full h-full"
+      >
+        {/* base plate */}
+        <path d={plate} fill="var(--dg-plate)" stroke="var(--dg-plate-edge)" strokeWidth={0.2} />
+        {plateLines.map((l, k) => (
+          <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="var(--dg-plate-line)" strokeWidth={0.5} />
+        ))}
 
-      {/* cubes — painter's algorithm (back-to-front) */}
-      <g strokeLinejoin="round">
-        {cubes.map(({ i, j, h, brand }) => {
-          const w = 0.9, d = 0.9;
-          const X = origin + i, Y = origin + j;
-          const [lbx, lby] = iso(X, Y + d, 0, s);
-          const [rbx, rby] = iso(X + w, Y + d, 0, s);
-          const [fbx, fby] = iso(X + w, Y, 0, s);
-          const [ltx, lty] = iso(X, Y + d, h, s);
-          const [rtx, rty] = iso(X + w, Y + d, h, s);
-          const [ftx, fty] = iso(X + w, Y, h, s);
-          const [btx, bty] = iso(X, Y, h, s);
-          const topFill = brand ? "#D96B3F" : "#1C1C1C";
-          const leftFill = brand ? "#6B2A1A" : "#0D0D0D";
-          const rightFill = brand ? "#A9432A" : "#151515";
-          const stroke = brand ? "#D96B3F" : "#333";
-          const sw = brand ? 0.9 : 0.6;
-          const op = brand ? 0.95 : 0.8;
-          return (
-            <g key={`${i}-${j}`} opacity={op}>
-              <polygon points={`${lbx},${lby} ${rbx},${rby} ${rtx},${rty} ${ltx},${lty}`} fill={leftFill} stroke={stroke} strokeWidth={sw} />
-              <polygon points={`${rbx},${rby} ${fbx},${fby} ${ftx},${fty} ${rtx},${rty}`} fill={rightFill} stroke={stroke} strokeWidth={sw} />
-              <polygon points={`${ltx},${lty} ${rtx},${rty} ${ftx},${fty} ${btx},${bty}`} fill={topFill} stroke={stroke} strokeWidth={sw} />
-            </g>
-          );
-        })}
-      </g>
-    </svg>
+        {/* cubes — painter's algorithm (back-to-front) */}
+        <g strokeLinejoin="round">
+          {cubes.map(({ i, j, h, brand }) => {
+            const w = 0.9, d = 0.9;
+            const X = origin + i, Y = origin + j;
+            const [lbx, lby] = iso(X, Y + d, 0, s);
+            const [rbx, rby] = iso(X + w, Y + d, 0, s);
+            const [fbx, fby] = iso(X + w, Y, 0, s);
+            const [ltx, lty] = iso(X, Y + d, h, s);
+            const [rtx, rty] = iso(X + w, Y + d, h, s);
+            const [ftx, fty] = iso(X + w, Y, h, s);
+            const [btx, bty] = iso(X, Y, h, s);
+            const topFill = brand ? "#D96B3F" : "var(--dg-top)";
+            const leftFill = brand ? "#6B2A1A" : "var(--dg-left)";
+            const rightFill = brand ? "#A9432A" : "var(--dg-right)";
+            const stroke = brand ? "#D96B3F" : "var(--dg-stroke)";
+            const sw = brand ? 0.9 : 0.6;
+            const op = brand ? 0.95 : 0.8;
+            return (
+              <g key={`${i}-${j}`} opacity={op}>
+                <polygon points={`${lbx},${lby} ${rbx},${rby} ${rtx},${rty} ${ltx},${lty}`} fill={leftFill} stroke={stroke} strokeWidth={sw} />
+                <polygon points={`${rbx},${rby} ${fbx},${fby} ${ftx},${fty} ${rtx},${rty}`} fill={rightFill} stroke={stroke} strokeWidth={sw} />
+                <polygon points={`${ltx},${lty} ${rtx},${rty} ${ftx},${fty} ${btx},${bty}`} fill={topFill} stroke={stroke} strokeWidth={sw} />
+              </g>
+            );
+          })}
+        </g>
+      </svg>
+    </div>
   );
 }
 
 // ----------------------------------------------------------------------------
-// Showcase wrapper — full-bleed DomedGrid inside a dark rounded card with the
-// brand radial glows + faint grid overlay. No copy, no buttons.
+// Showcase wrapper — DomedGrid inside a theme-aware rounded card.
 // ----------------------------------------------------------------------------
 export function DomedGridShowcase() {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-[#262626] bg-[#0A0A0A] h-[420px]">
-      {/* orange radial glows */}
-      {/* <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(700px 400px at 50% 110%, rgba(169,67,42,0.22), transparent 60%)," +
-            "radial-gradient(500px 300px at 50% -10%, rgba(169,67,42,0.10), transparent 60%)",
-        }}
-      /> */}
-
-      {/* the grid — centered, at full opacity for the showcase */}
-      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+    <section className="relative overflow-hidden rounded-2xl border border-neutral-300/60 dark:border-[#262626] bg-white dark:bg-[#0A0A0A] h-[420px]">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <DomedGrid />
       </div>
     </section>

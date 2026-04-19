@@ -17,12 +17,13 @@ const iso = (x: number, y: number, z: number, s = 24): [number, number] => [
 
 type Cube = { i: number; j: number; h: number; isCenter: boolean; order: number };
 
-const shade = (h: number) =>
+// Three height tiers — each maps to a CSS variable trio for theme-aware shading
+const tierVars = (h: number) =>
   h > 1.3
-    ? { top: "#2E2E2E", left: "#161616", right: "#222" }
+    ? { top: "var(--sg-top-3)", left: "var(--sg-left-3)", right: "var(--sg-right-3)" }
     : h > 0.7
-      ? { top: "#242424", left: "#131313", right: "#1C1C1C" }
-      : { top: "#1C1C1C", left: "#111", right: "#181818" };
+      ? { top: "var(--sg-top-2)", left: "var(--sg-left-2)", right: "var(--sg-right-2)" }
+      : { top: "var(--sg-top-1)", left: "var(--sg-left-1)", right: "var(--sg-right-1)" };
 
 export default function StackedGrid({
   className,
@@ -69,7 +70,26 @@ export default function StackedGrid({
   }, [N, s]);
 
   return (
-    <div className={cn("relative flex items-center justify-center w-full", className)}>
+    <div className={cn("stacked-grid relative flex items-center justify-center w-full", className)}>
+      {/* Theme-aware palette via scoped CSS variables. Brand stays fixed. */}
+      <style>{`
+        .stacked-grid {
+          --sg-plate: #EBEBEB;
+          --sg-plate-line: rgba(0,0,0,0.05);
+          --sg-stroke: #A3A3A3;
+          --sg-top-1: #D4D4D4;  --sg-left-1: #A3A3A3;  --sg-right-1: #BDBDBD;
+          --sg-top-2: #C8C8C8;  --sg-left-2: #999999;  --sg-right-2: #B0B0B0;
+          --sg-top-3: #BCBCBC;  --sg-left-3: #8C8C8C;  --sg-right-3: #A3A3A3;
+        }
+        .dark .stacked-grid {
+          --sg-plate: #0F0F0F;
+          --sg-plate-line: rgba(255,255,255,0.04);
+          --sg-stroke: #333;
+          --sg-top-1: #1C1C1C;  --sg-left-1: #111;     --sg-right-1: #181818;
+          --sg-top-2: #242424;  --sg-left-2: #131313;  --sg-right-2: #1C1C1C;
+          --sg-top-3: #2E2E2E;  --sg-left-3: #161616;  --sg-right-3: #222;
+        }
+      `}</style>
       <svg
         viewBox="-180 -40 370 220"
         preserveAspectRatio="xMidYMid meet"
@@ -85,9 +105,9 @@ export default function StackedGrid({
         </defs>
 
         {/* base plate */}
-        <path d={plate} fill="#0F0F0F" />
+        <path d={plate} fill="var(--sg-plate)" />
         {plateLines.map((l, k) => (
-          <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
+          <line key={k} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="var(--sg-plate-line)" strokeWidth={0.5} />
         ))}
 
         {/* cubes — painter's algorithm (back-to-front) */}
@@ -101,11 +121,11 @@ export default function StackedGrid({
             const [rtx, rty] = iso(i + w, j + d, h, s);
             const [ftx, fty] = iso(i + w, j, h, s);
             const [btx, bty] = iso(i, j, h, s);
-            const sh = shade(h);
-            const topFill = isCenter ? "url(#stackedGridGrad)" : sh.top;
-            const leftFill = isCenter ? "#0F3D2A" : sh.left;
-            const rightFill = isCenter ? "#1F7A54" : sh.right;
-            const stroke = isCenter ? "#34D399" : "#333";
+            const t = tierVars(h);
+            const topFill = isCenter ? "url(#stackedGridGrad)" : t.top;
+            const leftFill = isCenter ? "#0F3D2A" : t.left;
+            const rightFill = isCenter ? "#1F7A54" : t.right;
+            const stroke = isCenter ? "#34D399" : "var(--sg-stroke)";
             const sw = isCenter ? 1.2 : 0.8;
             return (
               <g key={`${i}-${j}`}>
